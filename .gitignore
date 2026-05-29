@@ -1,0 +1,6 @@
+node_modules/
+temporary screenshots/
+*.png
+!logo.png
+!assets/**/*.png
+!brand_assets/**/*.png
