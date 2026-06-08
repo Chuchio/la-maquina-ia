@@ -1530,6 +1530,11 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       n.bw=n.sq?38:(n.w*Math.min(1,reg.w/680)); n.bh=n.sq?38:(n.core?44:40); });
   }
   window.addEventListener('scroll', computeRegion, {passive:true});
+  // posición del cursor (el canvas es pointer-events:none → escuchamos en window).
+  // clientX/clientY ya están en CSS px, igual que n.px/n.py → coinciden sin convertir.
+  var mx=-9999, my=-9999;
+  window.addEventListener('mousemove', function(e){ mx=e.clientX; my=e.clientY; }, {passive:true});
+  window.addEventListener('mouseout', function(e){ if(!e.relatedTarget){ mx=-9999; my=-9999; } });
   function ports(A,B){var dxN=B.px-A.px,dyN=B.py-A.py,h=Math.abs(dxN)>=Math.abs(dyN);
     if(h)return{x1:A.px+A.bw/2,y1:A.py,x2:B.px-B.bw/2,y2:B.py,h:1,s:dxN>=0?1:-1};
     return{x1:A.px,y1:A.py+(dyN>=0?A.bh/2:-A.bh/2),x2:B.px,y2:B.py-(dyN>=0?B.bh/2:-B.bh/2),h:0,s:dyN>=0?1:-1};}
@@ -1590,22 +1595,31 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       // GLOW UP constante (azul de marca): el pulso sube n.act y decae LENTO, con
       // una base siempre encendida → el nodo brilla de forma estable, no se apaga.
       n.act=(n.act||0)*0.985; if(n.act<0.001)n.act=0;
-      var lit=Math.min(1, 0.5 + 0.7*n.act);   // base 0.5 (siempre) + aporte del pulso
-      var bw=n.bw,bh=n.bh,x=n.px-bw/2,y=n.py-bh/2;
-      // glow azul de marca (#1E40AF → rgb 30,64,175), constante.
+      // HOVER: si el cursor pasa por encima de la caja del nodo, sube n.hov (ataque
+      // rápido, caída suave) → el nodo flarea al pasar y se apaga al salir.
+      var pad=10, hx=n.px-n.bw/2-pad, hy=n.py-n.bh/2-pad;
+      var over=(vis>0.05 && mx>=hx && mx<=hx+n.bw+pad*2 && my>=hy && my<=hy+n.bh+pad*2)?1:0;
+      n.hov=(n.hov||0)+(over-(n.hov||0))*0.22; if(n.hov<0.002)n.hov=0;
+      var hv=n.hov;
+      var lit=Math.min(1.5, 0.5 + 0.7*n.act + 1.0*hv);   // base 0.5 + pulso + hover
+      // al hover: el nodo crece apenas y el glow vira de azul de marca → azul claro brillante
+      var sc=1+0.08*hv;
+      var bw=n.bw*sc,bh=n.bh*sc,x=n.px-bw/2,y=n.py-bh/2;
+      var gcol=(30+72*hv|0)+','+(64+95*hv|0)+','+(175+80*hv|0); // (30,64,175) → (102,159,255)
+      // glow azul de marca, constante; con hover sube el radio y se aclara.
       // En equipos lentos (LOWQ) usamos UN solo pase de blur chico: shadowBlur grande
       // por nodo/frame es el principal motivo de tirones en Windows (Mac lo hace por GPU).
       if(LOWQ){
-        ctx.shadowColor='rgba(30,64,175,'+(0.55+0.35*lit)+')';ctx.shadowBlur=(n.core?16:12)*(0.8+0.4*lit);
+        ctx.shadowColor='rgba('+gcol+','+Math.min(1,0.55+0.35*lit)+')';ctx.shadowBlur=(n.core?16:12)*(0.8+0.4*lit)+22*hv;
         ctx.fillStyle='rgba(16,36,80,0.94)';rr(x,y,bw,bh,11);ctx.fill();ctx.shadowBlur=0;
       } else {
-        ctx.shadowColor='rgba(30,64,175,'+(0.6+0.4*lit)+')';ctx.shadowBlur=(n.core?52:38)*(0.75+0.45*lit);
+        ctx.shadowColor='rgba('+gcol+','+Math.min(1,0.6+0.4*lit)+')';ctx.shadowBlur=(n.core?52:38)*(0.75+0.45*lit)+44*hv;
         ctx.fillStyle='rgba(16,36,80,0.94)';rr(x,y,bw,bh,11);ctx.fill();
-        ctx.shadowColor='rgba(30,64,175,'+(0.5+0.4*lit)+')';ctx.shadowBlur=(n.core?24:15)*(0.8+0.5*lit);
+        ctx.shadowColor='rgba('+gcol+','+Math.min(1,0.5+0.4*lit)+')';ctx.shadowBlur=(n.core?24:15)*(0.8+0.5*lit)+24*hv;
         rr(x,y,bw,bh,11);ctx.fill();ctx.shadowBlur=0;
       }
-      // borde del mismo azul de marca (constante, sube apenas con el pulso)
-      ctx.strokeStyle='rgba(30,64,175,'+(0.7+0.3*lit)+')';ctx.lineWidth=(n.core?1.8:1.3)+lit*0.8;rr(x,y,bw,bh,11);ctx.stroke();
+      // borde: azul de marca; con hover se aclara (gcol) y engrosa un poco
+      ctx.strokeStyle='rgba('+gcol+','+Math.min(1,0.7+0.3*lit)+')';ctx.lineWidth=(n.core?1.8:1.3)+lit*0.8+hv*0.6;rr(x,y,bw,bh,11);ctx.stroke();
       var icx=n.sq?n.px:x+(n.core?21:19),icy=n.py;
       if(!n.sq){ctx.fillStyle='rgba(70,140,255,0.26)';rr(icx-14,icy-14,28,28,8);ctx.fill();ctx.strokeStyle='rgba(120,180,255,0.5)';ctx.lineWidth=1;rr(icx-14,icy-14,28,28,8);ctx.stroke();}
       drawIcon(ctx,n.ic,icx,icy,n.sq?19:17,'#dff0ff');
