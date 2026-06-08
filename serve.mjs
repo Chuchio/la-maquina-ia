@@ -25,10 +25,25 @@ const MIME = {
   '.ogg': 'video/ogg',
 };
 
+const ROOT = __dirname;
+
 http.createServer((req, res) => {
-  let urlPath = req.url.split('?')[0];
+  let urlPath;
+  try {
+    urlPath = decodeURIComponent(req.url.split('?')[0]);
+  } catch {
+    res.writeHead(400, { 'Content-Type': 'text/plain' });
+    res.end('400 Bad Request');
+    return;
+  }
   if (urlPath === '/') urlPath = '/index.html';
-  const filePath = path.join(__dirname, urlPath);
+  // Resolve and confine to ROOT to prevent path traversal (e.g. /../../etc/passwd)
+  const filePath = path.normalize(path.join(ROOT, urlPath));
+  if (filePath !== ROOT && !filePath.startsWith(ROOT + path.sep)) {
+    res.writeHead(403, { 'Content-Type': 'text/plain' });
+    res.end('403 Forbidden');
+    return;
+  }
   const ext = path.extname(filePath).toLowerCase();
   const contentType = MIME[ext] || 'application/octet-stream';
 

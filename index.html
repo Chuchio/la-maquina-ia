@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
 <style>
 :root{--pr:#1E40AF;--ct:#F97316;--dk:#0F172A;--bg:#000000;--tx:#F1F5F9;--mu:#94A3B8;--su:#64748B;--ac:rgba(30,64,175,.14)}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -204,6 +203,25 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .ch2{font-size:clamp(32px,4.5vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1.08;color:#F8FAFC;max-width:680px;margin:0 auto}
 .csub{font-size:17px;font-weight:500;line-height:1.7;color:rgba(248,250,252,.88);max-width:460px;margin:20px auto 0}
 .cbtns{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:40px}
+/* FORMULARIO DE CONTACTO (Formspree) */
+.cform{display:flex;flex-direction:column;gap:12px;max-width:460px;margin:36px auto 0;text-align:left}
+.cform input,.cform textarea{width:100%;font-family:inherit;font-size:15px;font-weight:500;color:#F8FAFC;background:rgba(248,250,252,.06);border:1px solid rgba(248,250,252,.14);border-radius:10px;padding:13px 15px;outline:none;transition:border-color .2s,background .2s,box-shadow .2s}
+.cform input::placeholder,.cform textarea::placeholder{color:rgba(248,250,252,.45)}
+.cform textarea{resize:vertical;min-height:92px;line-height:1.55}
+.cform input:hover,.cform textarea:hover{border-color:rgba(248,250,252,.26)}
+.cform input:focus-visible,.cform textarea:focus-visible{border-color:var(--pr);background:rgba(30,64,175,.10);box-shadow:0 0 0 3px rgba(30,64,175,.28)}
+.cform .bc{justify-content:center;margin-top:4px}
+.cform .bc[disabled]{opacity:.6;cursor:progress}
+.cform-msg{font-size:14px;font-weight:600;line-height:1.5;margin:2px 0 0;text-align:center}
+.cform-msg.ok{color:#34D399}
+.cform-msg.err{color:#F97316}
+.calt{font-size:13px;color:rgba(248,250,252,.6);text-align:center;margin:16px auto 0}
+.calt a{color:rgba(248,250,252,.85);text-decoration:underline;text-underline-offset:2px}
+.calt a:hover{color:#fff}
+/* Contacto sin tilt 3D: el form queda 100% clickeable y no se mueve mientras tipeás
+   (el preserve-3d de .sec>.ct hacía que el contenedor interceptara los clics del form) */
+#contacto.sec{perspective:none}
+#contacto>.ct{transform:none!important;transform-style:flat}
 
 /* FOOTER */
 footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);backdrop-filter:blur(12px)}
@@ -333,6 +351,32 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 </head>
 <body>
 
+<!-- ── MONITOR DE RENDIMIENTO: mide FPS reales y activa modo LOW en equipos lentos ── -->
+<script>
+(function(){
+  var P = window.__PERF = window.__PERF || { low:false, hidden:false };
+  // pausa el trabajo pesado cuando la pestaña no está visible (evita lag al volver)
+  P.hidden = document.hidden;
+  document.addEventListener('visibilitychange', function(){ P.hidden = document.hidden; });
+  // muestreo de FPS: si el equipo no sostiene ~45fps en los primeros ~1.6s → LOW.
+  // En Mac (60fps) nunca se activa; en PC sin GPU potente sí, y abarata las animaciones.
+  if (window.matchMedia('(prefers-reduced-motion:reduce)').matches){ P.low = true; return; }
+  var frames=0, t0=performance.now(), done=false;
+  function tick(now){
+    if(done) return;
+    frames++;
+    var el = now - t0;
+    if (el >= 1600){
+      var fps = frames/(el/1000);
+      if (fps < 45) P.low = true;
+      done = true; return;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+
 <canvas id="brain-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none"></canvas>
 <!-- WORKFLOW (variante 1): canvas fijo; se reposiciona por scroll (hero der. → servicios izq.) -->
 <canvas id="wf-cv"></canvas>
@@ -342,7 +386,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 <!-- NAV -->
 <nav id="nav">
   <div class="ni">
-    <a href="#" class="logo" aria-label="La Máquina IA">
+    <a href="#inicio" class="logo" aria-label="La Máquina IA">
       <span class="lo-la">La</span><span class="lo-mq">Máquina</span><span class="lo-ia">IA</span>
     </a>
     <div class="nl">
@@ -596,10 +640,17 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
       <span class="cchip"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><circle cx="5" cy="5" r="3" fill="#F97316"/></svg>¿Listo para empezar?</span>
       <h2 class="ch2">Tu próxima etapa<br>empieza con<br>una conversación</h2>
       <p class="csub">En 30 minutos analizamos tu operación y te mostramos dónde la IA puede generar impacto real</p>
-      <div class="cbtns">
-        <a href="mailto:hola@lamaquinaia.com" class="bc bc-lg">Hablar con el equipo <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-      <p style="font-size:13px;color:rgba(248,250,252,.72);margin-top:28px;font-weight:500">Sin compromisos · Respuesta en menos de 24 horas</p>
+      <!-- TODO: reemplazar XXXXXXX por el endpoint real de Formspree (https://formspree.io/f/XXXXXXX) -->
+      <form id="cform" action="https://formspree.io/f/XXXXXXX" method="POST" class="cform">
+        <input name="nombre" type="text" placeholder="Tu nombre" autocomplete="name" required>
+        <input name="email" type="email" placeholder="Tu email" autocomplete="email" required>
+        <input name="empresa" type="text" placeholder="Empresa (opcional)" autocomplete="organization">
+        <textarea name="mensaje" rows="3" placeholder="Contanos qué querés automatizar" required></textarea>
+        <button type="submit" class="bc bc-lg">Enviar mensaje <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <p class="cform-msg" role="status" aria-live="polite" hidden></p>
+      </form>
+      <p class="calt">O escribinos directo a <a href="mailto:hola@lamaquinaia.com">hola@lamaquinaia.com</a></p>
+      <p style="font-size:13px;color:rgba(248,250,252,.72);margin-top:20px;font-weight:500">Sin compromisos · Respuesta en menos de 24 horas</p>
     </div>
   </div>
 </section>
@@ -609,7 +660,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   <div class="ct">
     <div class="fg">
       <div>
-        <a href="#" class="logo" aria-label="La Máquina IA">
+        <a href="#inicio" class="logo" aria-label="La Máquina IA">
           <span class="lo-la" style="color:rgba(248,250,252,.88)">La</span>
           <span class="lo-mq" style="color:rgba(248,250,252,.88)">Máquina</span>
           <span class="lo-ia" style="background:rgba(30,64,175,.2);color:rgba(248,250,252,.65)">IA</span>
@@ -626,7 +677,8 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
       </div>
       <div>
         <p class="fct">Contacto</p>
-        <nav class="fl" aria-label="Contacto"><a href="mailto:hola@lamaquinaia.com">hola@lamaquinaia.com</a><a href="#contacto">Agendar llamada</a><a href="#">LinkedIn</a><a href="#">WhatsApp</a></nav>
+        <!-- TODO: LinkedIn → URL real; WhatsApp usa el mismo número del botón flotante -->
+        <nav class="fl" aria-label="Contacto"><a href="mailto:hola@lamaquinaia.com">hola@lamaquinaia.com</a><a href="#contacto">Agendar llamada</a><a href="#" target="_blank" rel="noopener">LinkedIn</a><a href="https://wa.me/5491100000000" target="_blank" rel="noopener">WhatsApp</a></nav>
       </div>
     </div>
     <div class="ftb">
@@ -637,11 +689,33 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 </footer>
 
 <!-- WHATSAPP BUTTON -->
-<a href="https://wa.me/5491100000000" target="_blank" rel="noopener noreferrer" class="wa-btn" aria-label="Escribinos por WhatsApp" style="position:fixed!important;bottom:28px!important;right:28px!important;left:auto!important;z-index:99999!important;width:58px;height:58px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;text-decoration:none;">
+<!-- TODO: reemplazar 5491100000000 por el número real (formato internacional sin + ni espacios) -->
+<a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20automatizar%20mi%20empresa" target="_blank" rel="noopener noreferrer" class="wa-btn" aria-label="Escribinos por WhatsApp" style="position:fixed!important;bottom:28px!important;right:28px!important;left:auto!important;z-index:99999!important;width:58px;height:58px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;text-decoration:none;">
   <svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
   </svg>
 </a>
+
+<!-- ENVÍO DEL FORMULARIO (Formspree, AJAX sin redirección) -->
+<script>
+(function(){
+  var f=document.getElementById('cform'); if(!f) return;
+  var msg=f.querySelector('.cform-msg'), btn=f.querySelector('button[type=submit]'), btnHTML=btn.innerHTML;
+  function show(text, ok){ msg.textContent=text; msg.classList.remove('ok','err'); msg.classList.add(ok?'ok':'err'); msg.hidden=false; }
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(f.action.indexOf('XXXXXXX')>-1){ show('El formulario todavía no está configurado (falta el endpoint de Formspree).', false); return; }
+    btn.disabled=true; btn.textContent='Enviando…'; msg.hidden=true;
+    fetch(f.action, { method:'POST', body:new FormData(f), headers:{ 'Accept':'application/json' } })
+      .then(function(r){
+        if(r.ok){ f.reset(); show('¡Gracias! Te respondemos en menos de 24 horas.', true); }
+        else { return r.json().then(function(d){ throw new Error((d&&d.errors&&d.errors[0]&&d.errors[0].message)||'error'); }); }
+      })
+      .catch(function(){ show('No se pudo enviar. Escribinos a hola@lamaquinaia.com', false); })
+      .finally(function(){ btn.disabled=false; btn.innerHTML=btnHTML; });
+  });
+})();
+</script>
 
 <script>
 const nav=document.getElementById('nav');
@@ -824,7 +898,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
 
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="/assets/three.min.js"></script>
 
 <!-- RED NEURONAL (Three.js) → ESFERA → SATURNO → CUBO → EXPLOSIÓN: scroll morph -->
 <canvas id="morph-cv" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
@@ -1098,8 +1172,14 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
 
   var clock=new THREE.Clock(), T=0;
   var _sc=new THREE.Vector3(), _st=new THREE.Vector3();
+  var _perfApplied=false;
   function animate(){
     requestAnimationFrame(animate);
+    var P=window.__PERF;
+    if(P){
+      if(P.hidden){ clock.getDelta(); return; } // pestaña oculta: no renderizar
+      if(P.low && !_perfApplied){ _perfApplied=true; renderer.setPixelRatio(1); } // equipo lento: menos fill GPU
+    }
     var dt=Math.min(clock.getDelta(),0.05); T+=dt;
     morph0+=(tgtM0-morph0)*0.18; // ensamblado en fase con el estallido del workflow (sin lag)
     morph1+=(tgtM1-morph1)*0.04; morph2+=(tgtM2-morph2)*0.04; morph3+=(tgtM3-morph3)*0.035;
@@ -1161,7 +1241,8 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       eMat.opacity=0; // sin líneas neuronales: la esfera es sólo partículas
       pGeo.attributes.position.needsUpdate=true; pMat.opacity=netVis*0.7;
     }
-    nMat.opacity=(0.7+0.25*Math.sin(T*1.5))*(1-eM3)*eM0;
+    var cubeDim=1-0.6*eM2; // cubo más tenue: que se lean los textos detrás
+    nMat.opacity=(0.7+0.25*Math.sin(T*1.5))*(1-eM3)*eM0*cubeDim;
 
     var exa=expGeo.attributes.position.array;
     applyRepulsion(exa, repE, EXP, dt, eM3);
@@ -1176,7 +1257,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     }
     expGeo.attributes.position.needsUpdate=true;
     // las partículas extra aparecen al deformarse de la esfera
-    expMat.opacity=eM0; // partículas extra visibles desde la esfera (nube más densa)
+    expMat.opacity=eM0*cubeDim; // partículas extra; atenuadas en el cubo para leer textos
 
     camera.lookAt(offX*0.25, 0, 0);
     renderer.render(scene, camera);
@@ -1223,6 +1304,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   var t0=performance.now();
   function frame(now){
     requestAnimationFrame(frame);
+    var _P=window.__PERF; if(_P&&_P.hidden){ return; }
     var T=(now-t0)/1000;
     ctx.clearRect(0,0,W,H);
     for(var i=0;i<N;i++){
@@ -1465,6 +1547,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   setInterval(spawn,230);
 
   function frame(now){requestAnimationFrame(frame);var T=(now-t0)/1000;
+    var _P=window.__PERF; if(_P&&_P.hidden){ return; } var LOWQ=_P&&_P.low;
     // suavizar región (se desplaza hero→servicios) + visibilidad
     reg.x+=(tgt.x-reg.x)*0.08; reg.y+=(tgt.y-reg.y)*0.08; reg.w+=(tgt.w-reg.w)*0.08; reg.h+=(tgt.h-reg.h)*0.08;
     vis+=(tgtVis-vis)*0.08;
@@ -1508,12 +1591,18 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       n.act=(n.act||0)*0.985; if(n.act<0.001)n.act=0;
       var lit=Math.min(1, 0.5 + 0.7*n.act);   // base 0.5 (siempre) + aporte del pulso
       var bw=n.bw,bh=n.bh,x=n.px-bw/2,y=n.py-bh/2;
-      // doble glow azul de marca (#1E40AF → rgb 30,64,175), constante
-      // glow exactamente del azul "IA" del título: #1E40AF (rgb 30,64,175)
-      ctx.shadowColor='rgba(30,64,175,'+(0.6+0.4*lit)+')';ctx.shadowBlur=(n.core?52:38)*(0.75+0.45*lit);
-      ctx.fillStyle='rgba(16,36,80,0.94)';rr(x,y,bw,bh,11);ctx.fill();
-      ctx.shadowColor='rgba(30,64,175,'+(0.5+0.4*lit)+')';ctx.shadowBlur=(n.core?24:15)*(0.8+0.5*lit);
-      rr(x,y,bw,bh,11);ctx.fill();ctx.shadowBlur=0;
+      // glow azul de marca (#1E40AF → rgb 30,64,175), constante.
+      // En equipos lentos (LOWQ) usamos UN solo pase de blur chico: shadowBlur grande
+      // por nodo/frame es el principal motivo de tirones en Windows (Mac lo hace por GPU).
+      if(LOWQ){
+        ctx.shadowColor='rgba(30,64,175,'+(0.55+0.35*lit)+')';ctx.shadowBlur=(n.core?16:12)*(0.8+0.4*lit);
+        ctx.fillStyle='rgba(16,36,80,0.94)';rr(x,y,bw,bh,11);ctx.fill();ctx.shadowBlur=0;
+      } else {
+        ctx.shadowColor='rgba(30,64,175,'+(0.6+0.4*lit)+')';ctx.shadowBlur=(n.core?52:38)*(0.75+0.45*lit);
+        ctx.fillStyle='rgba(16,36,80,0.94)';rr(x,y,bw,bh,11);ctx.fill();
+        ctx.shadowColor='rgba(30,64,175,'+(0.5+0.4*lit)+')';ctx.shadowBlur=(n.core?24:15)*(0.8+0.5*lit);
+        rr(x,y,bw,bh,11);ctx.fill();ctx.shadowBlur=0;
+      }
       // borde del mismo azul de marca (constante, sube apenas con el pulso)
       ctx.strokeStyle='rgba(30,64,175,'+(0.7+0.3*lit)+')';ctx.lineWidth=(n.core?1.8:1.3)+lit*0.8;rr(x,y,bw,bh,11);ctx.stroke();
       var icx=n.sq?n.px:x+(n.core?21:19),icy=n.py;
