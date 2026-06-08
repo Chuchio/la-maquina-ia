@@ -1412,20 +1412,22 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   var ctx=canvas.getContext('2d'), DPR=Math.min(devicePixelRatio||1,2);
   // layout COMPACTO y reducido (menos nodos, bien juntos, a la derecha)
   var NODES=[
-    // triggers (entradas) a la izquierda
-    {id:'webhook', x:0.40, y:0.16, label:'Webhook',  sub:'TRIGGER',      ic:'webhook',  w:108, step:0},
-    {id:'calendar',x:0.40, y:0.38, label:'Calendario',sub:'AGENDA',      ic:'calendar', w:120, step:0},
-    {id:'form',    x:0.40, y:0.60, label:'Formulario',sub:'WEB',         ic:'form',     w:120, step:0},
-    // núcleo
-    {id:'agent',   x:0.60, y:0.38, label:'AI Agent', sub:'TOOLS AGENT',  ic:'agent', core:1, w:126, step:1},
-    {id:'switch',  x:0.78, y:0.38, label:'Router',   sub:'SWITCH',       ic:'router', w:104, step:2},
-    // herramientas del agente (abajo)
-    {id:'gemini',  x:0.51, y:0.68, label:'Gemini',   sub:'CHAT MODEL',   ic:'gemini', w:114, step:3},
-    {id:'openai',  x:0.67, y:0.68, label:'OpenAI',   sub:'API · GPT',    ic:'openai', w:110, step:3},
-    // acciones (salidas) a la derecha
-    {id:'whatsapp',x:0.92, y:0.18, label:'WhatsApp', sub:'ENVIAR MSG',   ic:'whatsapp', w:120, step:4},
-    {id:'gmail',   x:0.92, y:0.40, label:'Gmail',    sub:'ENVIAR EMAIL', ic:'gmail',    w:112, step:4},
-    {id:'h3',      x:0.92, y:0.60, sq:1, ic:'http', step:4}
+    // layout asimétrico (escalonado, fuera de grilla); flujo entradas → agente → router → salidas
+    // triggers (entradas) a la izquierda, escalonados
+    {id:'webhook', x:0.11, y:0.10, label:'Webhook',  sub:'TRIGGER',      ic:'webhook',  w:108, step:0},
+    {id:'calendar',x:0.04, y:0.44, label:'Calendario',sub:'AGENDA',      ic:'calendar', w:120, step:0},
+    {id:'form',    x:0.18, y:0.74, label:'Formulario',sub:'WEB',         ic:'form',     w:120, step:0},
+    // núcleo (arriba-izquierda del centro, no centrado)
+    {id:'agent',   x:0.45, y:0.27, label:'AI Agent', sub:'TOOLS AGENT',  ic:'agent', core:1, w:126, step:1},
+    // herramientas del agente (abajo, desfasadas)
+    {id:'gemini',  x:0.32, y:0.63, label:'Gemini',   sub:'CHAT MODEL',   ic:'gemini', w:114, step:3},
+    {id:'openai',  x:0.55, y:0.80, label:'OpenAI',   sub:'API · GPT',    ic:'openai', w:110, step:3},
+    // router a la derecha del agente
+    {id:'switch',  x:0.69, y:0.36, label:'Router',   sub:'SWITCH',       ic:'router', w:104, step:2},
+    // acciones (salidas) a la derecha, escalonadas
+    {id:'whatsapp',x:0.88, y:0.11, label:'WhatsApp', sub:'ENVIAR MSG',   ic:'whatsapp', w:120, step:4},
+    {id:'gmail',   x:0.94, y:0.48, label:'Gmail',    sub:'ENVIAR EMAIL', ic:'gmail',    w:112, step:4},
+    {id:'h3',      x:0.83, y:0.78, sq:1, ic:'http', step:4}
   ];
   var EDGES=[
     ['webhook','agent'],['calendar','agent'],['form','agent'],
@@ -1505,9 +1507,9 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   function computeRegion(){
     var serv=document.getElementById('servicios');
     var vh=window.innerHeight, sy=window.scrollY;
-    var rw=Math.min(W*0.66, 820), rh=Math.min(H*0.86, 620);
-    // el workflow vive SÓLO en el hero (un poco a la izquierda y más abajo); al bajar estalla
-    tgt.x=W-rw-W*0.08; tgt.y=(H-rh)/2 + H*0.07; tgt.w=rw; tgt.h=rh;
+    var rw=Math.min(W*0.50, 620), rh=Math.min(H*0.62, 440);
+    // el workflow vive SÓLO en el hero, más chico y anclado a la derecha (no pisa el texto)
+    tgt.x=W-rw-W*0.05; tgt.y=(H-rh)/2 + H*0.05; tgt.w=rw; tgt.h=rh;
     // burst (0 hero → 1 al entrar a Servicios): MISMA fórmula que el m0 del morph
     if(serv){var sTop=serv.offsetTop; burst=Math.max(0,Math.min((sy-(sTop-vh))/(vh*0.7),1));}
     else burst=Math.max(0,Math.min(sy/(vh*0.7),1));
@@ -1538,13 +1540,26 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   function ports(A,B){var dxN=B.px-A.px,dyN=B.py-A.py,h=Math.abs(dxN)>=Math.abs(dyN);
     if(h)return{x1:A.px+A.bw/2,y1:A.py,x2:B.px-B.bw/2,y2:B.py,h:1,s:dxN>=0?1:-1};
     return{x1:A.px,y1:A.py+(dyN>=0?A.bh/2:-A.bh/2),x2:B.px,y2:B.py-(dyN>=0?B.bh/2:-B.bh/2),h:0,s:dyN>=0?1:-1};}
-  function path(P){var p=new Path2D();p.moveTo(P.x1,P.y1);
-    if(P.h){var dx=Math.max(34,Math.abs(P.x2-P.x1)*0.45);p.bezierCurveTo(P.x1+dx*P.s,P.y1,P.x2-dx*P.s,P.y2,P.x2,P.y2);}
-    else{var dy=Math.max(28,Math.abs(P.y2-P.y1)*0.5);p.bezierCurveTo(P.x1,P.y1+dy*P.s,P.x2,P.y2-dy*P.s,P.x2,P.y2);}return p;}
-  function ptAt(P,t){var mt=1-t,c0,c1;
-    if(P.h){var dx=Math.max(34,Math.abs(P.x2-P.x1)*0.45);c0=[P.x1+dx*P.s,P.y1];c1=[P.x2-dx*P.s,P.y2];}
-    else{var dy=Math.max(28,Math.abs(P.y2-P.y1)*0.5);c0=[P.x1,P.y1+dy*P.s];c1=[P.x2,P.y2-dy*P.s];}
-    return{x:mt*mt*mt*P.x1+3*mt*mt*t*c0[0]+3*mt*t*t*c1[0]+t*t*t*P.x2,y:mt*mt*mt*P.y1+3*mt*mt*t*c0[1]+3*mt*t*t*c1[1]+t*t*t*P.y2};}
+  // conexiones ORTOGONALES (escalonadas): 3 tramos en ángulo recto con esquinas redondeadas.
+  // h=horizontal dominante → sale al medio en X; si no, escalona en Y.
+  function elbow(P){
+    if(P.h){var mx=(P.x1+P.x2)/2;return [[P.x1,P.y1],[mx,P.y1],[mx,P.y2],[P.x2,P.y2]];}
+    var my=(P.y1+P.y2)/2;return [[P.x1,P.y1],[P.x1,my],[P.x2,my],[P.x2,P.y2]];
+  }
+  function path(P){var pts=elbow(P);var p=new Path2D();p.moveTo(pts[0][0],pts[0][1]);
+    for(var i=1;i<pts.length-1;i++){
+      var a=pts[i-1],b=pts[i],c=pts[i+1];
+      var r=Math.min(10, Math.hypot(b[0]-a[0],b[1]-a[1])*0.5, Math.hypot(c[0]-b[0],c[1]-b[1])*0.5);
+      p.arcTo(b[0],b[1],c[0],c[1],r);
+    }
+    p.lineTo(pts[pts.length-1][0],pts[pts.length-1][1]);return p;}
+  function ptAt(P,t){var pts=elbow(P),segs=[],tot=0,i;
+    for(i=0;i<pts.length-1;i++){var L=Math.hypot(pts[i+1][0]-pts[i][0],pts[i+1][1]-pts[i][1]);segs.push(L);tot+=L;}
+    var d=t*tot;
+    for(i=0;i<segs.length;i++){
+      if(d<=segs[i]||i===segs.length-1){var f=segs[i]?d/segs[i]:0;return{x:pts[i][0]+(pts[i+1][0]-pts[i][0])*f,y:pts[i][1]+(pts[i+1][1]-pts[i][1])*f};}
+      d-=segs[i];
+    }}
   function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
 
   var pulses=[], shown={}, t0=performance.now();
