@@ -642,6 +642,8 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
       <p class="csub">En 30 minutos analizamos tu operación y te mostramos dónde la IA puede generar impacto real</p>
       <!-- TODO: reemplazar XXXXXXX por el endpoint real de Formspree (https://formspree.io/f/XXXXXXX) -->
       <form id="cform" action="https://formspree.io/f/XXXXXXX" method="POST" class="cform">
+        <!-- honeypot anti-spam: oculto a usuarios; si un bot lo completa, Formspree descarta el envío -->
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <input name="nombre" type="text" placeholder="Tu nombre" autocomplete="name" required>
         <input name="email" type="email" placeholder="Tu email" autocomplete="email" required>
         <input name="empresa" type="text" placeholder="Empresa (opcional)" autocomplete="organization">

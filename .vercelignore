@@ -1,0 +1,12 @@
+# Excluye del deploy público archivos de desarrollo / no usados por el sitio.
+# (index.html, vercel.json, logo.png, CNAME y assets/three.min.js SÍ se deployan.)
+
+# Tooling de desarrollo e instrucciones internas — no deben ser públicos
+serve.mjs
+screenshot.mjs
+CLAUDE.md
+
+# Assets pesados NO referenciados por index.html (0 refs) — reducen exposición y ancho de banda
+*.mp4
+*.pdf
+assets/magnific*
