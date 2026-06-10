@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Formas candidatas — demo</title>
+<style>
+  html,body{margin:0;background:#05060a;color:#cfe0ff;font-family:system-ui,sans-serif}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#11151f}
+  .cell{position:relative;background:#05060a;aspect-ratio:1/1}
+  .cell canvas{display:block;width:100%;height:100%}
+  .lbl{position:absolute;top:12px;left:14px;font-size:13px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:#9ad6ff;text-shadow:0 1px 4px #000}
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="cell"><div class="lbl">Toro / anillo</div><canvas data-shape="torus"></canvas></div>
+  <div class="cell"><div class="lbl">Hélice / ADN</div><canvas data-shape="helix"></canvas></div>
+  <div class="cell"><div class="lbl">Pirámide</div><canvas data-shape="pyramid"></canvas></div>
+  <div class="cell"><div class="lbl">Onda / grid</div><canvas data-shape="wave"></canvas></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+function dotTexture(){var s=64,c=document.createElement('canvas');c.width=c.height=s;var g=c.getContext('2d');
+  var rg=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);rg.addColorStop(0,'rgba(255,255,255,1)');
+  rg.addColorStop(0.35,'rgba(255,255,255,0.9)');rg.addColorStop(0.7,'rgba(255,255,255,0.25)');
+  rg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=rg;g.beginPath();g.arc(s/2,s/2,s/2,0,Math.PI*2);g.fill();
+  return new THREE.CanvasTexture(c);}
+var TEX=dotTexture();
+var N=420;
+
+// generadores de posiciones para cada forma
+function gen(shape){
+  var pts=[];
+  if(shape==='torus'){
+    var R=1.25, r=0.45;
+    for(var i=0;i<N;i++){var u=Math.random()*Math.PI*2,v=Math.random()*Math.PI*2;
+      pts.push(new THREE.Vector3((R+r*Math.cos(v))*Math.cos(u),r*Math.sin(v),(R+r*Math.cos(v))*Math.sin(u)));}
+  } else if(shape==='helix'){
+    // doble hélice HORIZONTAL: el eje largo es X
+    var turns=3.4, L=3.0, rr=0.55;
+    var strandN=Math.floor(N*0.8);          // 80% en las dos cadenas
+    for(var i=0;i<strandN;i++){
+      var strand=i%2, t=Math.random();
+      var ang=t*turns*Math.PI*2 + strand*Math.PI;
+      var x=(t-0.5)*L;
+      pts.push(new THREE.Vector3(x, Math.cos(ang)*rr, Math.sin(ang)*rr));
+    }
+    for(var i=strandN;i<N;i++){            // peldaños: cruzan entre las dos cadenas
+      var t=Math.random(), ang=t*turns*Math.PI*2, x=(t-0.5)*L;
+      var s=Math.random();                  // punto a lo largo del peldaño
+      var ya=Math.cos(ang)*rr, za=Math.sin(ang)*rr;
+      var yb=Math.cos(ang+Math.PI)*rr, zb=Math.sin(ang+Math.PI)*rr;
+      pts.push(new THREE.Vector3(x, ya+(yb-ya)*s, za+(zb-za)*s));
+    }
+  } else if(shape==='pyramid'){
+    // tetraedro relleno: vértices + aristas marcadas + partículas adentro
+    var v=[new THREE.Vector3(0,1.25,0),new THREE.Vector3(-1.1,-0.7,0.7),
+           new THREE.Vector3(1.1,-0.7,0.7),new THREE.Vector3(0,-0.7,-1.25)];
+    var E=[[0,1],[0,2],[0,3],[1,2],[2,3],[3,1]];
+    var edgeN=Math.floor(N*0.45);          // ~45% en las aristas (define la forma)
+    for(var i=0;i<edgeN;i++){var e=E[(Math.random()*E.length)|0],t=Math.random();
+      pts.push(v[e[0]].clone().lerp(v[e[1]],t));}
+    for(var i=edgeN;i<N;i++){             // resto: puntos uniformes DENTRO del tetraedro
+      var a=Math.random(),bb=Math.random(),cc=Math.random();
+      if(a+bb>1){a=1-a;bb=1-bb;}
+      if(bb+cc>1){var t=cc;cc=1-a-bb;bb=1-t;}
+      else if(a+bb+cc>1){var t=cc;cc=a+bb+cc-1;a=1-bb-t;}
+      var d=1-a-bb-cc;
+      pts.push(new THREE.Vector3(
+        v[0].x*a+v[1].x*bb+v[2].x*cc+v[3].x*d,
+        v[0].y*a+v[1].y*bb+v[2].y*cc+v[3].y*d,
+        v[0].z*a+v[1].z*bb+v[2].z*cc+v[3].z*d));
+    }
+  } else if(shape==='wave'){
+    var G=Math.ceil(Math.sqrt(N)), span=2.6;
+    for(var i=0;i<N;i++){var gx=i%G,gz=(i/G)|0;
+      var x=(gx/(G-1)-0.5)*span, z=(gz/(G-1)-0.5)*span;
+      var y=Math.sin(x*3)*0.28+Math.cos(z*3)*0.28;
+      pts.push(new THREE.Vector3(x,y,z));}
+  }
+  return pts;
+}
+
+function makeScene(canvas, shape){
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+  renderer.setClearColor(0x000000,0); renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  var scene=new THREE.Scene();
+  var cam=new THREE.PerspectiveCamera(45,1,0.1,100); cam.position.set(0,0,5);
+  function resize(){var w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+  resize(); window.addEventListener('resize',resize);
+
+  var nodes=gen(shape), n=nodes.length;
+  var pos=new Float32Array(n*3);
+  for(var i=0;i<n;i++){pos[i*3]=nodes[i].x;pos[i*3+1]=nodes[i].y;pos[i*3+2]=nodes[i].z;}
+  var g=new THREE.Group(); scene.add(g);
+  var geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0x8fd0ff,size:0.10,map:TEX,
+    transparent:true,opacity:0.95,blending:THREE.AdditiveBlending,depthWrite:false})));
+
+  // conexiones cercanas
+  var seg=[];
+  for(var i=0;i<n;i++)for(var j=i+1;j<n;j++){if(nodes[i].distanceTo(nodes[j])<0.42){seg.push(nodes[i],nodes[j]);}}
+  var lgeo=new THREE.BufferGeometry().setFromPoints(seg);
+  g.add(new THREE.LineSegments(lgeo,new THREE.LineBasicMaterial({color:0x4aa3ff,transparent:true,
+    opacity:0.28,blending:THREE.AdditiveBlending,depthWrite:false})));
+
+  var clock=new THREE.Clock(),T=0;
+  (function loop(){requestAnimationFrame(loop);T+=clock.getDelta();
+    if(shape==='helix'){ g.rotation.x=T*0.8; g.rotation.y=Math.sin(T*0.2)*0.15; }
+    else { g.rotation.y=T*0.5; g.rotation.x=(shape==='wave'?-0.6:Math.sin(T*0.3)*0.2-0.2); }
+    renderer.render(scene,cam);})();
+}
+
+document.querySelectorAll('canvas[data-shape]').forEach(function(c){ makeScene(c, c.dataset.shape); });
+</script>
+</body>
+</html>

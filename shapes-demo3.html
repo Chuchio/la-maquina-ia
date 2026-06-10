@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Engranajes candidatos — demo 3</title>
+<style>
+  html,body{margin:0;background:#05060a;color:#cfe0ff;font-family:system-ui,sans-serif}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#11151f}
+  .cell{position:relative;background:#05060a;aspect-ratio:1/1}
+  .cell canvas{display:block;width:100%;height:100%}
+  .lbl{position:absolute;top:10px;left:12px;font-size:12px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;color:#9ad6ff;text-shadow:0 1px 4px #000}
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="cell"><div class="lbl">Engranaje plano</div><canvas data-shape="gear"></canvas></div>
+  <div class="cell"><div class="lbl">Engranaje grueso 3D</div><canvas data-shape="gear3d"></canvas></div>
+  <div class="cell"><div class="lbl">Dos engranajes</div><canvas data-shape="twogears"></canvas></div>
+  <div class="cell"><div class="lbl">Engranaje + radios</div><canvas data-shape="spoked"></canvas></div>
+  <div class="cell"><div class="lbl">Tren de 3 engranajes</div><canvas data-shape="train"></canvas></div>
+  <div class="cell"><div class="lbl">Engranaje aro fino</div><canvas data-shape="ring"></canvas></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+function dotTexture(){var s=64,c=document.createElement('canvas');c.width=c.height=s;var g=c.getContext('2d');
+  var rg=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);rg.addColorStop(0,'rgba(255,255,255,1)');
+  rg.addColorStop(0.35,'rgba(255,255,255,0.9)');rg.addColorStop(0.7,'rgba(255,255,255,0.25)');
+  rg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=rg;g.beginPath();g.arc(s/2,s/2,s/2,0,Math.PI*2);g.fill();
+  return new THREE.CanvasTexture(c);}
+var TEX=dotTexture();
+var V=THREE.Vector3;
+
+// devuelve puntos (x,y) del PERFIL de un engranaje (diente cuadrado), centrado en 0
+function gearProfile(teeth, rOut, rIn, samples){
+  var pts=[], total=samples;
+  for(var i=0;i<total;i++){
+    var t=i/total, ang=t*Math.PI*2;
+    // diente cuadrado: alterna entre rOut y rIn según el sector
+    var phase=(ang*teeth/(Math.PI*2))%1;
+    var r=(phase<0.5)?rOut:rIn;
+    pts.push([Math.cos(ang)*r, Math.sin(ang)*r]);
+  }
+  return pts;
+}
+
+// genera nodos 3D de un engranaje en el plano XY con grosor opcional en Z
+function gearNodes(out, teeth, rOut, rIn, rHub, depth, cx, cy, density){
+  density=density||1;
+  var ringN=Math.floor(70*density);
+  // contorno dentado (varias capas en Z para dar grosor)
+  var layers = depth>0 ? 3 : 1;
+  for(var L=0;L<layers;L++){
+    var z = depth>0 ? (L/(layers-1)-0.5)*depth : 0;
+    for(var i=0;i<ringN;i++){
+      var t=i/ringN, ang=t*Math.PI*2;
+      var phase=(ang*teeth/(Math.PI*2))%1;
+      var r=(phase<0.5)?rOut:rIn;
+      // redondear esquinas del diente un poco
+      out.push(new V(cx+Math.cos(ang)*r, cy+Math.sin(ang)*r, z));
+    }
+  }
+  // aro interior (hueco del eje)
+  var hubN=Math.floor(22*density);
+  for(var i=0;i<hubN;i++){var a=i/hubN*Math.PI*2;
+    out.push(new V(cx+Math.cos(a)*rHub, cy+Math.sin(a)*rHub, 0));}
+  return out;
+}
+
+function gen(shape){
+  var pts=[];
+  if(shape==='gear'){
+    gearNodes(pts, 12, 1.35, 1.05, 0.42, 0, 0, 0, 1.2);
+  } else if(shape==='gear3d'){
+    gearNodes(pts, 10, 1.3, 1.0, 0.4, 0.55, 0, 0, 1.1);
+  } else if(shape==='twogears'){
+    // dos engranajes engranados
+    gearNodes(pts, 11, 0.95, 0.72, 0.3, 0, -0.85, 0.0, 0.9);
+    gearNodes(pts, 8,  0.75, 0.56, 0.25, 0, 0.92, 0.0, 0.9);
+  } else if(shape==='spoked'){
+    // engranaje con radios (spokes) hacia el centro
+    gearNodes(pts, 12, 1.35, 1.05, 0.35, 0, 0, 0, 1.0);
+    var spokes=6;
+    for(var s=0;s<spokes;s++){
+      var a=s/spokes*Math.PI*2;
+      var n=10;
+      for(var i=0;i<n;i++){var t=0.35+ (i/n)*(1.05-0.35);
+        pts.push(new V(Math.cos(a)*t, Math.sin(a)*t, 0));}
+    }
+  } else if(shape==='train'){
+    // tres engranajes en cadena diagonal
+    gearNodes(pts, 10, 0.7, 0.52, 0.22, 0, -1.05, 0.55, 0.8);
+    gearNodes(pts, 12, 0.85, 0.64, 0.26, 0, 0.0, -0.1, 0.8);
+    gearNodes(pts, 9,  0.62, 0.46, 0.2, 0, 1.05, 0.6, 0.8);
+  } else if(shape==='ring'){
+    // engranaje tipo aro fino (anillo dentado sin relleno)
+    gearNodes(pts, 16, 1.4, 1.18, 1.0, 0, 0, 0, 1.4);
+  }
+  return pts;
+}
+
+function makeScene(canvas, shape){
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+  renderer.setClearColor(0x000000,0); renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  var scene=new THREE.Scene();
+  var cam=new THREE.PerspectiveCamera(45,1,0.1,100); cam.position.set(0,0,5.4);
+  function resize(){var w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+  resize(); window.addEventListener('resize',resize);
+
+  var nodes=gen(shape), n=nodes.length;
+  var pos=new Float32Array(n*3);
+  for(var i=0;i<n;i++){pos[i*3]=nodes[i].x;pos[i*3+1]=nodes[i].y;pos[i*3+2]=nodes[i].z;}
+  var g=new THREE.Group(); scene.add(g);
+  var geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0x8fd0ff,size:0.085,map:TEX,
+    transparent:true,opacity:0.95,blending:THREE.AdditiveBlending,depthWrite:false})));
+  var seg=[];
+  for(var i=0;i<n;i++)for(var j=i+1;j<n;j++){if(nodes[i].distanceTo(nodes[j])<0.30){seg.push(nodes[i],nodes[j]);}}
+  var lgeo=new THREE.BufferGeometry().setFromPoints(seg);
+  g.add(new THREE.LineSegments(lgeo,new THREE.LineBasicMaterial({color:0x4aa3ff,transparent:true,
+    opacity:0.26,blending:THREE.AdditiveBlending,depthWrite:false})));
+
+  var clock=new THREE.Clock(),T=0;
+  (function loop(){requestAnimationFrame(loop);T+=clock.getDelta();
+    // los engranajes giran sobre su eje Z (cara hacia la cámara), con leve inclinación
+    g.rotation.z = T*0.4;
+    g.rotation.x = -0.5 + Math.sin(T*0.25)*0.08;
+    renderer.render(scene,cam);})();
+}
+document.querySelectorAll('canvas[data-shape]').forEach(function(c){ makeScene(c, c.dataset.shape); });
+</script>
+</body>
+</html>

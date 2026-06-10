@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chip de computadora — 5 ejemplos</title>
+<style>
+  html,body{margin:0;background:#000;color:#cfe0ff;font-family:system-ui,sans-serif}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#0c1018}
+  .cell{position:relative;background:#000;aspect-ratio:1/1}
+  .cell canvas{display:block;width:100%;height:100%}
+  .lbl{position:absolute;top:12px;left:14px;font-size:12px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;color:#8fb6ff;text-shadow:0 1px 4px #000}
+  .desc{position:absolute;bottom:12px;left:14px;right:14px;font-size:11px;color:#7d93b8;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="cell"><div class="lbl">1 · CPU clásico (QFP)</div><canvas data-v="qfp"></canvas><div class="desc">Procesador cuadrado con patas finas en los 4 lados, leyenda "AI" en el die y trazas internas.</div></div>
+  <div class="cell"><div class="lbl">2 · CPU 3D con disipador</div><canvas data-v="heatsink"></canvas><div class="desc">Chip 3D con die metálico y aletas de disipador encima. Gira en perspectiva.</div></div>
+  <div class="cell"><div class="lbl">3 · BGA (bolas abajo)</div><canvas data-v="bga"></canvas><div class="desc">Encapsulado moderno: cuerpo cuadrado con grilla de bolas de soldadura en la base.</div></div>
+  <div class="cell"><div class="lbl">4 · CPU + placa madre</div><canvas data-v="board"></canvas><div class="desc">El chip montado en una PCB con trazas que recorren la placa hacia otros componentes.</div></div>
+  <div class="cell"><div class="lbl">5 · Die / oblea de silicio</div><canvas data-v="die"></canvas><div class="desc">El interior del chip: cuadrícula de núcleos/cores con buses, vista cenital tipo floorplan.</div></div>
+  <div class="cell" style="display:flex;align-items:center;justify-content:center;color:#5a6a86;font-size:12px;text-align:center;padding:20px">Giran / laten en vivo.<br>Decime cuál te gusta.</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+var V=THREE.Vector3;
+function dotTexture(){var s=64,c=document.createElement('canvas');c.width=c.height=s;var g=c.getContext('2d');
+  var rg=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);rg.addColorStop(0,'rgba(255,255,255,1)');
+  rg.addColorStop(0.35,'rgba(210,235,255,0.9)');rg.addColorStop(0.7,'rgba(120,170,255,0.25)');
+  rg.addColorStop(1,'rgba(80,140,255,0)');g.fillStyle=rg;g.beginPath();g.arc(s/2,s/2,s/2,0,Math.PI*2);g.fill();
+  return new THREE.CanvasTexture(c);}
+var TEX=dotTexture();
+
+function build(v){
+  var nodes=[], segs=[], faces=[]; // faces: tríos para mesh tenue (cuerpo del chip)
+  function trace(a,b){segs.push(a,b);}
+  function L(path){for(var i=0;i<path.length-1;i++)trace(path[i],path[i+1]);}
+  function rect(cx,cy,cz,w,h,plane){ // rectángulo en un plano
+    var hw=w/2,hh=h/2,p;
+    if(plane==='xy')p=[new V(cx-hw,cy-hh,cz),new V(cx+hw,cy-hh,cz),new V(cx+hw,cy+hh,cz),new V(cx-hw,cy+hh,cz)];
+    else if(plane==='xz')p=[new V(cx-hw,cy,cz-hh),new V(cx+hw,cy,cz-hh),new V(cx+hw,cy,cz+hh),new V(cx-hw,cy,cz+hh)];
+    L([p[0],p[1],p[2],p[3],p[0]]); return p;
+  }
+  function node(p){nodes.push(p);}
+  function box(cx,cy,cz,w,h,d){
+    var hw=w/2,hh=h/2,hd=d/2;
+    var t=rect(cx,cy+hh,cz,w,d,'xz'), b=rect(cx,cy-hh,cz,w,d,'xz');
+    for(var i=0;i<4;i++)trace(t[i],b[i]);
+    return {top:t,bot:b};
+  }
+
+  if(v==='qfp'){
+    var s=0.6;
+    rect(0,0,0,s*2,s*2,'xy');                 // cuerpo
+    rect(0,0,0.001,s*1.2,s*1.2,'xy');         // die interno
+    node(new V(0,0,0));
+    // marca de orientación (esquina) + texto "AI" sugerido con puntos
+    node(new V(-s*0.8,s*0.8,0));
+    // patas finas en los 4 lados
+    for(var side=0;side<4;side++)for(var k=-3;k<=3;k++){
+      var off=k*0.16, p,d;
+      if(side===0){p=new V(off,-s,0);d=new V(off,-s-0.3,0);}
+      else if(side===1){p=new V(s,off,0);d=new V(s+0.3,off,0);}
+      else if(side===2){p=new V(off,s,0);d=new V(off,s+0.3,0);}
+      else {p=new V(-s,off,0);d=new V(-s-0.3,off,0);}
+      trace(p,d); node(d);
+    }
+    // trazas internas del die
+    for(var k=-2;k<=2;k++){trace(new V(k*0.22,-s*0.55,0.001),new V(k*0.22,s*0.55,0.001));}
+  } else if(v==='heatsink'){
+    var s=0.62,bh=0.16;
+    box(0,0,0,s*2,bh*2,s*2);                  // cuerpo del chip
+    // die metálico encima
+    rect(0,bh+0.001,0,s*1.0,s*1.0,'xz');
+    node(new V(0,bh+0.02,0));
+    // aletas del disipador
+    for(var k=-3;k<=3;k++){var x=k*0.16;
+      L([new V(x,bh,-s*0.55),new V(x,bh+0.5,-s*0.55),new V(x,bh+0.5,s*0.55),new V(x,bh,s*0.55)]);
+    }
+    // patas cortas abajo
+    for(var side=0;side<2;side++)for(var k=-2;k<=2;k++){
+      var off=k*0.24; var p=(side===0)?new V(off,-bh,-s):new V(off,-bh,s);
+      var d=p.clone(); d.y-=0.28; trace(p,d); node(d);
+    }
+  } else if(v==='bga'){
+    var s=0.6,bh=0.14;
+    box(0,0,0,s*2,bh*2,s*2);
+    rect(0,bh+0.001,0,s*1.1,s*1.1,'xz');      // tapa
+    node(new V(0,bh+0.02,0));
+    // grilla de bolas en la base
+    for(var gx=-3;gx<=3;gx++)for(var gz=-3;gz<=3;gz++){
+      node(new V(gx*0.18,-bh-0.12,gz*0.18));
+    }
+  } else if(v==='board'){
+    // placa madre (plano grande) + chip central + trazas a componentes
+    rect(0,0,0,3.0,2.2,'xy');
+    var s=0.45;
+    rect(0,0,0.01,s*2,s*2,'xy'); node(new V(0,0,0.01));
+    // patas del chip
+    for(var side=0;side<4;side++)for(var k=-2;k<=2;k++){
+      var off=k*0.18,p,d;
+      if(side===0){p=new V(off,-s,0.01);d=new V(off,-s-0.18,0.01);}
+      else if(side===1){p=new V(s,off,0.01);d=new V(s+0.18,off,0.01);}
+      else if(side===2){p=new V(off,s,0.01);d=new V(off,s+0.18,0.01);}
+      else {p=new V(-s,off,0.01);d=new V(-s-0.18,off,0.01);}
+      trace(p,d);
+    }
+    // trazas largas con quiebres hacia "componentes" + nodos
+    var comps=[new V(-1.25,0.75,0.01),new V(1.25,0.6,0.01),new V(1.2,-0.7,0.01),new V(-1.2,-0.65,0.01),new V(0,0.95,0.01),new V(0,-0.95,0.01)];
+    comps.forEach(function(c){
+      var start=new V(Math.sign(c.x)*(s+0.18),Math.sign(c.y||1)*0.1,0.01);
+      var corner=new V(c.x,start.y,0.01);
+      L([start,corner,c]); node(c);
+      // mini componente (rectángulo)
+      rect(c.x,c.y,0.01,0.28,0.18,'xy');
+    });
+  } else if(v==='die'){
+    // floorplan: grilla de cores con buses, vista cenital
+    var s=0.85;
+    rect(0,0,0,s*2,s*2,'xy');
+    // 4x4 cores
+    for(var gx=0;gx<4;gx++)for(var gy=0;gy<4;gy++){
+      var cx=-s+ s*0.5 + gx*(s*2/4), cy=-s+ s*0.5 + gy*(s*2/4);
+      var cs=s*2/4*0.78;
+      rect(cx,cy,0.001,cs,cs,'xy');
+      node(new V(cx,cy,0.002));
+    }
+    // buses centrales (cruz ancha)
+    for(var k=-1;k<=1;k++){
+      trace(new V(-s,k*0.06,0.003),new V(s,k*0.06,0.003));
+      trace(new V(k*0.06,-s,0.003),new V(k*0.06,s,0.003));
+    }
+  }
+  return {nodes:nodes, segs:segs};
+}
+
+function makeScene(canvas, v){
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+  renderer.setClearColor(0x000000,0); renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  var scene=new THREE.Scene(); var cam=new THREE.PerspectiveCamera(45,1,0.1,100); cam.position.set(0,0,4.2);
+  function resize(){var w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+  resize(); window.addEventListener('resize',resize);
+  var data=build(v);
+  var g=new THREE.Group(); scene.add(g);
+  if(data.segs.length){
+    var lgeo=new THREE.BufferGeometry().setFromPoints(data.segs);
+    g.add(new THREE.LineSegments(lgeo,new THREE.LineBasicMaterial({color:0x4f9bff,transparent:true,opacity:0.6,blending:THREE.AdditiveBlending,depthWrite:false})));
+  }
+  if(data.nodes.length){
+    var np=new Float32Array(data.nodes.length*3);
+    data.nodes.forEach(function(p,i){np[i*3]=p.x;np[i*3+1]=p.y;np[i*3+2]=p.z;});
+    var ngeo=new THREE.BufferGeometry(); ngeo.setAttribute('position',new THREE.BufferAttribute(np,3));
+    g.add(new THREE.Points(ngeo,new THREE.PointsMaterial({color:0xbfe0ff,size:0.15,map:TEX,transparent:true,opacity:0.95,blending:THREE.AdditiveBlending,depthWrite:false})));
+  }
+  // ── MÁS PARTÍCULAS: puntos densos a lo largo de todas las trazas ──
+  if(data.segs.length){
+    var fill=[], PER=6;  // partículas por traza
+    for(var si=0;si<data.segs.length;si+=2){
+      var a=data.segs[si],b=data.segs[si+1];
+      for(var t=0;t<PER;t++){var f=(t+0.5)/PER;fill.push(a.x+(b.x-a.x)*f,a.y+(b.y-a.y)*f,a.z+(b.z-a.z)*f);}
+    }
+    var fgeo=new THREE.BufferGeometry(); fgeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(fill),3));
+    g.add(new THREE.Points(fgeo,new THREE.PointsMaterial({color:0x9ec8ff,size:0.05,map:TEX,transparent:true,opacity:0.7,blending:THREE.AdditiveBlending,depthWrite:false})));
+  }
+  // ── partículas ambientales flotando alrededor del chip ──
+  var AMB=140, ap=new Float32Array(AMB*3), abase=new Float32Array(AMB*3), adr=new Float32Array(AMB);
+  for(var i=0;i<AMB;i++){abase[i*3]=(Math.random()*2-1)*1.9;abase[i*3+1]=(Math.random()*2-1)*1.6;abase[i*3+2]=(Math.random()*2-1)*1.2;ap[i*3]=abase[i*3];ap[i*3+1]=abase[i*3+1];ap[i*3+2]=abase[i*3+2];adr[i]=Math.random()*Math.PI*2;}
+  var agéo=new THREE.BufferGeometry(); agéo.setAttribute('position',new THREE.BufferAttribute(ap,3));
+  g.add(new THREE.Points(agéo,new THREE.PointsMaterial({color:0x7fb0ff,size:0.04,map:TEX,transparent:true,opacity:0.45,blending:THREE.AdditiveBlending,depthWrite:false})));
+  // pulsos de energía corriendo por las trazas (más cantidad)
+  var pulses=[], PN=Math.min(90, data.segs.length/2|0);
+  var pg=new THREE.BufferGeometry(), pp=new Float32Array(PN*3);
+  pg.setAttribute('position',new THREE.BufferAttribute(pp,3));
+  g.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0xdff0ff,size:0.10,map:TEX,transparent:true,opacity:1,blending:THREE.AdditiveBlending,depthWrite:false})));
+  function spawn(o){o.i=((Math.random()*data.segs.length/2)|0)*2;o.t=0;o.sp=0.5+Math.random()*1.5;}
+  for(var i=0;i<PN;i++){var o={};spawn(o);pulses.push(o);}
+
+  var flat=(v==='qfp'||v==='die');
+  var clock=new THREE.Clock(),T=0;
+  (function loop(){requestAnimationFrame(loop);var dt=clock.getDelta();T+=dt;
+    if(flat){ g.rotation.z=Math.sin(T*0.2)*0.04; g.rotation.y=Math.sin(T*0.35)*0.12; g.rotation.x=-0.12+Math.sin(T*0.25)*0.06; }
+    else { g.rotation.y=T*0.45; g.rotation.x=-0.5+Math.sin(T*0.3)*0.08; }
+    if(data.segs.length){
+      for(var k=0;k<PN;k++){var o=pulses[k];o.t+=dt*o.sp;if(o.t>=1)spawn(o);
+        var a=data.segs[o.i],b=data.segs[o.i+1];
+        pp[k*3]=a.x+(b.x-a.x)*o.t;pp[k*3+1]=a.y+(b.y-a.y)*o.t;pp[k*3+2]=a.z+(b.z-a.z)*o.t;}
+      pg.attributes.position.needsUpdate=true;
+    }
+    for(var i=0;i<AMB;i++){var ph=adr[i];
+      ap[i*3]=abase[i*3]+Math.sin(T*0.5+ph)*0.07;
+      ap[i*3+1]=abase[i*3+1]+Math.cos(T*0.45+ph)*0.07;
+      ap[i*3+2]=abase[i*3+2]+Math.sin(T*0.6+ph*1.3)*0.07;}
+    agéo.attributes.position.needsUpdate=true;
+    renderer.render(scene,cam);})();
+}
+document.querySelectorAll('canvas[data-v]').forEach(function(c){ makeScene(c, c.dataset.v); });
+</script>
+</body>
+</html>

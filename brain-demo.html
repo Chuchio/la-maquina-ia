@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cerebro de partículas — 5 enfoques</title>
+<style>
+  html,body{margin:0;background:#000;color:#cfe0ff;font-family:system-ui,sans-serif}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#0c1018}
+  .cell{position:relative;background:#000;aspect-ratio:1/1}
+  .cell canvas{display:block;width:100%;height:100%}
+  .lbl{position:absolute;top:12px;left:14px;font-size:12px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;color:#8fb6ff;text-shadow:0 1px 4px #000}
+  .desc{position:absolute;bottom:12px;left:14px;right:14px;font-size:11px;color:#7d93b8;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="cell"><div class="lbl">1 · Volumétrico denso</div><canvas data-v="dense"></canvas><div class="desc">Miles de partículas finas llenando el volumen del cerebro. Surcos por ruido. El más "nube de polvo".</div></div>
+  <div class="cell"><div class="lbl">2 · Superficie + giros</div><canvas data-v="gyri"></canvas><div class="desc">Partículas solo en la corteza, siguiendo los pliegues (gyri/sulci) marcados. Look anatómico.</div></div>
+  <div class="cell"><div class="lbl">3 · Red neuronal viva</div><canvas data-v="neural"></canvas><div class="desc">Nodos + conexiones + pulsos de luz corriendo por las sinapsis. Estilo IA.</div></div>
+  <div class="cell"><div class="lbl">4 · Wireframe + puntos</div><canvas data-v="wire"></canvas><div class="desc">Malla de la superficie con puntos en los vértices. Más gráfico/técnico.</div></div>
+  <div class="cell"><div class="lbl">5 · Glow etéreo</div><canvas data-v="glow"></canvas><div class="desc">Partículas suaves con mucho brillo y profundidad, pocas líneas. Sensación de energía/luz.</div></div>
+  <div class="cell" style="display:flex;align-items:center;justify-content:center;color:#5a6a86;font-size:12px;text-align:center;padding:20px">Giran en vivo.<br>Decime cuál te gusta<br>(o combino dos).</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+var V=THREE.Vector3;
+function dotTex(soft){var s=64,c=document.createElement('canvas');c.width=c.height=s;var g=c.getContext('2d');
+  var rg=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
+  if(soft){rg.addColorStop(0,'rgba(255,255,255,0.9)');rg.addColorStop(0.4,'rgba(180,215,255,0.5)');rg.addColorStop(1,'rgba(120,170,255,0)');}
+  else{rg.addColorStop(0,'rgba(255,255,255,1)');rg.addColorStop(0.35,'rgba(210,235,255,0.9)');rg.addColorStop(0.7,'rgba(120,170,255,0.25)');rg.addColorStop(1,'rgba(80,140,255,0)');}
+  g.fillStyle=rg;g.beginPath();g.arc(s/2,s/2,s/2,0,Math.PI*2);g.fill();return new THREE.CanvasTexture(c);}
+var TEX=dotTex(false), TEXS=dotTex(true);
+
+// ── ruido determinista ──
+function hash3(x,y,z){var n=Math.sin(x*127.1+y*311.7+z*74.7)*43758.5453;return n-Math.floor(n);}
+function noise3(x,y,z){var xi=Math.floor(x),yi=Math.floor(y),zi=Math.floor(z),xf=x-xi,yf=y-yi,zf=z-zi;
+  function f(t){return t*t*(3-2*t);}var u=f(xf),v=f(yf),w=f(zf);function lp(a,b,t){return a+(b-a)*t;}
+  return lp(lp(lp(hash3(xi,yi,zi),hash3(xi+1,yi,zi),u),lp(hash3(xi,yi+1,zi),hash3(xi+1,yi+1,zi),u),v),
+            lp(lp(hash3(xi,yi,zi+1),hash3(xi+1,yi,zi+1),u),lp(hash3(xi,yi+1,zi+1),hash3(xi+1,yi+1,zi+1),u),v),w);}
+
+// deforma una dirección unitaria a la SUPERFICIE de un cerebro
+function brainSurface(nx,ny,nz){
+  var x=nx*0.92,y=ny*0.80,z=nz*1.30;
+  if(y<0)y*=0.66; else y*=1.04;
+  z+=-0.12*y;
+  var taper=1-0.16*(z*z)/(1.30*1.30); x*=taper;
+  var rad=Math.sqrt(x*x+y*y+z*z)+1e-5, dr=0;
+  var fis=Math.exp(-(x*x)/0.060);            // fisura central (2 hemisferios)
+  dr+=-0.34*fis*Math.max(0,(y+0.05)); x+=(x>0?1:-1)*0.08*fis;
+  var f=0;                                    // gyri
+  f+=0.075*noise3(x*3.4,y*3.4,z*3.4);
+  f+=0.036*noise3(x*7.0+10,y*7.0+10,z*7.0+10);
+  f+=0.020*noise3(x*13.0+40,y*13.0+40,z*13.0+40);
+  f-=0.066; dr+=f;
+  var k=(rad+dr)/rad; return new V(x*k,y*k,z*k);
+}
+function randDir(){var u=Math.random(),v=Math.random();var th=Math.acos(2*u-1),ph=2*Math.PI*v;
+  return [Math.sin(th)*Math.cos(ph),Math.cos(th),Math.sin(th)*Math.sin(ph)];}
+
+function build(v){
+  var pts=[], segs=[], soft=false, size=0.05, col=0x8fd0ff, lineOp=0;
+  var N = (v==='dense')?2600 : (v==='glow')?1400 : 700;
+  if(v==='dense'){
+    // volumétrico: superficie + interior (radio aleatorio hacia adentro)
+    for(var i=0;i<N;i++){var d=randDir();var s=brainSurface(d[0],d[1],d[2]);
+      var r=Math.pow(Math.random(),0.5);  // sesgo a la superficie
+      pts.push(s.clone().multiplyScalar(0.25+0.75*r));}
+    size=0.05; col=0x9ad0ff;
+  } else if(v==='gyri'){
+    // solo superficie, denso → se ven los pliegues
+    for(var i=0;i<N*1.6;i++){var d=randDir();pts.push(brainSurface(d[0],d[1],d[2]));}
+    size=0.055; col=0xcfeaff;
+  } else if(v==='neural'){
+    for(var i=0;i<420;i++){var d=randDir();pts.push(brainSurface(d[0],d[1],d[2]));}
+    for(var i=0;i<pts.length;i++)for(var j=i+1;j<pts.length;j++){
+      if(pts[i].distanceTo(pts[j])<0.30){ if(pts[i].x*pts[j].x<0&&(Math.abs(pts[i].x)>0.05||Math.abs(pts[j].x)>0.05))continue; segs.push(pts[i],pts[j]); }
+    }
+    size=0.07; col=0x9ad6ff; lineOp=0.5;
+  } else if(v==='wire'){
+    var geo=new THREE.IcosahedronGeometry(1,4); var pos=geo.attributes.position, seen={};
+    var verts=[];
+    for(var i=0;i<pos.count;i++){var p=brainSurface(pos.getX(i),pos.getY(i),pos.getZ(i));verts.push(p);}
+    // edges del icosaedro
+    var idx=geo.index?geo.index.array:null;
+    if(idx){for(var t=0;t<idx.length;t+=3){var a=idx[t],b=idx[t+1],c=idx[t+2];
+      segs.push(verts[a],verts[b],verts[b],verts[c],verts[c],verts[a]);}}
+    pts=verts; size=0.07; col=0xcfeaff; lineOp=0.3;
+  } else if(v==='glow'){
+    for(var i=0;i<N;i++){var d=randDir();var s=brainSurface(d[0],d[1],d[2]);
+      var r=Math.pow(Math.random(),0.7);pts.push(s.clone().multiplyScalar(0.4+0.6*r));}
+    soft=true; size=0.13; col=0xaee0ff;
+  }
+  return {pts:pts,segs:segs,soft:soft,size:size,col:col,lineOp:lineOp};
+}
+
+function makeScene(canvas,v){
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+  renderer.setClearColor(0x000000,0); renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  var scene=new THREE.Scene(); var cam=new THREE.PerspectiveCamera(45,1,0.1,100); cam.position.set(0,0,4.4);
+  function resize(){var w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+  resize(); window.addEventListener('resize',resize);
+  var d=build(v); var g=new THREE.Group(); scene.add(g); g.scale.setScalar(1.25);
+  if(d.segs.length){var lg=new THREE.BufferGeometry().setFromPoints(d.segs);
+    g.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0x4f9bff,transparent:true,opacity:d.lineOp,blending:THREE.AdditiveBlending,depthWrite:false})));}
+  var np=new Float32Array(d.pts.length*3); d.pts.forEach(function(p,i){np[i*3]=p.x;np[i*3+1]=p.y;np[i*3+2]=p.z;});
+  var ng=new THREE.BufferGeometry(); ng.setAttribute('position',new THREE.BufferAttribute(np,3));
+  var mat=new THREE.PointsMaterial({color:d.col,size:d.size,map:d.soft?TEXS:TEX,transparent:true,opacity:d.soft?0.7:1.0,blending:THREE.AdditiveBlending,depthWrite:false});
+  g.add(new THREE.Points(ng,mat));
+  // pulsos para el neural
+  var pulses=[],PN=0,pg,pp;
+  if(v==='neural'&&d.segs.length){PN=70;pg=new THREE.BufferGeometry();pp=new Float32Array(PN*3);pg.setAttribute('position',new THREE.BufferAttribute(pp,3));
+    g.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0xdff0ff,size:0.11,map:TEX,transparent:true,opacity:1,blending:THREE.AdditiveBlending,depthWrite:false})));
+    for(var i=0;i<PN;i++){var o={};o.i=((Math.random()*d.segs.length/2)|0)*2;o.t=Math.random();o.sp=0.5+Math.random()*1.5;pulses.push(o);}}
+  var clock=new THREE.Clock(),T=0;
+  (function loop(){requestAnimationFrame(loop);var dt=clock.getDelta();T+=dt;
+    g.rotation.y=T*0.35; g.rotation.x=-0.32+Math.sin(T*0.25)*0.08;
+    if(v==='glow') mat.opacity=0.45+0.25*Math.sin(T*1.5);
+    if(PN){for(var k=0;k<PN;k++){var o=pulses[k];o.t+=dt*o.sp;if(o.t>=1){o.i=((Math.random()*d.segs.length/2)|0)*2;o.t=0;o.sp=0.5+Math.random()*1.5;}
+      var a=d.segs[o.i],b=d.segs[o.i+1];pp[k*3]=a.x+(b.x-a.x)*o.t;pp[k*3+1]=a.y+(b.y-a.y)*o.t;pp[k*3+2]=a.z+(b.z-a.z)*o.t;}pg.attributes.position.needsUpdate=true;}
+    renderer.render(scene,cam);})();
+}
+var solo=new URLSearchParams(location.search).get('solo');
+if(solo){
+  document.body.innerHTML='<canvas id="s" style="display:block;width:100vw;height:100vh"></canvas>';
+  document.body.style.background='#000';
+  makeScene(document.getElementById('s'),solo);
+} else {
+  document.querySelectorAll('canvas[data-v]').forEach(function(c){makeScene(c,c.dataset.v);});
+}
+</script>
+</body>
+</html>

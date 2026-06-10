@@ -1,0 +1,12 @@
+import puppeteer from 'puppeteer';
+const browser = await puppeteer.launch({headless:'new', args:['--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--ignore-gpu-blocklist','--enable-unsafe-swiftshader']});
+const page = await browser.newPage();
+const errors=[];
+page.on('console', m=>{ if(m.type()==='error') errors.push('CONSOLE: '+m.text()); });
+page.on('pageerror', e=> errors.push('PAGEERR: '+e.message));
+await page.setViewport({width:1440,height:900,deviceScaleFactor:1});
+await page.goto('http://localhost:3000',{waitUntil:'load'});
+await new Promise(r=>setTimeout(r,3500));
+await page.screenshot({path:'./temporary screenshots/brain3d-hero.png',clip:{x:0,y:0,width:1440,height:900}});
+await browser.close();
+console.log('ERRORS:', errors.length ? '\n'+errors.join('\n') : 'none');

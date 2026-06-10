@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glowing Blue Brain — Neural Network</title>
+<style>
+  html,body{margin:0;height:100%;background:#000;overflow:hidden}
+  #cv{display:block;width:100vw;height:100vh}
+  /* viñeta sutil para dar profundidad al fondo negro */
+  .vig{position:fixed;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 70% 70% at 50% 50%,transparent 55%,rgba(0,0,0,.6) 100%)}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="vig"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ============================================================
+   GLOWING BLUE BRAIN — neural network
+   - Black background
+   - Translucent blue brain (deformed sphere, organic two-hemisphere shape)
+   - Floating white/blue dot particles around it
+   - Thin geometric lines connecting nearby particles (low-poly mesh)
+   - Slow rotation + pulsing glow
+   ============================================================ */
+(function(){
+  var canvas = document.getElementById('cv');
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  renderer.setClearColor(0x000000, 1);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+
+  var scene  = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(0, 0, 6);
+
+  function resize(){
+    var W=window.innerWidth, H=window.innerHeight;
+    renderer.setSize(W,H); camera.aspect=W/H; camera.updateProjectionMatrix();
+  }
+  resize(); window.addEventListener('resize', resize);
+
+  // soft lights so the translucent brain reads as volume
+  scene.add(new THREE.AmbientLight(0x223355, 0.8));
+  var key = new THREE.PointLight(0x4ea8ff, 1.6, 50); key.position.set(4,5,6); scene.add(key);
+  var rim = new THREE.PointLight(0x1e90ff, 1.2, 50); rim.position.set(-6,-2,-4); scene.add(rim);
+
+  // ── round glow sprite for particles ──
+  var dotTex=(function(){var s=64,c=document.createElement('canvas');c.width=c.height=s;var g=c.getContext('2d');
+    var rg=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
+    rg.addColorStop(0,'rgba(255,255,255,1)');rg.addColorStop(0.35,'rgba(210,235,255,0.9)');
+    rg.addColorStop(0.7,'rgba(120,180,255,0.25)');rg.addColorStop(1,'rgba(80,140,255,0)');
+    g.fillStyle=rg;g.beginPath();g.arc(s/2,s/2,s/2,0,Math.PI*2);g.fill();
+    return new THREE.CanvasTexture(c);})();
+
+  // deterministic noise for organic deformation
+  function hash3(x,y,z){var n=Math.sin(x*127.1+y*311.7+z*74.7)*43758.5453;return n-Math.floor(n);}
+  function noise3(x,y,z){
+    var xi=Math.floor(x),yi=Math.floor(y),zi=Math.floor(z),xf=x-xi,yf=y-yi,zf=z-zi;
+    function f(t){return t*t*(3-2*t);} var u=f(xf),v=f(yf),w=f(zf);
+    function lp(a,b,t){return a+(b-a)*t;}
+    return lp(lp(lp(hash3(xi,yi,zi),hash3(xi+1,yi,zi),u),lp(hash3(xi,yi+1,zi),hash3(xi+1,yi+1,zi),u),v),
+              lp(lp(hash3(xi,yi,zi+1),hash3(xi+1,yi,zi+1),u),lp(hash3(xi,yi+1,zi+1),hash3(xi+1,yi+1,zi+1),u),v),w);
+  }
+
+  var group = new THREE.Group(); scene.add(group);
+
+  /* ── deform an icosphere into an organic brain ──
+     elongated front↔back, narrower sides, flatter base, deep median
+     fissure (two hemispheres) and high-frequency folds (gyri). */
+  function brainify(geo){
+    var pos=geo.attributes.position, v=new THREE.Vector3();
+    for(var i=0;i<pos.count;i++){
+      v.fromBufferAttribute(pos,i);
+      var nx=v.x, ny=v.y, nz=v.z;                 // unit-ish sphere normal
+      var x=nx*0.92, y=ny*0.80, z=nz*1.30;        // base ellipsoid
+      if(y<0) y*=0.66; else y*=1.04;              // flatter base, fuller top
+      z += -0.12*y;                               // lift frontal lobe
+      var taper=1-0.16*(z*z)/(1.30*1.30); x*=taper;
+      var rad=Math.sqrt(x*x+y*y+z*z)+1e-5, dr=0;
+      var fis=Math.exp(-(x*x)/0.060);             // median fissure
+      dr += -0.34*fis*Math.max(0,(y+0.05));
+      x  += (x>0?1:-1)*0.08*fis;
+      var f=0;                                     // gyri folds
+      f += 0.070*noise3(x*3.6,y*3.6,z*3.6);
+      f += 0.034*noise3(x*7.5+10,y*7.5+10,z*7.5+10);
+      f += 0.020*noise3(x*14+40,y*14+40,z*14+40);
+      f -= 0.062; dr += f;
+      var k=(rad+dr)/rad;
+      pos.setXYZ(i, x*k, y*k, z*k);
+    }
+    geo.computeVertexNormals();
+    return geo;
+  }
+
+  // base geometry (shared for the solid + wireframe shells)
+  var baseGeo = brainify(new THREE.IcosahedronGeometry(1.0, 5));
+  baseGeo.scale(1.35,1.35,1.35);
+
+  // translucent glowing inner brain
+  var brainMat = new THREE.MeshPhongMaterial({
+    color:0x1b6fff, emissive:0x0a3aa0, emissiveIntensity:0.9,
+    transparent:true, opacity:0.32, shininess:80, specular:0x6fb6ff,
+    side:THREE.DoubleSide, depthWrite:false, blending:THREE.AdditiveBlending
+  });
+  var brainMesh = new THREE.Mesh(baseGeo, brainMat);
+  group.add(brainMesh);
+
+  // low-poly mesh overlay (lines on the brain surface)
+  var lowGeo = brainify(new THREE.IcosahedronGeometry(1.0, 3)); lowGeo.scale(1.37,1.37,1.37);
+  var wire = new THREE.LineSegments(
+    new THREE.WireframeGeometry(lowGeo),
+    new THREE.LineBasicMaterial({color:0x5fb0ff, transparent:true, opacity:0.22,
+      blending:THREE.AdditiveBlending, depthWrite:false})
+  );
+  group.add(wire);
+
+  // bright neuron points sitting on the surface
+  var surf = brainify(new THREE.IcosahedronGeometry(1.0, 4)); surf.scale(1.40,1.40,1.40);
+  var surfPts = new THREE.Points(surf, new THREE.PointsMaterial({
+    color:0xbfe0ff, size:0.05, map:dotTex, transparent:true, opacity:0.95,
+    blending:THREE.AdditiveBlending, depthWrite:false}));
+  group.add(surfPts);
+
+  /* ── floating particle field around the brain ── */
+  var N = (window.innerWidth<760)?160:300;
+  var pPos = new Float32Array(N*3), nodes=[];
+  for(var i=0;i<N;i++){
+    var a=Math.random()*Math.PI*2, c=Math.acos(Math.random()*2-1);
+    var r=1.7 + Math.random()*1.8;                // shell around the brain
+    var x=Math.sin(c)*Math.cos(a)*r, y=Math.cos(c)*r*0.8, z=Math.sin(c)*Math.sin(a)*r;
+    pPos[i*3]=x; pPos[i*3+1]=y; pPos[i*3+2]=z;
+    nodes.push(new THREE.Vector3(x,y,z));
+  }
+  var pGeo=new THREE.BufferGeometry();
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos,3));
+  var floatPts=new THREE.Points(pGeo, new THREE.PointsMaterial({
+    color:0xffffff, size:0.07, map:dotTex, transparent:true, opacity:0.9,
+    blending:THREE.AdditiveBlending, depthWrite:false}));
+  group.add(floatPts);
+
+  // thin geometric lines connecting nearby floating particles
+  var segs=[];
+  for(var i=0;i<N;i++) for(var j=i+1;j<N;j++){
+    if(nodes[i].distanceTo(nodes[j]) < 0.95) segs.push(nodes[i],nodes[j]);
+  }
+  var linkGeo=new THREE.BufferGeometry().setFromPoints(segs);
+  var links=new THREE.LineSegments(linkGeo, new THREE.LineBasicMaterial({
+    color:0x4aa3ff, transparent:true, opacity:0.18,
+    blending:THREE.AdditiveBlending, depthWrite:false}));
+  group.add(links);
+
+  // subtle per-particle drift offsets (so the field feels alive)
+  var drift=new Float32Array(N);
+  for(var i=0;i<N;i++) drift[i]=Math.random()*Math.PI*2;
+  var basePos=pPos.slice();
+
+  var clock=new THREE.Clock(), T=0;
+  function animate(){
+    requestAnimationFrame(animate);
+    T += clock.getDelta();
+
+    // slow rotation
+    group.rotation.y = T*0.18;
+    group.rotation.x = Math.sin(T*0.12)*0.10 - 0.15;
+
+    // pulsing glow on the brain
+    var pulse = 0.5 + 0.5*Math.sin(T*1.4);
+    brainMat.emissiveIntensity = 0.6 + 0.6*pulse;
+    brainMat.opacity = 0.26 + 0.12*pulse;
+    var s = 1 + 0.02*Math.sin(T*1.4);           // gentle breathing
+    brainMesh.scale.setScalar(s);
+    surfPts.material.opacity = 0.7 + 0.28*pulse;
+    wire.material.opacity = 0.16 + 0.12*pulse;
+
+    // float the surrounding particles
+    var arr=pGeo.attributes.position.array;
+    for(var i=0;i<N;i++){
+      var i3=i*3, ph=drift[i];
+      arr[i3]   = basePos[i3]   + Math.sin(T*0.6+ph)*0.06;
+      arr[i3+1] = basePos[i3+1] + Math.cos(T*0.5+ph)*0.06;
+      arr[i3+2] = basePos[i3+2] + Math.sin(T*0.7+ph*1.3)*0.06;
+    }
+    pGeo.attributes.position.needsUpdate=true;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>

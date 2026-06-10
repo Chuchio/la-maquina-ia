@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Más formas candidatas — demo 2</title>
+<style>
+  html,body{margin:0;background:#05060a;color:#cfe0ff;font-family:system-ui,sans-serif}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#11151f}
+  .cell{position:relative;background:#05060a;aspect-ratio:1/1}
+  .cell canvas{display:block;width:100%;height:100%}
+  .lbl{position:absolute;top:10px;left:12px;font-size:12px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;color:#9ad6ff;text-shadow:0 1px 4px #000}
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="cell"><div class="lbl">Espiral cónica</div><canvas data-shape="cone"></canvas></div>
+  <div class="cell"><div class="lbl">Cristal / diamante</div><canvas data-shape="diamond"></canvas></div>
+  <div class="cell"><div class="lbl">Vórtice / túnel</div><canvas data-shape="vortex"></canvas></div>
+  <div class="cell"><div class="lbl">Infinito ∞</div><canvas data-shape="infinity"></canvas></div>
+  <div class="cell"><div class="lbl">Estrella 3D</div><canvas data-shape="star"></canvas></div>
+  <div class="cell"><div class="lbl">Cubo wireframe</div><canvas data-shape="wirecube"></canvas></div>
+  <div class="cell"><div class="lbl">Anillos de Saturno</div><canvas data-shape="saturn"></canvas></div>
+  <div class="cell"><div class="lbl">Cilindro malla</div><canvas data-shape="cylinder"></canvas></div>
+  <div class="cell"><div class="lbl">Corazón 3D</div><canvas data-shape="heart"></canvas></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+function dotTexture(){var s=64,c=document.createElement('canvas');c.width=c.height=s;var g=c.getContext('2d');
+  var rg=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);rg.addColorStop(0,'rgba(255,255,255,1)');
+  rg.addColorStop(0.35,'rgba(255,255,255,0.9)');rg.addColorStop(0.7,'rgba(255,255,255,0.25)');
+  rg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=rg;g.beginPath();g.arc(s/2,s/2,s/2,0,Math.PI*2);g.fill();
+  return new THREE.CanvasTexture(c);}
+var TEX=dotTexture();
+var N=440;
+var V=THREE.Vector3;
+
+function gen(shape){
+  var pts=[], i;
+  if(shape==='cone'){               // espiral que sube formando un cono
+    var turns=4.5,H=2.6;
+    for(i=0;i<N;i++){var t=Math.random(),ang=t*turns*Math.PI*2,r=0.15+t*1.25;
+      pts.push(new V(Math.cos(ang)*r,(t-0.5)*H,Math.sin(ang)*r));}
+  } else if(shape==='diamond'){     // bipirámide (diamante): aristas + relleno
+    var top=new V(0,1.4,0),bot=new V(0,-1.4,0),ring=[];
+    for(var k=0;k<6;k++){var a=k/6*Math.PI*2;ring.push(new V(Math.cos(a)*1.0,0,Math.sin(a)*1.0));}
+    var E=[];for(var k=0;k<6;k++){E.push([top,ring[k]]);E.push([bot,ring[k]]);E.push([ring[k],ring[(k+1)%6]]);}
+    var en=Math.floor(N*0.55);
+    for(i=0;i<en;i++){var e=E[(Math.random()*E.length)|0],t=Math.random();pts.push(e[0].clone().lerp(e[1],t));}
+    for(i=en;i<N;i++){var a=Math.random(),h=(Math.random()*2-1);var ang=Math.random()*Math.PI*2;
+      var rr=(1-Math.abs(h))*Math.sqrt(Math.random());
+      pts.push(new V(Math.cos(ang)*rr,h*1.4,Math.sin(ang)*rr));}
+  } else if(shape==='vortex'){      // túnel/vórtice (partículas en tubo que rota en profundidad)
+    var turns=5,L=3.2;
+    for(i=0;i<N;i++){var t=Math.random(),ang=t*turns*Math.PI*2,r=0.7+0.25*Math.sin(t*8);
+      pts.push(new V(Math.cos(ang)*r,(t-0.5)*L,Math.sin(ang)*r));}
+  } else if(shape==='infinity'){    // lemniscata (símbolo infinito) con grosor
+    for(i=0;i<N;i++){var t=Math.random()*Math.PI*2,sc=1.5/(1+Math.sin(t)*Math.sin(t));
+      pts.push(new V(sc*Math.cos(t),sc*Math.sin(t)*Math.cos(t),(Math.random()-0.5)*0.35));}
+  } else if(shape==='star'){        // estrella de 5 puntas extruida en 3D
+    var pk=5;
+    for(i=0;i<N;i++){var a=Math.random()*Math.PI*2;
+      var spikes=Math.cos(a*pk);var r=0.6+0.7*(spikes*0.5+0.5);
+      pts.push(new V(Math.cos(a)*r,Math.sin(a)*r,(Math.random()-0.5)*0.5));}
+  } else if(shape==='wirecube'){    // cubo en aristas (12 aristas marcadas)
+    var c=1.15,Vc=[];for(var sx=-1;sx<=1;sx+=2)for(var sy=-1;sy<=1;sy+=2)for(var sz=-1;sz<=1;sz+=2)Vc.push(new V(sx*c,sy*c,sz*c));
+    var Ec=[];for(var a=0;a<8;a++)for(var bcnt=a+1;bcnt<8;bcnt++){var d=Vc[a].distanceTo(Vc[bcnt]);if(Math.abs(d-2*c)<0.01)Ec.push([Vc[a],Vc[bcnt]]);}
+    for(i=0;i<N;i++){var e=Ec[(Math.random()*Ec.length)|0],t=Math.random();pts.push(e[0].clone().lerp(e[1],t));}
+  } else if(shape==='saturn'){      // esfera central + anillo plano
+    var coreN=Math.floor(N*0.45);
+    for(i=0;i<coreN;i++){var a=Math.random()*Math.PI*2,cc=Math.acos(Math.random()*2-1),R=0.75;
+      pts.push(new V(Math.sin(cc)*Math.cos(a)*R,Math.cos(cc)*R,Math.sin(cc)*Math.sin(a)*R));}
+    for(i=coreN;i<N;i++){var a=Math.random()*Math.PI*2,rr=1.25+Math.random()*0.55;
+      pts.push(new V(Math.cos(a)*rr,(Math.random()-0.5)*0.06,Math.sin(a)*rr));}
+  } else if(shape==='cylinder'){    // cilindro hueco (malla)
+    var H=2.4,R=0.95;
+    for(i=0;i<N;i++){var a=Math.random()*Math.PI*2;pts.push(new V(Math.cos(a)*R,(Math.random()-0.5)*H,Math.sin(a)*R));}
+  } else if(shape==='heart'){       // corazón 3D
+    for(i=0;i<N;i++){var t=Math.random()*Math.PI*2;
+      var x=16*Math.pow(Math.sin(t),3);
+      var y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+      pts.push(new V(x*0.08,y*0.08,(Math.random()-0.5)*0.5));}
+  }
+  return pts;
+}
+
+function makeScene(canvas, shape){
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+  renderer.setClearColor(0x000000,0); renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  var scene=new THREE.Scene();
+  var cam=new THREE.PerspectiveCamera(45,1,0.1,100); cam.position.set(0,0,5.4);
+  function resize(){var w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+  resize(); window.addEventListener('resize',resize);
+
+  var nodes=gen(shape), n=nodes.length;
+  var pos=new Float32Array(n*3);
+  for(var i=0;i<n;i++){pos[i*3]=nodes[i].x;pos[i*3+1]=nodes[i].y;pos[i*3+2]=nodes[i].z;}
+  var g=new THREE.Group(); scene.add(g);
+  var geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0x8fd0ff,size:0.085,map:TEX,
+    transparent:true,opacity:0.95,blending:THREE.AdditiveBlending,depthWrite:false})));
+  var seg=[];
+  for(var i=0;i<n;i++)for(var j=i+1;j<n;j++){if(nodes[i].distanceTo(nodes[j])<0.40){seg.push(nodes[i],nodes[j]);}}
+  var lgeo=new THREE.BufferGeometry().setFromPoints(seg);
+  g.add(new THREE.LineSegments(lgeo,new THREE.LineBasicMaterial({color:0x4aa3ff,transparent:true,
+    opacity:0.26,blending:THREE.AdditiveBlending,depthWrite:false})));
+
+  var clock=new THREE.Clock(),T=0;
+  (function loop(){requestAnimationFrame(loop);T+=clock.getDelta();
+    g.rotation.y=T*0.5; g.rotation.x=Math.sin(T*0.3)*0.18-0.12;
+    renderer.render(scene,cam);})();
+}
+document.querySelectorAll('canvas[data-shape]').forEach(function(c){ makeScene(c, c.dataset.shape); });
+</script>
+</body>
+</html>
