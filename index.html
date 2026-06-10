@@ -28,7 +28,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 ::-webkit-scrollbar-thumb{background:rgba(30,64,175,.3);border-radius:3px}
 
 /* NAV */
-#nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .3s,box-shadow .3s}
+#nav{position:absolute;top:0;left:0;right:0;z-index:100;transition:background .3s,box-shadow .3s}
 #nav.sc{background:rgba(0,0,0,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(255,255,255,.06)}
 .ni{max-width:1200px;margin:0 auto;padding:0 48px;height:100px;display:flex;align-items:center;justify-content:space-between}
 .logo{text-decoration:none;display:flex;align-items:baseline}
@@ -65,7 +65,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .bgd:focus-visible{outline:3px solid rgba(248,250,252,.3);outline-offset:3px}
 
 /* HERO */
-.hw{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:80px;padding-bottom:clamp(64px,16vh,220px)}
+.hw{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:140px;padding-bottom:clamp(64px,16vh,220px)}
 /* Cerebro hiperrealista en video — fixed, se mueve con el scroll vía JS
    (--vx/--vy son el desplazamiento que escribe el script). screen blend funde
    el fondo negro. Empieza a la derecha del hero y baja a la izquierda al scrollear. */
@@ -338,6 +338,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   #servicios .ct{padding-left:20px}
   #inicio .ct{padding-left:20px}
   #inicio .hl{margin-left:0}
+  .logo img{margin-left:0!important}
   .nl,.nc{display:none}
   .hb{display:flex}
   .hc{grid-template-columns:1fr;padding:60px 0}
@@ -483,7 +484,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 <nav id="nav">
   <div class="ni">
     <a href="#inicio" class="logo" aria-label="La Máquina IA">
-      <img src="logo-nav.png" alt="" width="64" height="64" style="margin-left:-10px">
+      <img src="logo-nav.png" alt="" width="64" height="64" style="margin-left:-48px">
     </a>
     <div class="nl">
       <a href="#servicios">Servicios</a>
@@ -493,7 +494,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
       <a href="#clientes">Clientes</a>
     </div>
     <div class="nc">
-      <a href="#contacto" class="bc">Agendar llamada <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="#contacto" class="bc">Agendar llamada</a>
     </div>
     <button class="hb" id="hbtn" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
@@ -503,7 +504,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
     <a href="#resultados">Resultados</a>
     <a href="#industrias">Industrias</a>
     <a href="#clientes">Clientes</a>
-    <a href="#contacto" class="bc">Agendar llamada →</a>
+    <a href="#contacto" class="bc">Agendar llamada</a>
   </div>
 </nav>
 
@@ -515,14 +516,13 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   <div class="ct">
     <div class="hc" id="hcon">
       <div class="hl" style="position:relative;z-index:2">
-        <div>
+        <div style="position:relative;top:-20px">
           <div class="hero-brand">La Máquina <span>IA</span></div>
-          <div><span class="chip">Agencia de IA · Automatización empresarial</span></div>
           <h1 class="hh1">Tu operación<br>en <em>piloto</em><br>automático</h1>
           <p class="hsub">Automatizamos los procesos repetitivos de tu empresa con IA. Menos fricción, menos errores, más tiempo para lo que realmente importa</p>
         </div>
         <div class="hctas">
-          <a href="#contacto" class="bc bc-lg">Empezar ahora <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="#contacto" class="bc bc-lg">Empezar ahora</a>
           <a href="#servicios" class="bg">Ver servicios</a>
         </div>
         <div class="hproof">
@@ -584,37 +584,37 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
         <div class="si" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="3" stroke="#1E40AF" stroke-width="1.75"/><path d="M11 2v3M11 17v3M2 11h3M17 11h3" stroke="#1E40AF" stroke-width="1.75" stroke-linecap="round"/><path d="M4.93 4.93l2.12 2.12M14.95 14.95l2.12 2.12M4.93 17.07l2.12-2.12M14.95 7.05l2.12-2.12" stroke="#1E40AF" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <h3 class="st">Agentes IA Autónomos</h3>
         <p class="sd">Desplegamos agentes que ejecutan tareas complejas sin intervención humana. Trabajan 24/7, aprenden de cada operación y se adaptan al contexto</p>
-        <a href="/servicios#agentes" class="sa">Conocer más <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/servicios#agentes" class="sa">Conocer más</a>
       </article>
       <article class="sc2 fu d2">
         <div class="si" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="4" width="6" height="5" rx="1.5" stroke="#1E40AF" stroke-width="1.75"/><rect x="14" y="4" width="6" height="5" rx="1.5" stroke="#1E40AF" stroke-width="1.75"/><rect x="2" y="13" width="6" height="5" rx="1.5" stroke="#1E40AF" stroke-width="1.75"/><rect x="14" y="13" width="6" height="5" rx="1.5" stroke="#1E40AF" stroke-width="1.75"/><path d="M8 6.5h2.5v9H8M11 6.5h3M11 15.5h3" stroke="#1E40AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <h3 class="st">Automatización de Flujos</h3>
         <p class="sd">Conectamos y automatizamos procesos end-to-end. Eliminamos tareas repetitivas y reducimos el margen de error a casi cero</p>
-        <a href="/servicios#automatizacion" class="sa">Conocer más <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/servicios#automatizacion" class="sa">Conocer más</a>
       </article>
       <article class="sc2 fu d3">
         <div class="si" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="5" cy="11" r="2.5" stroke="#1E40AF" stroke-width="1.75"/><circle cx="17" cy="5" r="2.5" stroke="#1E40AF" stroke-width="1.75"/><circle cx="17" cy="17" r="2.5" stroke="#1E40AF" stroke-width="1.75"/><path d="M7.5 11h3.5M14.5 6.5L11 10M14.5 15.5L11 12" stroke="#1E40AF" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <h3 class="st">Integración de Sistemas</h3>
         <p class="sd">Unificamos tu stack tecnológico. CRMs, ERPs, APIs y aplicaciones internas trabajando en sincronía, sin fricción ni duplicidad de datos</p>
-        <a href="/servicios#integracion" class="sa">Conocer más <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/servicios#integracion" class="sa">Conocer más</a>
       </article>
       <article class="sc2 fu d4">
         <div class="si" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 5.5A1.5 1.5 0 014.5 4h13A1.5 1.5 0 0119 5.5v9A1.5 1.5 0 0117.5 16H13l-2 2.5L9 16H4.5A1.5 1.5 0 013 14.5v-9z" stroke="#1E40AF" stroke-width="1.75" stroke-linejoin="round"/><path d="M7 9h8M7 12h5" stroke="#1E40AF" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <h3 class="st">Asistentes Conversacionales</h3>
         <p class="sd">Chatbots y asistentes IA para atención al cliente, soporte interno y calificación de leads. Disponibles 24/7 en cualquier canal</p>
-        <a href="/servicios#asistentes" class="sa">Conocer más <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/servicios#asistentes" class="sa">Conocer más</a>
       </article>
       <article class="sc2 fu d5">
         <div class="si" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 17l4-5 4 3 4-6 4 3" stroke="#1E40AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 4v13h16" stroke="#1E40AF" stroke-width="1.75" stroke-linecap="round"/></svg></div>
         <h3 class="st">Inteligencia de Datos</h3>
         <p class="sd">Transformamos datos en decisiones automatizadas. Dashboards en tiempo real, detección de anomalías y forecasting con modelos a medida</p>
-        <a href="/servicios#datos" class="sa">Conocer más <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/servicios#datos" class="sa">Conocer más</a>
       </article>
       <article class="sc2 fu d6">
         <div class="si" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3l1.8 5.4H18l-4.5 3.3 1.7 5.3L11 14l-4.2 3 1.7-5.3L4 8.4h5.2L11 3z" stroke="#1E40AF" stroke-width="1.75" stroke-linejoin="round"/></svg></div>
         <h3 class="st">Consultoría Estratégica IA</h3>
         <p class="sd">Mapeamos tu operación, identificamos las oportunidades de mayor impacto y diseñamos el roadmap de automatización con ROI medible</p>
-        <a href="/servicios#consultoria" class="sa">Conocer más <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/servicios#consultoria" class="sa">Conocer más</a>
       </article>
     </div>
   </div>
@@ -789,7 +789,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
         <input name="email" type="email" placeholder="Tu email" autocomplete="email" required>
         <input name="empresa" type="text" placeholder="Empresa (opcional)" autocomplete="organization">
         <textarea name="mensaje" rows="3" placeholder="Contanos qué querés automatizar. Si todavía no lo tenés claro, lo charlamos juntos" required></textarea>
-        <button type="submit" class="bc bc-lg">Enviar mensaje <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="submit" class="bc bc-lg">Enviar mensaje</button>
         <p class="cform-msg" role="status" aria-live="polite" hidden></p>
       </form>
       <p class="calt" aria-hidden="true">&nbsp;</p>
@@ -1251,7 +1251,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   if(edges.length){ for(var i=0;i<PULSES;i++){ var p={}; spawn(p); pulses.push(p); } }
 
   // partículas extra (densifican formas y explotan)
-  var EXP=(window.innerWidth<760)?420:800;
+  var EXP=(window.innerWidth<760)?560:1100;
   var exSph=new Float32Array(EXP*3), exGal=new Float32Array(EXP*3), exCube=new Float32Array(EXP*3), exScat=new Float32Array(EXP*3), exAsm=new Float32Array(EXP*3);
   for(var i=0;i<EXP;i++){
     var i3=i*3;
@@ -1280,28 +1280,39 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     blending:THREE.AdditiveBlending, depthWrite:false});
   group.add(new THREE.Points(expGeo, expMat));
 
-  // ── LOGO: muestrea el isotipo y sustituye el cubo (cubePos/exCube) por su silueta ──
+  // ── LOGO: muestrea el logo COMPLETO (logo-nav.png: rombo + nube + círculos
+  //    con sus conectores) y sustituye el cubo (cubePos/exCube) por su silueta ──
   (function(){
     var img=new Image();
     img.onload=function(){
       var size=320, c=document.createElement('canvas'); c.width=c.height=size;
       var g=c.getContext('2d'); g.drawImage(img,0,0,size,size);
       var data=g.getImageData(0,0,size,size).data, pts=[];
+      var minX=size,maxX=0,minY=size,maxY=0;
       for(var y=0;y<size;y++) for(var x=0;x<size;x++){
-        if(data[(y*size+x)*4+3]>128) pts.push(x,y);
+        if(data[(y*size+x)*4+3]>128){
+          pts.push(x,y);
+          if(x<minX)minX=x; if(x>maxX)maxX=x; if(y<minY)minY=y; if(y>maxY)maxY=y;
+        }
       }
-      if(!pts.length) return;
-      var SCALE=1.4, n=pts.length/2;
+      var n=pts.length/2; if(!n) return;
+      // barajar y repartir round-robin: cada zona del logo (círculos finos
+      // incluidos) recibe partículas parejas, sin clusters al azar
+      for(var i=n-1;i>0;i--){var j=(Math.random()*(i+1))|0,t0=pts[i*2],t1=pts[i*2+1];
+        pts[i*2]=pts[j*2];pts[i*2+1]=pts[j*2+1];pts[j*2]=t0;pts[j*2+1]=t1;}
+      // normalizar la silueta al tamaño del cubo que reemplaza (~2.3 unidades)
+      var cx=(minX+maxX)/2, cy=(minY+maxY)/2, span=Math.max(maxX-minX,maxY-minY)||1, W=2.3;
+      var cursor=0;
       function place(arr,i3){
-        var k=((Math.random()*n)|0)*2;
-        arr[i3]  =(pts[k]/size-0.5)*2*SCALE;
-        arr[i3+1]=-(pts[k+1]/size-0.5)*2*SCALE;
+        var k=(cursor++%n)*2;
+        arr[i3]  = (pts[k]-cx)/span*W;
+        arr[i3+1]=-(pts[k+1]-cy)/span*W;
         arr[i3+2]=(Math.random()-0.5)*0.10;
       }
       for(var i=0;i<NODES;i++) place(cubePos,i*3);
       for(var i=0;i<EXP;i++) place(exCube,i*3);
     };
-    img.src='logo-isotipo.svg';
+    img.src='logo-nav.png';
   })();
 
   /* ── morphs: m1 esfera→galaxia, m2 galaxia→logo, m3 logo→explosión ── */
@@ -1987,17 +1998,17 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
 
   /* ── NODOS (espacio compacto 760x600) ── */
   var NODES={
-    form:   {x:108,y:115,  label:'Formulario', sub:'Web',     icon:'form'},
-    wa_in:  {x:108,y:175, label:'WhatsApp',   sub:'Mensaje', icon:'whatsapp'},
+    form:   {x:76,y:115,  label:'Formulario', sub:'Web',     icon:'form'},
+    wa_in:  {x:76,y:175, label:'WhatsApp',   sub:'Mensaje', icon:'whatsapp'},
     cal_in: {x:108,y:235, label:'Calendario', sub:'Evento',  icon:'calendar'},
-    crm:    {x:108,y:295, label:'CRM',         sub:'Lead',    icon:'crm'},
+    crm:    {x:76,y:295, label:'CRM',         sub:'Lead',    icon:'crm'},
     erp:    {x:108,y:355, label:'ERP',         sub:'Stock',   icon:'erp'},
     core:   {x:380,y:225, core:true, label:'La Máquina IA', sub:'Agente IA', icon:'core'},
     claude: {x:380,y:90,  model:true, label:'Claude', icon:'claude'},
-    gemini: {x:312,y:430, model:true, label:'Gemini', icon:'gemini'},
+    gemini: {x:312,y:475, model:true, label:'Gemini', icon:'gemini'},
     openai: {x:448,y:430, model:true, label:'OpenAI', icon:'openai'},
-    gmail:  {x:652,y:100,  label:'Gmail',      sub:'Enviar email', icon:'gmail'},
-    wa_out: {x:652,y:170, label:'WhatsApp',   sub:'Responder',    icon:'whatsapp'},
+    gmail:  {x:700,y:100,  label:'Gmail',      sub:'Enviar email', icon:'gmail'},
+    wa_out: {x:700,y:170, label:'WhatsApp',   sub:'Responder',    icon:'whatsapp'},
     cal_out:{x:652,y:300, label:'Calendario', sub:'Agendar',      icon:'calendar'},
     db:     {x:652,y:370, label:'Base de datos', sub:'Guardar',   icon:'db'}
   };
@@ -2140,6 +2151,98 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     }
   }
   requestAnimationFrame(frame);
+
+  /* ── EXPLOSIÓN AL SCROLLEAR: el diagrama estalla en partículas 2D que vuelan
+     hasta la esfera 3D (window.__sph, publicada por el morph) y la "forman".
+     Reversible: si scrolleás hacia arriba, las partículas se rearman en el diagrama. ── */
+  (function(){
+    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var xcv=document.createElement('canvas');
+    xcv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0';
+    document.body.appendChild(xcv);
+    var xg=xcv.getContext('2d'), DPR=Math.min(window.devicePixelRatio||1,2);
+    function xrs(){xcv.width=innerWidth*DPR; xcv.height=innerHeight*DPR; xg.setTransform(DPR,0,0,DPR,0,0);}
+    xrs(); addEventListener('resize',xrs,{passive:true});
+
+    var SPHCOL=[143,208,255]; // 0x8fd0ff: el color de la esfera 3D
+    function rgb(hex){return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)];}
+    var parts=[];
+    function addP(sx,sy,col,r){
+      var a=Math.random()*Math.PI*2, d=36+Math.random()*150;
+      var th=Math.acos(Math.random()*2-1), ph=Math.random()*Math.PI*2;
+      parts.push({sx:sx,sy:sy,c:rgb(col),r:r,
+        dx:Math.cos(a)*d, dy:Math.sin(a)*d-22,
+        ux:Math.sin(th)*Math.cos(ph), uy:Math.cos(th)*0.96,
+        j:Math.random()*0.3});
+    }
+    // contorno de cada nodo (tarjetas) en coords del stage 760x600
+    for(var id in NODES){
+      var n=NODES[id], w=halfW(n)*2, h=halfH(n)*2, P=2*(w+h);
+      var cnt=Math.max(10,Math.round(P/15));
+      for(var k=0;k<cnt;k++){
+        var p=k/cnt*P, px,py;
+        if(p<w){px=n.x-w/2+p; py=n.y-h/2;}
+        else if(p<w+h){px=n.x+w/2; py=n.y-h/2+(p-w);}
+        else if(p<2*w+h){px=n.x+w/2-(p-w-h); py=n.y+h/2;}
+        else {px=n.x-w/2; py=n.y+h/2-(p-2*w-h);}
+        addP(px,py, n.core?'#5B8DEF':'#C7D2E8', n.core?2.3:1.6);
+      }
+    }
+    // puntos a lo largo de cada arista + un paquete brillante por arista
+    edgeData.forEach(function(ed){
+      var L=ed.len||ed.path.getTotalLength();
+      for(var s=11;s<L;s+=22){
+        var pt=ed.path.getPointAtLength(s);
+        addP(pt.x,pt.y, COL[ed.e.cat], 1.8);
+      }
+      var pm=ed.path.getPointAtLength(L*Math.random());
+      addP(pm.x,pm.y,'#FFFFFF',2.6);
+    });
+
+    function sm(v){return v*v*(3-2*v);}
+    var active=false;
+    function xloop(){
+      requestAnimationFrame(xloop);
+      var vh=innerHeight, sy=window.scrollY||0;
+      if(innerWidth<=768){ if(active){xg.clearRect(0,0,innerWidth,innerHeight); active=false; root.style.opacity='';} return; }
+      var P=window.__PERF; if(P&&P.hidden) return;
+      var eb=Math.max(0,Math.min((sy-vh*0.04)/(vh*0.5),1));
+      var sph=window.__sph||null, form=sph?sph.form:0;
+      // el diagrama real se desvanece a medida que estalla
+      root.style.opacity = eb>0 ? String(Math.max(0,1-eb*1.8).toFixed(3)) : '';
+      if(eb<=0 || form>=0.999){
+        if(active){xg.clearRect(0,0,innerWidth,innerHeight); active=false;}
+        return;
+      }
+      var rect=links.getBoundingClientRect();
+      if(rect.width<10){ if(active){xg.clearRect(0,0,innerWidth,innerHeight); active=false;} return; }
+      active=true;
+      var kx=rect.width/STAGE_W, ky=rect.height/STAGE_H;
+      var burst=sm(Math.min(1,eb/0.45));                 // fase 1: estallido hacia afuera
+      var conv=sm(Math.max(0,(eb-0.38)/0.62));           // fase 2: convergen a la esfera
+      var alpha=1-Math.max(0,(form-0.55)/0.45);          // handoff: se funden en la esfera 3D
+      xg.clearRect(0,0,innerWidth,innerHeight);
+      xg.globalCompositeOperation='lighter';
+      for(var i=0;i<parts.length;i++){
+        var q=parts[i];
+        var ox=rect.left+q.sx*kx, oy=rect.top+q.sy*ky;
+        var bx=ox+q.dx*burst*(1+q.j), by=oy+q.dy*burst*(1+q.j);
+        var cx2=bx, cy2=by;
+        if(sph&&conv>0){
+          cx2=bx+((sph.x+q.ux*sph.r)-bx)*conv;
+          cy2=by+((sph.y+q.uy*sph.r)-by)*conv;
+        }
+        var R=(q.c[0]+(SPHCOL[0]-q.c[0])*conv)|0, G=(q.c[1]+(SPHCOL[1]-q.c[1])*conv)|0, B=(q.c[2]+(SPHCOL[2]-q.c[2])*conv)|0;
+        var rad=q.r*(1-conv*0.3);
+        xg.fillStyle='rgba('+R+','+G+','+B+','+(0.85*alpha).toFixed(3)+')';
+        xg.beginPath(); xg.arc(cx2,cy2,rad,0,6.2832); xg.fill();
+        xg.fillStyle='rgba('+R+','+G+','+B+','+(0.15*alpha).toFixed(3)+')';
+        xg.beginPath(); xg.arc(cx2,cy2,rad*3,0,6.2832); xg.fill();
+      }
+      xg.globalCompositeOperation='source-over';
+    }
+    requestAnimationFrame(xloop);
+  })();
 
   function fit(){
     var w=root.clientWidth, h=root.clientHeight;

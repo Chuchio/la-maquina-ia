@@ -28,7 +28,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 ::-webkit-scrollbar-thumb{background:rgba(30,64,175,.3);border-radius:3px}
 
 /* NAV */
-#nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .3s,box-shadow .3s}
+#nav{position:absolute;top:0;left:0;right:0;z-index:100;transition:background .3s,box-shadow .3s}
 #nav.sc{background:rgba(0,0,0,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 1px 0 rgba(255,255,255,.06)}
 .ni{max-width:1200px;margin:0 auto;padding:0 48px;height:100px;display:flex;align-items:center;justify-content:space-between}
 .logo{text-decoration:none;display:flex;align-items:baseline}
@@ -85,6 +85,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   .ftb{flex-direction:column;gap:12px;text-align:center;padding:24px 0}
   .content{padding-top:116px}
   .ni{padding:0 24px}
+  .logo img{margin-left:0!important}
   .nl{display:none}
   .hb{display:flex}
 }
@@ -99,7 +100,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 <nav id="nav">
   <div class="ni">
     <a href="/" class="logo" aria-label="La Máquina IA">
-      <img src="logo-nav.png" alt="" width="64" height="64" style="margin-left:-10px">
+      <img src="logo-nav.png" alt="" width="64" height="64" style="margin-left:-48px">
     </a>
     <div class="nl">
       <a href="/#inicio">Inicio</a>
