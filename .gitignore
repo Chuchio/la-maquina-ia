@@ -5,3 +5,4 @@ temporary screenshots/
 !logo-nav.png
 !assets/**/*.png
 !brand_assets/**/*.png
+.vercel
