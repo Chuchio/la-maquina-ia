@@ -81,15 +81,32 @@ http.createServer((req, res) => {
     return;
   }
 
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.end('404 Not Found');
-      return;
-    }
-    res.writeHead(200, { 'Content-Type': contentType });
-    res.end(data);
-  });
+  const sendFile = (fp, type) => {
+    fs.readFile(fp, (err, data) => {
+      if (err) {
+        // Clean-URL fallback: /terminos-y-condiciones -> terminos-y-condiciones.html
+        if (!ext) {
+          const htmlPath = fp + '.html';
+          fs.readFile(htmlPath, (err2, data2) => {
+            if (err2) {
+              res.writeHead(404, { 'Content-Type': 'text/plain' });
+              res.end('404 Not Found');
+              return;
+            }
+            res.writeHead(200, { 'Content-Type': MIME['.html'] });
+            res.end(data2);
+          });
+          return;
+        }
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('404 Not Found');
+        return;
+      }
+      res.writeHead(200, { 'Content-Type': type });
+      res.end(data);
+    });
+  };
+  sendFile(filePath, contentType);
 }).listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });

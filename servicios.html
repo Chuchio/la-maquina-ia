@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servicios de Automatización con IA — Agentes, Integraciones y Consultoría | La Máquina IA</title>
+<meta name="description" content="Servicios de La Máquina IA en detalle: agentes IA autónomos, automatización de flujos, integración de sistemas, asistentes conversacionales, inteligencia de datos y consultoría estratégica.">
+<link rel="canonical" href="https://lamaquinaia.com/servicios">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Máquina IA">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Servicios de Automatización con IA | La Máquina IA">
+<meta property="og:description" content="Agentes IA autónomos, automatización de flujos, integración de sistemas, asistentes conversacionales, inteligencia de datos y consultoría estratégica.">
+<meta property="og:url" content="https://lamaquinaia.com/servicios">
+<meta property="og:image" content="https://lamaquinaia.com/logo.png">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--pr:#1E40AF;--ct:#F97316;--dk:#0F172A;--bg:#000000;--tx:#F1F5F9;--mu:#94A3B8;--su:#64748B}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#000}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#000;color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:rgba(30,64,175,.25)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#000}::-webkit-scrollbar-thumb{background:rgba(30,64,175,.3);border-radius:3px}
+a{color:inherit}
+
+.bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 1000px 700px at 80% -5%,rgba(30,64,175,.10) 0%,transparent 60%),radial-gradient(ellipse 700px 600px at -10% 60%,rgba(249,115,22,.05) 0%,transparent 60%),#000}
+.bgfx::after{content:'';position:absolute;inset:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")}
+body>*:not(.bgfx){position:relative;z-index:1}
+
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(0,0,0,.88);backdrop-filter:blur(20px);box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.ni{max-width:1240px;margin:0 auto;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{text-decoration:none;display:flex;align-items:baseline}
+.logo img{display:block;width:40px;height:40px;border-radius:9px;box-shadow:0 0 0 1px rgba(248,250,252,.12)}
+.lo-la{font-size:20px;font-weight:300;color:#E2E8F0;letter-spacing:-.01em}
+.lo-mq{font-size:20px;font-weight:800;color:#F8FAFC;letter-spacing:-.035em}
+.lo-ia{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#93C5FD;background:rgba(30,64,175,.15);padding:2px 7px;border-radius:100px;margin-left:6px;align-self:center;border:1px solid rgba(30,64,175,.25)}
+.nl{display:flex;align-items:center;gap:36px}
+.nl a{font-size:13px;font-weight:500;color:var(--tx);text-decoration:none;transition:color .2s}
+.nl a:hover{color:var(--pr)}
+.bc{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;background:var(--ct);color:#fff;font-size:14px;font-weight:700;letter-spacing:-.01em;border-radius:8px;text-decoration:none;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(249,115,22,.28);transition:background .2s,transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .2s}
+.bc:hover{background:#EA6C0A;transform:translateY(-1px);box-shadow:0 8px 24px rgba(249,115,22,.36)}
+.hb{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.hb span{display:block;width:22px;height:2px;background:#E2E8F0;border-radius:1px}
+
+.ct{max-width:1240px;margin:0 auto;padding:0 48px;width:100%}
+
+.head{padding:120px 0 22px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:rgba(30,64,175,.1);color:#93C5FD;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:100px;border:1px solid rgba(30,64,175,.25)}
+.head h1{font-size:clamp(30px,4.2vw,48px);font-weight:800;letter-spacing:-.035em;line-height:1.05;color:#F8FAFC;margin-top:16px}
+.head h1 em{font-style:normal;color:var(--pr)}
+.head p{font-size:16px;font-weight:500;line-height:1.7;color:var(--mu);max-width:560px;margin-top:14px}
+
+/* LAYOUT split */
+.split{display:grid;grid-template-columns:288px 1fr;gap:48px;padding:40px 0 64px;align-items:start}
+
+/* menú lateral sticky */
+.side{position:sticky;top:96px;display:flex;flex-direction:column;gap:6px}
+.side a{display:flex;align-items:center;gap:14px;padding:15px 16px;border-radius:14px;text-decoration:none;border:1px solid transparent;transition:background .2s,border-color .2s,transform .12s}
+.side a .mi{width:38px;height:38px;flex:0 0 38px;border-radius:11px;background:rgba(30,64,175,.1);border:1px solid rgba(30,64,175,.22);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.side a .mi svg{width:20px;height:20px}
+.side a .mt{display:flex;flex-direction:column;gap:2px}
+.side a .mn{font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--su)}
+.side a .ml{font-size:14px;font-weight:700;color:#CBD5E1;letter-spacing:-.01em}
+.side a:hover{background:rgba(255,255,255,.03);transform:translateX(2px)}
+.side a.on{background:rgba(30,64,175,.12);border-color:rgba(30,64,175,.55);box-shadow:0 0 24px rgba(30,64,175,.18)}
+.side a.on .mi{background:rgba(30,64,175,.25)}
+.side a.on .ml{color:#fff}
+.side a.on .mn{color:#93C5FD}
+
+/* panel contenido */
+.detail{min-height:64vh}
+.panel{display:none;animation:fade .45s cubic-bezier(.22,1,.36,1);padding-bottom:40px}
+.panel.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.d-head{display:flex;align-items:center;gap:18px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:30px}
+.d-ico{width:60px;height:60px;flex:0 0 60px;border-radius:16px;background:rgba(30,64,175,.12);border:1px solid rgba(30,64,175,.28);display:flex;align-items:center;justify-content:center;box-shadow:0 0 32px rgba(30,64,175,.15)}
+.d-ico svg{width:30px;height:30px}
+.d-head .svc-el{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#60A5FA;margin-bottom:5px}
+.d-head h2{font-size:clamp(24px,2.6vw,34px);font-weight:800;letter-spacing:-.028em;line-height:1.1;color:#F1F5F9}
+.d-cols{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:start}
+.svc-lead{font-size:17px;font-weight:500;line-height:1.75;color:var(--tx)}
+.svc-body{font-size:15.5px;font-weight:400;line-height:1.8;color:var(--mu);margin-top:16px}
+.svc-bl{list-style:none;margin-top:26px;display:grid;gap:12px}
+.svc-bl li{display:flex;gap:11px;font-size:15px;line-height:1.55;color:#CBD5E1}
+.svc-bl svg{flex:0 0 20px;width:20px;height:20px;margin-top:1px}
+.svc-card{background:rgba(8,16,35,.7);border:1px solid rgba(30,64,175,.16);border-radius:20px;padding:30px;backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.25)}
+.card-t{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#93C5FD;margin-bottom:18px}
+.steps{list-style:none;counter-reset:s;display:grid;gap:16px}
+.steps li{display:flex;gap:14px;font-size:14px;line-height:1.5;color:#CBD5E1;counter-increment:s}
+.steps li::before{content:counter(s);flex:0 0 28px;width:28px;height:28px;border-radius:8px;background:rgba(30,64,175,.18);border:1px solid rgba(30,64,175,.32);color:#93C5FD;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.usecase{margin-top:24px;padding-top:22px;border-top:1px solid rgba(255,255,255,.08)}
+.uc-t{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--su);margin-bottom:8px}
+.uc-d{font-size:14px;line-height:1.6;color:var(--mu)}
+.metric{margin-top:22px;display:flex;align-items:center;gap:10px;padding:13px 16px;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:12px}
+.metric svg{width:18px;height:18px;flex:0 0 18px}
+.metric span{font-size:13.5px;font-weight:700;color:#FBBF8A;letter-spacing:-.01em}
+
+
+.endcta{text-align:center;padding:70px 0 88px;border-top:1px solid rgba(255,255,255,.07)}
+.endcta h3{font-size:clamp(24px,3vw,34px);font-weight:800;letter-spacing:-.025em;color:#F8FAFC}
+.endcta p{font-size:16px;color:var(--mu);margin:14px auto 28px;max-width:480px;line-height:1.7}
+
+footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);backdrop-filter:blur(12px)}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding:64px 0 48px}
+.fbd{font-size:13px;font-weight:500;line-height:1.65;color:rgba(248,250,252,.75);margin-top:12px;max-width:210px}
+.fct{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(248,250,252,.65);margin-bottom:16px}
+.fl{display:flex;flex-direction:column;gap:10px}
+.fl a{font-size:13px;font-weight:500;color:rgba(248,250,252,.78);text-decoration:none;transition:color .2s}
+.fl a:hover{color:rgba(248,250,252,1)}
+.ftb{border-top:1px solid rgba(248,250,252,.07);padding:24px 0;display:flex;align-items:center;justify-content:center}
+.fcp{font-size:12px;font-weight:500;color:rgba(248,250,252,.62)}
+.fla{font-size:12px;font-weight:500;color:rgba(248,250,252,.62);text-decoration:none}.fla:hover{color:rgba(248,250,252,.9)}
+
+@media(max-width:980px){
+  .split{grid-template-columns:1fr;gap:24px}
+  .side{position:static;flex-direction:row;overflow-x:auto;gap:8px;padding-bottom:6px;scrollbar-width:none}
+  .side::-webkit-scrollbar{display:none}
+  .side a{flex:0 0 auto}.side a .mt .mn{display:none}
+  .d-cols{grid-template-columns:1fr;gap:32px}
+}
+@media(max-width:768px){.ct,.ni{padding-left:20px;padding-right:20px}.nl{display:none}.hb{display:flex}.fg{grid-template-columns:1fr 1fr;gap:32px}.pn{flex-direction:column}}
+@media(max-width:480px){.fg{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bgfx"></div>
+
+<nav id="nav">
+  <div class="ni">
+    <a href="/#inicio" class="logo" aria-label="La Máquina IA"><img src="logo-nav.png" alt="" width="40" height="40"></a>
+    <div class="nl"><a href="/#servicios">Servicios</a><a href="/#proceso">Cómo funciona</a><a href="/#resultados">Resultados</a><a href="/#industrias">Industrias</a></div>
+    <a href="/#contacto" class="bc">Agendar llamada <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <button class="hb" aria-label="Menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<header class="head"><div class="ct">
+  <span class="chip">Nuestros servicios en detalle</span>
+  <h1>Conocé en profundidad<br><em>cómo trabajamos</em></h1>
+  <p>Elegí un servicio en el menú y mirá la explicación completa: qué resuelve, cómo lo implementamos y qué resultado podés esperar.</p>
+</div></header>
+
+<div class="ct"><div class="split">
+  <!-- MENÚ LATERAL -->
+  <nav class="side" id="side" aria-label="Servicios">
+    <a data-go="agentes"><span class="mi"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="3" stroke="#60A5FA" stroke-width="1.75"/><path d="M11 2v3M11 17v3M2 11h3M17 11h3" stroke="#60A5FA" stroke-width="1.75" stroke-linecap="round"/></svg></span><span class="mt"><span class="ml">Agentes IA Autónomos</span></span></a>
+    <a data-go="automatizacion"><span class="mi"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="4" width="6" height="5" rx="1.5" stroke="#60A5FA" stroke-width="1.75"/><rect x="14" y="4" width="6" height="5" rx="1.5" stroke="#60A5FA" stroke-width="1.75"/><rect x="2" y="13" width="6" height="5" rx="1.5" stroke="#60A5FA" stroke-width="1.75"/><rect x="14" y="13" width="6" height="5" rx="1.5" stroke="#60A5FA" stroke-width="1.75"/></svg></span><span class="mt"><span class="ml">Automatización de Flujos</span></span></a>
+    <a data-go="integracion"><span class="mi"><svg viewBox="0 0 22 22" fill="none"><circle cx="5" cy="11" r="2.5" stroke="#60A5FA" stroke-width="1.75"/><circle cx="17" cy="5" r="2.5" stroke="#60A5FA" stroke-width="1.75"/><circle cx="17" cy="17" r="2.5" stroke="#60A5FA" stroke-width="1.75"/><path d="M7.5 11h3.5M14.5 6.5L11 10M14.5 15.5L11 12" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="mt"><span class="ml">Integración de Sistemas</span></span></a>
+    <a data-go="asistentes"><span class="mi"><svg viewBox="0 0 22 22" fill="none"><path d="M3 5.5A1.5 1.5 0 014.5 4h13A1.5 1.5 0 0119 5.5v9A1.5 1.5 0 0117.5 16H13l-2 2.5L9 16H4.5A1.5 1.5 0 013 14.5v-9z" stroke="#60A5FA" stroke-width="1.75" stroke-linejoin="round"/><path d="M7 9h8M7 12h5" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="mt"><span class="ml">Asistentes Conversacionales</span></span></a>
+    <a data-go="datos"><span class="mi"><svg viewBox="0 0 22 22" fill="none"><path d="M3 17l4-5 4 3 4-6 4 3" stroke="#60A5FA" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 4v13h16" stroke="#60A5FA" stroke-width="1.75" stroke-linecap="round"/></svg></span><span class="mt"><span class="ml">Inteligencia de Datos</span></span></a>
+    <a data-go="consultoria"><span class="mi"><svg viewBox="0 0 22 22" fill="none"><path d="M11 3l1.8 5.4H18l-4.5 3.3 1.7 5.3L11 14l-4.2 3 1.7-5.3L4 8.4h5.2L11 3z" stroke="#60A5FA" stroke-width="1.75" stroke-linejoin="round"/></svg></span><span class="mt"><span class="ml">Consultoría Estratégica IA</span></span></a>
+  </nav>
+
+  <!-- DETALLE -->
+  <div class="detail" id="detail">
+
+  <article class="panel" id="agentes">
+    <div class="d-head"><div class="d-ico"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="3" stroke="#60A5FA" stroke-width="1.75"/><path d="M11 2v3M11 17v3M2 11h3M17 11h3" stroke="#60A5FA" stroke-width="1.75" stroke-linecap="round"/><path d="M4.93 4.93l2.12 2.12M14.95 14.95l2.12 2.12M4.93 17.07l2.12-2.12M14.95 7.05l2.12-2.12" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><p class="svc-el">Servicio</p><h2>Agentes IA Autónomos</h2></div></div>
+    <div class="d-cols">
+      <div>
+        <p class="svc-lead">Desplegamos agentes que ejecutan tareas complejas sin intervención humana, trabajan 24/7 y se adaptan al contexto. Pero, ¿qué significa eso realmente?</p>
+        <p class="svc-body">Un agente autónomo no es un script que sigue reglas fijas: es un sistema que percibe su entorno, razona sobre qué hacer y ejecuta acciones reales en tus herramientas. Le damos un objetivo y el contexto de tu operación, y él decide el camino. Donde una persona tardaría horas en revisar, clasificar y responder, el agente lo hace en segundos, sin perder consistencia. Y a diferencia de una automatización rígida, se adapta: si cambia el formato de un documento o aparece un caso nuevo, razona en lugar de romperse.</p>
+        <ul class="svc-bl">
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Operación continua 24/7, sin costos de turnos</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Decisiones consistentes según tus reglas de negocio</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Escala instantánea: 10 o 10.000 tareas</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Se integra con tus sistemas actuales</li>
+        </ul>
+      </div>
+      <aside class="svc-card">
+        <p class="card-t">Cómo lo hacemos</p>
+        <ol class="steps"><li>Mapeamos el objetivo y las decisiones que toma una persona</li><li>Conectamos el agente a tus herramientas (correo, CRM, ERP…)</li><li>Definimos límites, escalamientos y control humano</li><li>Desplegamos, medimos y refinamos en producción</li></ol>
+        <div class="usecase"><p class="uc-t">Caso real</p><p class="uc-d">Una distribuidora delegó la gestión de pedidos por correo a un agente: lee el mail, valida stock, carga la orden en el ERP y responde al cliente.</p></div>
+        <div class="metric"><svg viewBox="0 0 18 18" fill="none"><path d="M9 1.5l1.5 4.5h4.5l-3.6 2.7 1.4 4.3L9 10.4l-3.8 2.6 1.4-4.3L3 6h4.5L9 1.5z" fill="#FB923C"/></svg><span>24/7 · 90% menos tiempo de gestión</span></div>
+      </aside>
+    </div>
+  </article>
+
+  <article class="panel" id="automatizacion">
+    <div class="d-head"><div class="d-ico"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="4" width="6" height="5" rx="1.5" stroke="#60A5FA" stroke-width="1.75"/><rect x="14" y="4" width="6" height="5" rx="1.5" stroke="#60A5FA" stroke-width="1.75"/><rect x="2" y="13" width="6" height="5" rx="1.5" stroke="#60A5FA" stroke-width="1.75"/><rect x="14" y="13" width="6" height="5" rx="1.5" stroke="#60A5FA" stroke-width="1.75"/><path d="M8 6.5h2.5v9H8M11 6.5h3M11 15.5h3" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><p class="svc-el">Servicio</p><h2>Automatización de Flujos</h2></div></div>
+    <div class="d-cols">
+      <div>
+        <p class="svc-lead">Conectamos y automatizamos procesos end-to-end, eliminamos tareas repetitivas y reducimos el error a casi cero. Así se ve por dentro.</p>
+        <p class="svc-body">La mayoría de los procesos viven repartidos entre planillas, correos, sistemas y personas copiando datos de un lado a otro. Cada salto manual es tiempo perdido y un lugar donde se cuela un error. Automatizar el flujo end-to-end significa que el proceso completo corre solo, de principio a fin. No automatizamos una tarea aislada, sino todo el recorrido: cuando entra un dato, se dispara la cadena completa de acciones hasta el resultado final. Vos ves el resultado; la máquina hace el trabajo intermedio.</p>
+        <ul class="svc-bl">
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Elimina el copiar-y-pegar entre sistemas</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Reduce el margen de error a casi cero</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Procesos de días resueltos en minutos</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Trazabilidad completa de cada paso</li>
+        </ul>
+      </div>
+      <aside class="svc-card">
+        <p class="card-t">Cómo lo hacemos</p>
+        <ol class="steps"><li>Documentamos el flujo actual, paso a paso</li><li>Identificamos saltos manuales y puntos de error</li><li>Diseñamos el flujo automatizado con validaciones</li><li>Implementamos, probamos con datos reales y monitoreamos</li></ol>
+        <div class="usecase"><p class="uc-t">Caso real</p><p class="uc-d">Procesamiento de facturas de proveedores: llegan por email, el sistema extrae datos automáticamente, valida contra órdenes de compra y carga en el ERP.</p></div>
+        <div class="metric"><svg viewBox="0 0 18 18" fill="none"><path d="M9 1.5l1.5 4.5h4.5l-3.6 2.7 1.4 4.3L9 10.4l-3.8 2.6 1.4-4.3L3 6h4.5L9 1.5z" fill="#FB923C"/></svg><span>~0% error · de días a minutos</span></div>
+      </aside>
+    </div>
+  </article>
+
+  <article class="panel" id="integracion">
+    <div class="d-head"><div class="d-ico"><svg viewBox="0 0 22 22" fill="none"><circle cx="5" cy="11" r="2.5" stroke="#60A5FA" stroke-width="1.75"/><circle cx="17" cy="5" r="2.5" stroke="#60A5FA" stroke-width="1.75"/><circle cx="17" cy="17" r="2.5" stroke="#60A5FA" stroke-width="1.75"/><path d="M7.5 11h3.5M14.5 6.5L11 10M14.5 15.5L11 12" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><p class="svc-el">Servicio</p><h2>Integración de Sistemas</h2></div></div>
+    <div class="d-cols">
+      <div>
+        <p class="svc-lead">Unificamos tu stack para que CRMs, ERPs, APIs y apps internas trabajen en sincronía, sin fricción ni duplicidad. ¿Por qué importa tanto?</p>
+        <p class="svc-body">Tu empresa probablemente usa un CRM, un ERP, facturación, planillas, soporte… y ninguno se habla con el otro. El resultado: datos duplicados, versiones que no coinciden y equipos decidiendo con información desactualizada. Integrar tu stack significa que todos comparten una sola verdad. Un dato se carga una vez y aparece, sincronizado, donde tenga que aparecer. Sin fricción, sin duplicidad, sin "¿cuál es el número bueno?".</p>
+        <ul class="svc-bl">
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Una única fuente de verdad para la operación</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Sincronización en tiempo real entre plataformas</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Conexión vía API, webhooks o middleware</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Compatible con lo que ya usás</li>
+        </ul>
+      </div>
+      <aside class="svc-card">
+        <p class="card-t">Cómo lo hacemos</p>
+        <ol class="steps"><li>Inventariamos sistemas, datos y dónde vive cada cosa</li><li>Definimos el modelo de datos y la fuente de verdad</li><li>Construimos las conexiones (API / webhooks / middleware)</li><li>Validamos la sincronización y monitoreamos la salud</li></ol>
+        <div class="usecase"><p class="uc-t">Caso real</p><p class="uc-d">CRM + facturación + soporte sincronizados: al cerrar una venta se factura y se abre el ticket de onboarding automáticamente.</p></div>
+        <div class="metric"><svg viewBox="0 0 18 18" fill="none"><path d="M9 1.5l1.5 4.5h4.5l-3.6 2.7 1.4 4.3L9 10.4l-3.8 2.6 1.4-4.3L3 6h4.5L9 1.5z" fill="#FB923C"/></svg><span>Tiempo real · una sola verdad</span></div>
+      </aside>
+    </div>
+  </article>
+
+  <article class="panel" id="asistentes">
+    <div class="d-head"><div class="d-ico"><svg viewBox="0 0 22 22" fill="none"><path d="M3 5.5A1.5 1.5 0 014.5 4h13A1.5 1.5 0 0119 5.5v9A1.5 1.5 0 0117.5 16H13l-2 2.5L9 16H4.5A1.5 1.5 0 013 14.5v-9z" stroke="#60A5FA" stroke-width="1.75" stroke-linejoin="round"/><path d="M7 9h8M7 12h5" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><p class="svc-el">Servicio</p><h2>Asistentes Conversacionales</h2></div></div>
+    <div class="d-cols">
+      <div>
+        <p class="svc-lead">Chatbots y asistentes IA para atención, soporte y calificación de leads, disponibles 24/7 en cualquier canal. No son los bots de antes.</p>
+        <p class="svc-body">Tus clientes (y tu equipo) esperan respuestas inmediatas. Un asistente conversacional con IA atiende, entiende lo que se le pregunta en lenguaje natural y resuelve — no con respuestas enlatadas, sino conectado a tus datos reales y a tus sistemas. Funciona donde ya están tus clientes: WhatsApp, web, Instagram, correo o tu intranet. Califica leads, responde dudas frecuentes, agenda reuniones y escala a una persona solo cuando hace falta. Disponible 24/7, sin filas de espera.</p>
+        <ul class="svc-bl">
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Atención inmediata 24/7 en cualquier canal</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Califica y filtra leads antes de pasarlos a ventas</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Responde con información real de tus sistemas</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Escala a un humano solo cuando es necesario</li>
+        </ul>
+      </div>
+      <aside class="svc-card">
+        <p class="card-t">Cómo lo hacemos</p>
+        <ol class="steps"><li>Definimos los casos de uso y el tono de marca</li><li>Alimentamos al asistente con tu base de conocimiento</li><li>Lo conectamos a tus canales y sistemas</li><li>Entrenamos, medimos y mejoramos las respuestas</li></ol>
+        <div class="usecase"><p class="uc-t">Caso real</p><p class="uc-d">Un asistente en WhatsApp califica leads 24/7, agenda demos en el calendario y responde el grueso de las consultas sin intervención.</p></div>
+        <div class="metric"><svg viewBox="0 0 18 18" fill="none"><path d="M9 1.5l1.5 4.5h4.5l-3.6 2.7 1.4 4.3L9 10.4l-3.8 2.6 1.4-4.3L3 6h4.5L9 1.5z" fill="#FB923C"/></svg><span>24/7 · 80% resuelto sin humano</span></div>
+      </aside>
+    </div>
+  </article>
+
+  <article class="panel" id="datos">
+    <div class="d-head"><div class="d-ico"><svg viewBox="0 0 22 22" fill="none"><path d="M3 17l4-5 4 3 4-6 4 3" stroke="#60A5FA" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 4v13h16" stroke="#60A5FA" stroke-width="1.75" stroke-linecap="round"/></svg></div><div><p class="svc-el">Servicio</p><h2>Inteligencia de Datos</h2></div></div>
+    <div class="d-cols">
+      <div>
+        <p class="svc-lead">Transformamos datos en decisiones automatizadas: dashboards en tiempo real, detección de anomalías y forecasting a medida. Tus datos ya te están hablando.</p>
+        <p class="svc-body">Tus datos ya están contándote algo: qué clientes están por irse, qué producto se va a quedar sin stock, dónde se está fugando el margen. El problema es que están dispersos y nadie tiene tiempo de mirarlos a tiempo. Convertimos esos datos en decisiones automatizadas. Dashboards que se actualizan solos, alertas cuando algo se sale de lo normal y modelos de predicción a medida que anticipan lo que viene, en lugar de explicar lo que ya pasó.</p>
+        <ul class="svc-bl">
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Dashboards en tiempo real, siempre actualizados</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Detección automática de anomalías y alertas</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecasting con modelos entrenados con tus datos</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Decisiones basadas en evidencia, no en intuición</li>
+        </ul>
+      </div>
+      <aside class="svc-card">
+        <p class="card-t">Cómo lo hacemos</p>
+        <ol class="steps"><li>Centralizamos y limpiamos las fuentes de datos</li><li>Definimos los KPIs y las preguntas a responder</li><li>Construimos dashboards y modelos predictivos</li><li>Automatizamos alertas y la entrega de reportes</li></ol>
+        <div class="usecase"><p class="uc-t">Caso real</p><p class="uc-d">Un retailer detecta quiebres de stock antes de que ocurran y recibe alertas de productos en riesgo, reduciendo pérdidas.</p></div>
+        <div class="metric"><svg viewBox="0 0 18 18" fill="none"><path d="M9 1.5l1.5 4.5h4.5l-3.6 2.7 1.4 4.3L9 10.4l-3.8 2.6 1.4-4.3L3 6h4.5L9 1.5z" fill="#FB923C"/></svg><span>Tiempo real · anticipación, no reacción</span></div>
+      </aside>
+    </div>
+  </article>
+
+  <article class="panel" id="consultoria">
+    <div class="d-head"><div class="d-ico"><svg viewBox="0 0 22 22" fill="none"><path d="M11 3l1.8 5.4H18l-4.5 3.3 1.7 5.3L11 14l-4.2 3 1.7-5.3L4 8.4h5.2L11 3z" stroke="#60A5FA" stroke-width="1.75" stroke-linejoin="round"/></svg></div><div><p class="svc-el">Servicio</p><h2>Consultoría Estratégica IA</h2></div></div>
+    <div class="d-cols">
+      <div>
+        <p class="svc-lead">Mapeamos tu operación, identificamos las oportunidades de mayor impacto y diseñamos el roadmap con ROI medible. El mapa antes del viaje.</p>
+        <p class="svc-body">Antes de automatizar nada, hay que saber qué automatizar. No toda tarea conviene automatizar, y el mayor desperdicio es invertir esfuerzo donde el retorno es bajo. La consultoría estratégica es el mapa antes del viaje. Analizamos tu operación de punta a punta, identificamos dónde está el mayor impacto y diseñamos un roadmap concreto: qué automatizar primero, qué retorno esperar y en qué orden avanzar. Con ROI medible, no promesas.</p>
+        <ul class="svc-bl">
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Diagnóstico completo de tu operación actual</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Oportunidades priorizadas por impacto y esfuerzo</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Roadmap fase por fase con ROI estimado</li>
+          <li><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#34D399" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7" stroke="#34D399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Acompañamiento en la ejecución</li>
+        </ul>
+      </div>
+      <aside class="svc-card">
+        <p class="card-t">Cómo lo hacemos</p>
+        <ol class="steps"><li>Auditamos procesos, herramientas y cuellos de botella</li><li>Cuantificamos el impacto de cada oportunidad</li><li>Priorizamos por ROI y facilidad de implementación</li><li>Entregamos el roadmap y acompañamos la ejecución</li></ol>
+        <div class="usecase"><p class="uc-t">Caso real</p><p class="uc-d">Una pyme de servicios pasó de "queremos usar IA" a un plan de 6 iniciativas priorizadas, con la primera pagándose sola en 2 meses.</p></div>
+        <div class="metric"><svg viewBox="0 0 18 18" fill="none"><path d="M9 1.5l1.5 4.5h4.5l-3.6 2.7 1.4 4.3L9 10.4l-3.8 2.6 1.4-4.3L3 6h4.5L9 1.5z" fill="#FB923C"/></svg><span>ROI medible · roadmap claro</span></div>
+      </aside>
+    </div>
+  </article>
+
+  </div>
+</div></div>
+
+<section class="endcta"><div class="ct">
+  <h3>¿Listo para automatizar tu operación?</h3>
+  <p>Agendá una llamada gratuita. Analizamos tu caso y te decimos exactamente qué se puede automatizar primero.</p>
+  <a href="/#contacto" class="bc">Agendar llamada <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div></section>
+
+<footer>
+  <div class="ct">
+    <div class="fg">
+      <div>
+        <a href="/#inicio" class="logo" aria-label="La Máquina IA"><span class="lo-la" style="color:rgba(248,250,252,.88)">La</span><span class="lo-mq" style="color:rgba(248,250,252,.88)">Máquina</span><span class="lo-ia" style="background:rgba(30,64,175,.2);color:rgba(248,250,252,.65)">IA</span></a>
+        <p class="fbd">Automatización de procesos empresariales con inteligencia artificial. Menos fricción, más resultados</p>
+      </div>
+      <div><p class="fct">Servicios</p><nav class="fl"><a data-go="agentes" style="cursor:pointer">Agentes IA</a><a data-go="automatizacion" style="cursor:pointer">Automatización</a><a data-go="integracion" style="cursor:pointer">Integración</a><a data-go="asistentes" style="cursor:pointer">Asistentes IA</a><a data-go="datos" style="cursor:pointer">Inteligencia de Datos</a></nav></div>
+      <div><p class="fct">Empresa</p><nav class="fl"><a href="/#proceso">Cómo funciona</a><a href="/#resultados">Resultados</a><a href="/#industrias">Industrias</a></nav></div>
+      <div><p class="fct">Contacto</p><nav class="fl"><a href="mailto:hola@lamaquinaia.com">hola@lamaquinaia.com</a><a href="/#contacto">Agendar llamada</a><a href="https://wa.me/5491178295927" target="_blank" rel="noopener">WhatsApp</a></nav></div>
+    </div>
+    <div class="ftb"><p class="fcp">© Copyright 2026 La Máquina IA<span style="margin:0 12px;opacity:.4">|</span><a href="/terminos-y-condiciones" class="fla">Términos</a><span style="margin:0 12px;opacity:.4">|</span><a href="/politica-de-privacidad" class="fla">Privacidad</a></p></div>
+  </div>
+</footer>
+
+<script>
+const SVCS=[
+  {id:'agentes',t:'Agentes IA Autónomos'},
+  {id:'automatizacion',t:'Automatización de Flujos'},
+  {id:'integracion',t:'Integración de Sistemas'},
+  {id:'asistentes',t:'Asistentes Conversacionales'},
+  {id:'datos',t:'Inteligencia de Datos'},
+  {id:'consultoria',t:'Consultoría Estratégica IA'}
+];
+const sideLinks=[...document.querySelectorAll('.side a')];
+const panels=[...document.querySelectorAll('.panel')];
+
+function show(id,push,scroll){
+  const i=SVCS.findIndex(s=>s.id===id); if(i<0) return;
+  panels.forEach(p=>p.classList.toggle('on',p.id===id));
+  sideLinks.forEach(a=>a.classList.toggle('on',a.dataset.go===id));
+  const pan=document.getElementById(id); pan.style.animation='none'; void pan.offsetWidth; pan.style.animation='';
+  if(push){history.replaceState(null,'','#'+id);}
+  if(scroll){document.querySelector('.split').scrollIntoView({behavior:'smooth',block:'start'});}
+}
+document.querySelectorAll('[data-go]').forEach(el=>{
+  el.addEventListener('click',e=>{e.preventDefault(); const g=el.dataset.go; if(g) show(g,true,true);});
+});
+window.addEventListener('hashchange',()=>{const h=location.hash.replace('#','');if(h)show(h,false,true);});
+const params=new URLSearchParams(location.search);
+const start=params.get('s')||location.hash.replace('#','')||'agentes';
+show(SVCS.some(s=>s.id===start)?start:'agentes',true,false);
+</script>
+</body>
+</html>

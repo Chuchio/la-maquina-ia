@@ -1,4 +1,11 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/servicios-v3", "destination": "/servicios", "permanent": true },
+    { "source": "/terminosycondiciones", "destination": "/terminos-y-condiciones", "permanent": true },
+    { "source": "/politicasdeprivacidad", "destination": "/politica-de-privacidad", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",

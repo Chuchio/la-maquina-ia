@@ -2,5 +2,6 @@ node_modules/
 temporary screenshots/
 *.png
 !logo.png
+!logo-nav.png
 !assets/**/*.png
 !brand_assets/**/*.png

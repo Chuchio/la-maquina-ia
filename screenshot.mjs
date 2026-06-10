@@ -16,7 +16,6 @@ const outPath = path.join(dir, `screenshot-${n}${label ? '-' + label : ''}.png`)
 
 const browser = await puppeteer.launch({
   headless: true,
-  executablePath: path.join(process.env.HOME, '.cache/puppeteer/chrome/mac_arm-149.0.7827.22/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'),
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
 const page = await browser.newPage();
