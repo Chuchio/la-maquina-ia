@@ -46,7 +46,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 #mb.op{display:flex}
 #mb a{font-size:15px;font-weight:500;color:#CBD5E1;text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
 #mb a:hover{color:var(--pr)}
-#mb a:last-child{border:none;margin-top:12px;text-align:center}
+#mb a:last-child{border:none;margin-top:12px;text-align:center;align-self:center}
 .hb{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
 .hb span{display:block;width:22px;height:2px;background:#E2E8F0;border-radius:1px}
 
@@ -65,7 +65,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .bgd:focus-visible{outline:3px solid rgba(248,250,252,.3);outline-offset:3px}
 
 /* HERO */
-.hw{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:180px;padding-bottom:clamp(64px,16vh,220px)}
+.hw{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:80px;padding-bottom:clamp(64px,16vh,220px)}
 /* Cerebro hiperrealista en video — fixed, se mueve con el scroll vía JS
    (--vx/--vy son el desplazamiento que escribe el script). screen blend funde
    el fondo negro. Empieza a la derecha del hero y baja a la izquierda al scrollear. */
@@ -180,8 +180,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 /* PROCESS */
 .pg{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
 .pg::before{content:'';position:absolute;top:32px;left:12.5%;width:75%;height:1px;background:rgba(30,64,175,.45);z-index:0}
-.sp{padding:0 24px;position:relative;z-index:1}
-.snw{width:64px;height:64px;background:rgba(30,64,175,.22);border:2px solid rgba(30,64,175,.6);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 0 18px rgba(30,64,175,.2)}
+.sp{padding:0 24px;position:relative;z-index:1;text-align:center}
+.snw{width:64px;height:64px;background:rgba(30,64,175,.22);border:2px solid rgba(30,64,175,.6);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 18px rgba(30,64,175,.2)}
 .sn{font-size:14px;font-weight:800;color:#93C5FD;letter-spacing:.04em}
 .ptit{font-size:15px;font-weight:700;letter-spacing:-.01em;line-height:1.3;color:#F1F5F9;margin-bottom:8px}
 .pdesc{font-size:13px;font-weight:500;line-height:1.65;color:var(--mu)}
@@ -249,7 +249,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 /* FOOTER */
 footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);backdrop-filter:blur(6px)}
 .fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding:64px 0 48px}
-.fbd{font-size:13px;font-weight:500;line-height:1.65;color:rgba(248,250,252,.75);margin-top:12px;max-width:210px}
 .fct{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(248,250,252,.65);margin-bottom:16px}
 .fl{display:flex;flex-direction:column;gap:10px}
 .fl a{font-size:13px;font-weight:500;color:rgba(248,250,252,.78);text-decoration:none;transition:color .2s}
@@ -352,7 +351,13 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   .sp{padding:0}
   .proc-card{padding:28px 22px 32px}
   #proceso .ct{padding-right:20px}
-  .fg{grid-template-columns:1fr 1fr;gap:32px}
+  #contacto .ct{padding-left:36px;padding-right:36px}
+  .itg{flex-direction:column;align-items:center}
+  .fg{grid-template-columns:repeat(3,1fr);gap:28px 14px}
+  .fg>div:first-child{grid-column:1/-1}
+  .fct{font-size:11px;margin-bottom:10px}
+  .fl{gap:8px}
+  .fl a{font-size:12px}
   .ftb{flex-direction:column;gap:12px;text-align:center}
   .sec{padding:72px 0}
   .tbs{gap:28px}
@@ -360,7 +365,6 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 }
 @media(max-width:480px){
   .stg{gap:40px 20px}
-  .fg{grid-template-columns:1fr}
   .hctas,.cbtns{flex-direction:column;align-items:flex-start}
   .cbtns{align-items:center}
 }
@@ -511,7 +515,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   <div class="ct">
     <div class="hc" id="hcon">
       <div class="hl" style="position:relative;z-index:2">
-        <div style="position:relative;top:-64px">
+        <div>
           <div class="hero-brand">La Máquina <span>IA</span></div>
           <div><span class="chip">Agencia de IA · Automatización empresarial</span></div>
           <h1 class="hh1">Tu operación<br>en <em>piloto</em><br>automático</h1>
@@ -804,7 +808,6 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
           <span class="lo-mq" style="color:rgba(248,250,252,.88)">Máquina</span>
           <span class="lo-ia" style="background:rgba(30,64,175,.2);color:rgba(248,250,252,.65)">IA</span>
         </a>
-        <p class="fbd">Automatización de procesos empresariales con inteligencia artificial. Menos fricción, más resultados</p>
       </div>
       <div>
         <p class="fct">Servicios</p>
@@ -1018,7 +1021,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   if(!track) return;
   var dotsWrap=document.getElementById('rvdots');
   var prevBtn=document.getElementById('rvprev'), nextBtn=document.getElementById('rvnext');
-  var GAP=20, AUTO=2000;
+  var GAP=20, MOB=window.innerWidth<=768, AUTO=MOB?5000:2000, DUR=MOB?1000:700;
   var originals=[].slice.call(track.children);
   var N=originals.length;
   var per=function(){ return window.innerWidth<=768 ? 1 : (window.innerWidth<=1024 ? 2 : 3); };
@@ -1055,7 +1058,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   }
   function apply(anim){
     var w=cardW();
-    track.style.transition = anim ? 'transform .7s cubic-bezier(.4,0,.2,1)' : 'none';
+    track.style.transition = anim ? 'transform '+(DUR/1000)+'s cubic-bezier(.4,0,.2,1)' : 'none';
     track.style.transform = 'translateX(-'+(idx*(w+GAP))+'px)';
     var active=((idx%N)+N)%N;
     dots.forEach(function(dt,i){ dt.classList.toggle('on', i===active); });
@@ -1066,9 +1069,9 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     idx++;
     apply(true);
     if(idx>=N){
-      setTimeout(function(){ idx=0; apply(false); animating=false; },710);
+      setTimeout(function(){ idx=0; apply(false); animating=false; },DUR+10);
     } else {
-      setTimeout(function(){ animating=false; },710);
+      setTimeout(function(){ animating=false; },DUR+10);
     }
   }
   function prev(){
@@ -1080,7 +1083,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     } else {
       idx--; apply(true);
     }
-    setTimeout(function(){ animating=false; },710);
+    setTimeout(function(){ animating=false; },DUR+10);
   }
   function goTo(j){
     if(animating) return;

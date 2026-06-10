@@ -30,9 +30,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 /* NAV */
 #nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .3s,box-shadow .3s}
 #nav.sc{background:rgba(0,0,0,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 1px 0 rgba(255,255,255,.06)}
-.ni{max-width:1200px;margin:0 auto;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.ni{max-width:1200px;margin:0 auto;padding:0 48px;height:100px;display:flex;align-items:center;justify-content:space-between}
 .logo{text-decoration:none;display:flex;align-items:baseline}
-.logo img{display:block;width:56px;height:56px}
+.logo img{display:block;width:64px;height:64px}
 .lo-la{font-size:20px;font-weight:300;color:#E2E8F0;letter-spacing:-.01em}
 .lo-mq{font-size:20px;font-weight:800;color:#F8FAFC;letter-spacing:-.035em}
 .lo-ia{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#93C5FD;background:rgba(30,64,175,.15);padding:2px 7px;border-radius:100px;margin-left:6px;align-self:center;border:1px solid rgba(30,64,175,.25)}
@@ -52,7 +52,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .ct{max-width:1200px;margin:0 auto;padding:0 48px;width:100%}
 
 /* CONTENT */
-.content{padding-top:100px;padding-bottom:80px}
+.content{padding-top:136px;padding-bottom:80px}
 .content h1{font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-.03em;margin-bottom:32px;color:#F8FAFC}
 .content h2{font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:-.02em;margin-top:40px;margin-bottom:16px;color:#E2E8F0}
 .content h3{font-size:clamp(16px,2vw,20px);font-weight:600;margin-top:24px;margin-bottom:12px;color:#CBD5E1}
@@ -66,7 +66,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 /* FOOTER */
 footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);backdrop-filter:blur(12px);margin-top:80px}
 .fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding:64px 0 48px}
-.fbd{font-size:13px;font-weight:500;line-height:1.65;color:rgba(248,250,252,.75);margin-top:12px;max-width:210px}
 .fct{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(248,250,252,.65);margin-bottom:16px}
 .fl{display:flex;flex-direction:column;gap:10px}
 .fl a{font-size:13px;font-weight:500;color:rgba(248,250,252,.78);text-decoration:none;transition:color .2s}
@@ -78,15 +77,18 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 .fla:hover{color:rgba(248,250,252,.9)}
 
 @media(max-width:768px){
-  .fg{grid-template-columns:1fr 1fr;gap:32px}
+  .fg{grid-template-columns:repeat(3,1fr);gap:28px 14px}
+  .fg>div:first-child{grid-column:1/-1}
+  .fct{font-size:11px;margin-bottom:10px}
+  .fl{gap:8px}
+  .fl a{font-size:12px}
   .ftb{flex-direction:column;gap:12px;text-align:center;padding:24px 0}
-  .content{padding-top:80px}
+  .content{padding-top:116px}
   .ni{padding:0 24px}
   .nl{display:none}
   .hb{display:flex}
 }
 @media(max-width:480px){
-  .fg{grid-template-columns:1fr}
   .ct{padding:0 24px}
   .ni{padding:0 16px}
 }
@@ -97,7 +99,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 <nav id="nav">
   <div class="ni">
     <a href="/" class="logo" aria-label="La Máquina IA">
-      <img src="logo-nav.png" alt="" width="56" height="56">
+      <img src="logo-nav.png" alt="" width="64" height="64" style="margin-left:-10px">
     </a>
     <div class="nl">
       <a href="/#inicio">Inicio</a>
@@ -215,7 +217,6 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
           <span class="lo-mq" style="color:rgba(248,250,252,.88)">Máquina</span>
           <span class="lo-ia" style="background:rgba(30,64,175,.2);color:rgba(248,250,252,.65)">IA</span>
         </a>
-        <p class="fbd">Automatización de procesos empresariales con inteligencia artificial. Transformamos la forma en que tu empresa trabaja.</p>
       </div>
       <div>
         <p class="fct">Servicios</p>
