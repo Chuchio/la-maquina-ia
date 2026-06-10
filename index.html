@@ -28,8 +28,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 ::-webkit-scrollbar-thumb{background:rgba(30,64,175,.3);border-radius:3px}
 
 /* NAV */
-#nav{position:absolute;top:0;left:0;right:0;z-index:100;transition:background .3s,box-shadow .3s}
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .3s,box-shadow .3s,transform .35s cubic-bezier(.22,1,.36,1)}
 #nav.sc{background:rgba(0,0,0,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(255,255,255,.06)}
+#nav.hide{transform:translateY(-100%)}
 .ni{max-width:1200px;margin:0 auto;padding:0 48px;height:100px;display:flex;align-items:center;justify-content:space-between}
 .logo{text-decoration:none;display:flex;align-items:baseline}
 .logo img{display:block;width:64px;height:64px}
@@ -56,7 +57,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .bc:active{transform:translateY(0)}
 .bc:focus-visible{outline:3px solid rgba(249,115,22,.5);outline-offset:3px}
 .bc-lg{padding:15px 32px;font-size:15px;border-radius:10px}
-.bg{display:inline-flex;align-items:center;gap:7px;padding:15px 32px;background:transparent;color:#E2E8F0;font-size:15px;font-weight:700;letter-spacing:-.01em;border-radius:10px;text-decoration:none;border:1.5px solid rgba(226,232,240,.18);cursor:pointer;transition:border-color .2s,color .2s,background .2s,transform .15s}
+.bg{display:inline-flex;align-items:center;gap:7px;padding:13.5px 30.5px;background:transparent;color:#E2E8F0;font-size:15px;font-weight:700;letter-spacing:-.01em;border-radius:10px;text-decoration:none;border:1.5px solid rgba(226,232,240,.18);cursor:pointer;transition:border-color .2s,color .2s,background .2s,transform .15s}
 .bg:hover{border-color:rgba(30,64,175,.7);color:var(--pr);background:rgba(30,64,175,.08);transform:translateY(-1px);box-shadow:0 0 20px rgba(30,64,175,.35),0 0 50px rgba(30,64,175,.15)}
 .bg:active{transform:translateY(0)}
 .bg:focus-visible{outline:3px solid rgba(30,64,175,.4);outline-offset:3px}
@@ -90,16 +91,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 @keyframes bl{0%,100%{opacity:1}50%{opacity:.3}}
 .hero-brand{font-size:clamp(38px,min(6.5vw,8.6vh),80px);font-weight:800;letter-spacing:-.04em;line-height:1;color:#F8FAFC;margin-bottom:clamp(7px,1.5vh,20px)}
 .hero-brand span{color:var(--pr)}
-.hh1{font-size:clamp(27px,min(4vw,6.3vh),52px);font-weight:800;letter-spacing:-.03em;line-height:1.07;color:#F8FAFC;margin-top:clamp(7px,1.5vh,20px)}
+.hh1{font-size:clamp(27px,min(4vw,6.3vh),52px);font-weight:800;letter-spacing:-.03em;line-height:1.07;color:#F8FAFC;margin-top:clamp(40px,7vh,80px)}
 .hh1 em{font-style:normal;color:var(--pr)}
-.hsub{font-size:clamp(15px,1.05vw,17px);font-weight:500;line-height:1.6;color:var(--mu);max-width:460px;margin-top:clamp(10px,1.6vh,18px)}
-.hctas{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:clamp(16px,3vh,36px)}
-.hproof{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:32px}
-.avs{display:flex;align-items:center}
-.av{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.1);background:rgba(30,64,175,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#93C5FD;margin-left:-8px}
-.av:first-child{margin-left:0}
-.hpt{font-size:13px;font-weight:400;line-height:1.5;color:var(--mu)}
-.hpt strong{color:var(--tx);font-weight:600}
+.hsub{font-size:clamp(15px,1.05vw,17px);font-weight:500;line-height:1.6;color:var(--mu);max-width:460px;margin-top:clamp(20px,3vh,32px)}
+.hctas{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:clamp(28px,4.5vh,52px)}
 
 /* HERO VISUAL */
 .hv{position:relative;height:460px;display:flex;align-items:center;justify-content:center}
@@ -481,10 +476,11 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 <style>body>*:not(#brain-canvas):not(#morph-cv):not(#wf-cv):not(.wa-btn):not(#nav){position:relative;z-index:1}</style>
 
 <!-- NAV -->
+<div id="nav-trigger" style="position:fixed;top:0;left:0;right:0;height:16px;z-index:99"></div>
 <nav id="nav">
   <div class="ni">
     <a href="#inicio" class="logo" aria-label="La Máquina IA">
-      <img src="logo-nav.png" alt="" width="64" height="64" style="margin-left:-48px">
+      <img src="logo-nav.png" alt="" width="38" height="38" style="margin-left:-32px">
     </a>
     <div class="nl">
       <a href="#servicios">Servicios</a>
@@ -516,20 +512,14 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   <div class="ct">
     <div class="hc" id="hcon">
       <div class="hl" style="position:relative;z-index:2">
-        <div style="position:relative;top:-20px">
+        <div style="position:relative;top:10px">
           <div class="hero-brand">La Máquina <span>IA</span></div>
           <h1 class="hh1">Tu operación<br>en <em>piloto</em><br>automático</h1>
           <p class="hsub">Automatizamos los procesos repetitivos de tu empresa con IA. Menos fricción, menos errores, más tiempo para lo que realmente importa</p>
         </div>
-        <div class="hctas">
+        <div class="hctas" style="margin-top:clamp(52px,8vh,84px)">
           <a href="#contacto" class="bc bc-lg">Empezar ahora</a>
           <a href="#servicios" class="bg">Ver servicios</a>
-        </div>
-        <div class="hproof">
-          <div class="avs" aria-hidden="true">
-            <div class="av">JM</div><div class="av">AR</div><div class="av">PL</div><div class="av">CM</div>
-          </div>
-          <p class="hpt"><strong>+40 empresas</strong> ya operan con La Máquina IA</p>
         </div>
       </div>
       <!-- HERO WORKFLOW: flujo de conexiones (reemplaza el canvas #wf-cv) -->
@@ -864,7 +854,15 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 
 <script>
 const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>nav.classList.toggle('sc',scrollY>8),{passive:true});
+let lastY=scrollY;
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('sc',scrollY>8);
+  if(scrollY>lastY && scrollY>120 && !nav.matches(':hover')) nav.classList.add('hide');
+  else if(scrollY<lastY) nav.classList.remove('hide');
+  lastY=scrollY;
+},{passive:true});
+nav.addEventListener('mouseenter',()=>nav.classList.remove('hide'));
+document.getElementById('nav-trigger').addEventListener('mouseenter',()=>nav.classList.remove('hide'));
 // ── Cerebro en video: mostrar sólo si el archivo carga ──────────
 // Si el video existe, se muestra y se avisa al sistema de partículas
 // (window.__brainVideoOn) para que NO dibuje el cerebro en el hero.
@@ -1190,21 +1188,29 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     // EXPLOSIÓN (final)
     var sa=rnd()*Math.PI*2, sb=Math.acos(rnd()*2-1), sr=4.5+rnd()*5.5;
     scatPos[i3]=Math.sin(sb)*Math.cos(sa)*sr; scatPos[i3+1]=Math.cos(sb)*sr; scatPos[i3+2]=Math.sin(sb)*Math.sin(sa)*sr;
-    // ENSAMBLADO 3D: la esfera 3D se materializa SUAVE en su lugar (jitter chico),
-    // mientras las partículas del workflow (canvas 2D) son las que vuelan y la forman.
-    asmPos[i3]  = sphPos[i3]   + (rnd()-0.5)*1.1;
-    asmPos[i3+1]= sphPos[i3+1] + (rnd()-0.5)*1.1;
-    asmPos[i3+2]= sphPos[i3+2] + (rnd()-0.5)*1.1;
+    // ENSAMBLADO 3D: sin jitter — la esfera 3D queda invisible en su posición final
+    // y sólo se desvanece "in" cuando las partículas del workflow (canvas 2D) terminan
+    // de converger y aterrizar ahí. Así no aparecen partículas sueltas desde otro lado.
+    asmPos[i3]  = sphPos[i3];
+    asmPos[i3+1]= sphPos[i3+1];
+    asmPos[i3+2]= sphPos[i3+2];
   }
 
   var group=new THREE.Group(); scene.add(group);
   group.scale.setScalar(1.0);
 
+  // paleta: celeste / naranja / violeta (misma que las partículas de la explosión del workflow)
+  var PAL=[[0.2196,0.7412,0.9725],[0.9843,0.5725,0.2353],[0.6549,0.5451,0.9804]];
+  function fillPal(arr,count){for(var i=0;i<count;i++){var c=PAL[(Math.random()*PAL.length)|0];arr[i*3]=c[0];arr[i*3+1]=c[1];arr[i*3+2]=c[2];}}
+
   // neuronas
   var nGeo=new THREE.BufferGeometry();
   var curPos=new Float32Array(NODES*3); for(var i=0;i<NODES*3;i++) curPos[i]=asmPos[i];
   nGeo.setAttribute('position', new THREE.BufferAttribute(curPos,3));
-  var nMat=new THREE.PointsMaterial({color:0x8fd0ff, size:0.10, map:dotTex,
+  var nCol=new Float32Array(NODES*3); fillPal(nCol,NODES);
+  var nColBase=nCol.slice();
+  nGeo.setAttribute('color', new THREE.BufferAttribute(nCol,3));
+  var nMat=new THREE.PointsMaterial({vertexColors:true, size:0.10, map:dotTex,
     transparent:true, opacity:0.95, blending:THREE.AdditiveBlending, depthWrite:false});
   group.add(new THREE.Points(nGeo, nMat));
 
@@ -1226,15 +1232,16 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   var eMat=new THREE.LineBasicMaterial({vertexColors:true, transparent:true, opacity:0.9,
     blending:THREE.AdditiveBlending, depthWrite:false});
   group.add(new THREE.LineSegments(eGeo, eMat));
-  var EDGE_DIM=[0.10,0.40,0.92], EDGE_LIT=[0.60,0.88,1.0];
+  var EDGE_BASE=[]; for(var k=0;k<edges.length;k++) EDGE_BASE.push(PAL[(Math.random()*PAL.length)|0]);
 
   // ── Anillos "JARVIS": un par de líneas finas que orbitan la esfera (look HUD) ──
   var rings=new THREE.Group(); group.add(rings);
   var ringMats=[], RINGR=1.52;
-  [[0,0,0],[Math.PI/2.3,0.6,0],[0.5,1.2,Math.PI/3]].forEach(function(rot){
+  [[0,0,0],[Math.PI/2.3,0.6,0],[0.5,1.2,Math.PI/3]].forEach(function(rot,ri){
     var seg=160, pts=[];
     for(var i=0;i<=seg;i++){var a=i/seg*Math.PI*2; pts.push(new THREE.Vector3(Math.cos(a)*RINGR, Math.sin(a)*RINGR, 0));}
-    var rm=new THREE.LineBasicMaterial({color:0x86d6ff, transparent:true, opacity:0,
+    var rc=PAL[ri%PAL.length];
+    var rm=new THREE.LineBasicMaterial({color:new THREE.Color(rc[0],rc[1],rc[2]), transparent:true, opacity:0,
       blending:THREE.AdditiveBlending, depthWrite:false});
     var line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), rm);
     line.rotation.set(rot[0],rot[1],rot[2]); rings.add(line); ringMats.push(rm);
@@ -1244,7 +1251,9 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   var PULSES=(window.innerWidth<760)?60:110;
   var pulses=[], pGeo=new THREE.BufferGeometry(), ppos=new Float32Array(PULSES*3);
   pGeo.setAttribute('position', new THREE.BufferAttribute(ppos,3));
-  var pMat=new THREE.PointsMaterial({color:0xcfecff, size:0.16, map:dotTex,
+  var pCol=new Float32Array(PULSES*3); fillPal(pCol,PULSES);
+  pGeo.setAttribute('color', new THREE.BufferAttribute(pCol,3));
+  var pMat=new THREE.PointsMaterial({vertexColors:true, size:0.16, map:dotTex,
     transparent:true, opacity:1, blending:THREE.AdditiveBlending, depthWrite:false});
   group.add(new THREE.Points(pGeo, pMat));
   function spawn(p){ p.ei=(Math.random()*edges.length)|0; p.e=edges[p.ei]; p.t=0; p.sp=0.6+Math.random()*1.6; }
@@ -1257,8 +1266,8 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     var i3=i*3;
     var a=Math.random()*Math.PI*2, c=Math.acos(Math.random()*2-1), Rs=1.35;
     exSph[i3]=Math.sin(c)*Math.cos(a)*Rs; exSph[i3+1]=Math.cos(c)*Rs; exSph[i3+2]=Math.sin(c)*Math.sin(a)*Rs;
-    // ensamblado 3D suave en su lugar (las partículas del workflow hacen el "forming")
-    exAsm[i3]=exSph[i3]+(Math.random()-0.5)*1.1; exAsm[i3+1]=exSph[i3+1]+(Math.random()-0.5)*1.1; exAsm[i3+2]=exSph[i3+2]+(Math.random()-0.5)*1.1;
+    // sin jitter: igual que arriba, quedan invisibles en su lugar hasta el handoff
+    exAsm[i3]=exSph[i3]; exAsm[i3+1]=exSph[i3+1]; exAsm[i3+2]=exSph[i3+2];
     // SATURNO (extra): refuerza el anillo plano (más finos al borde)
     if(i % 100 < 30){
       var sa2=Math.random()*Math.PI*2, sc2=Math.acos(Math.random()*2-1), R2=0.78;
@@ -1276,7 +1285,10 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   var expGeo=new THREE.BufferGeometry();
   var expCur=new Float32Array(EXP*3); for(var i=0;i<EXP*3;i++) expCur[i]=exAsm[i];
   expGeo.setAttribute('position', new THREE.BufferAttribute(expCur,3));
-  var expMat=new THREE.PointsMaterial({color:0x8fd0ff, size:0.10, map:dotTex, transparent:true, opacity:0,
+  var expCol=new Float32Array(EXP*3); fillPal(expCol,EXP);
+  var expColBase=expCol.slice();
+  expGeo.setAttribute('color', new THREE.BufferAttribute(expCol,3));
+  var expMat=new THREE.PointsMaterial({vertexColors:true, size:0.10, map:dotTex, transparent:true, opacity:0,
     blending:THREE.AdditiveBlending, depthWrite:false});
   group.add(new THREE.Points(expGeo, expMat));
 
@@ -1334,7 +1346,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
         secRes=document.getElementById('resultados'), secCon=document.getElementById('contacto');
     // m0 ensamblado disperso→esfera: las partículas vuelan hacia adentro al salir del
     // hero (MISMA fórmula que el burst del workflow) y forman la esfera al entrar a Servicios.
-    if(secServ){var s0=secServ.offsetTop; tgtM0=Math.max(0,Math.min((sy-(s0-vh))/(vh*0.7),1));}
+    if(secServ){var s0=secServ.offsetTop; tgtM0=Math.max(0,Math.min((sy-(s0-vh))/(vh*1.1),1));}
     // m1 esfera→Saturno: se forma durante Servicios (mientras la forma está a la
     // izquierda, lejos de las tarjetas) y queda listo ANTES de entrar a Proceso.
     if(secServ&&secProc){var s1=secServ.offsetTop,sp=secProc.offsetTop;
@@ -1418,6 +1430,8 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
 
   var clock=new THREE.Clock(), T=0;
   var _sc=new THREE.Vector3(), _st=new THREE.Vector3();
+  var _viewDir=new THREE.Vector3(), _qInv=new THREE.Quaternion();
+  var SHADE_AMB=0.22; // brillo mínimo de la cara oculta de la esfera
   var _perfApplied=false;
   function animate(){
     requestAnimationFrame(animate);
@@ -1432,6 +1446,10 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     groupRot+=(tgtGroupRot-groupRot)*0.07; offX+=(tgtOffX-offX)*0.06; offY+=(tgtOffY-offY)*0.06;
     cRotX+=(tRotX-cRotX)*0.05; cRotY+=(tRotY-cRotY)*0.05;
     var eM0=ease(morph0), eM1=ease(morph1), eM2=ease(morph2), eM3=ease(morph3);
+    // handoff: la esfera 3D recién se hace visible cuando los fragmentos 2D del
+    // workflow ya convergieron y se están desvaneciendo (mismo umbral que su alpha,
+    // form>0.55), evitando que partículas "fantasma" aparezcan antes de tiempo.
+    var eM0v=ease(Math.max(0,(eM0-0.55)/0.45));
 
     var ringView=eM1*(1-eM2); // 1 cuando es Saturno puro
     group.position.x=offX; group.position.y=offY;
@@ -1445,6 +1463,13 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     for(var ri=0;ri<ringMats.length;ri++) ringMats[ri].opacity=ringVis*(0.5+0.14*Math.sin(T*1.4+ri));
     group.updateMatrixWorld();
 
+    // dirección a cámara en espacio local del grupo, para sombrear la esfera
+    // como un cuerpo 3D real (cara visible iluminada, cara oculta tenue)
+    _viewDir.copy(camera.position).sub(group.position).normalize();
+    _qInv.copy(group.quaternion).invert();
+    _viewDir.applyQuaternion(_qInv);
+    var sphereShade=(1-eM1)*(1-eM2)*(1-eM3)*eM0v; // sólo se nota en la fase esfera
+
     var ca=nGeo.attributes.position.array;
     applyRepulsion(ca, repN, NODES, dt, eM3);
     for(var i=0;i<NODES;i++){
@@ -1456,12 +1481,19 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       var tz=lerp(lerp(lerp(bz, galPos[i3+2], eM1), cubePos[i3+2], eM2), scatPos[i3+2], eM3);
       tx+=repN[i3]; ty+=repN[i3+1]; tz+=repN[i3+2];
       ca[i3]+=(tx-ca[i3])*0.16; ca[i3+1]+=(ty-ca[i3+1])*0.16; ca[i3+2]+=(tz-ca[i3+2])*0.16;
+      // sombreado: la normal de la esfera es su propia posición normalizada
+      var nx=sphPos[i3],ny=sphPos[i3+1],nz=sphPos[i3+2], nl=Math.sqrt(nx*nx+ny*ny+nz*nz)||1;
+      var dot=(nx*_viewDir.x+ny*_viewDir.y+nz*_viewDir.z)/nl;
+      var lit=SHADE_AMB+(1-SHADE_AMB)*Math.max(0,dot);
+      var litMix=1+(lit-1)*sphereShade;
+      nCol[i3]=nColBase[i3]*litMix; nCol[i3+1]=nColBase[i3+1]*litMix; nCol[i3+2]=nColBase[i3+2]*litMix;
     }
     nGeo.attributes.position.needsUpdate=true;
+    nGeo.attributes.color.needsUpdate=true;
 
     // las conexiones/pulsos se ven en esfera y se desvanecen al deformarse
     // las conexiones se ven plenas en la esfera y se atenúan al formar el Saturno/cubo/explosión
-    var netVis=(1-eM1*0.7)*(1-eM2)*(1-eM3)*eM0;
+    var netVis=(1-eM1*0.7)*(1-eM2)*(1-eM3)*eM0v;
     if(edges.length){
       var pa=pGeo.attributes.position.array;
       var edgeLit=animate._lit||(animate._lit=new Float32Array(edges.length));
@@ -1477,10 +1509,8 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       for(var k=0;k<edges.length;k++){
         var ai=edges[k][0]*3, bi=edges[k][1]*3;
         ea[k*6]=ca[ai];ea[k*6+1]=ca[ai+1];ea[k*6+2]=ca[ai+2];ea[k*6+3]=ca[bi];ea[k*6+4]=ca[bi+1];ea[k*6+5]=ca[bi+2];
-        var L=edgeLit[k], br=(0.40+0.30*breathe)*netVis;
-        var r=(EDGE_DIM[0]+(EDGE_LIT[0]-EDGE_DIM[0])*L)*(br+L*0.9);
-        var g=(EDGE_DIM[1]+(EDGE_LIT[1]-EDGE_DIM[1])*L)*(br+L*0.9);
-        var bl=(EDGE_DIM[2]+(EDGE_LIT[2]-EDGE_DIM[2])*L)*(br+L*0.9);
+        var L=edgeLit[k], br=(0.40+0.30*breathe)*netVis, bc=EDGE_BASE[k], bright=br+L*0.9;
+        var r=bc[0]*bright, g=bc[1]*bright, bl=bc[2]*bright;
         eca[k*6]=r;eca[k*6+1]=g;eca[k*6+2]=bl;eca[k*6+3]=r;eca[k*6+4]=g;eca[k*6+5]=bl;
       }
       eGeo.attributes.position.needsUpdate=true; eGeo.attributes.color.needsUpdate=true;
@@ -1490,7 +1520,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     // logo: mismo tamaño y cantidad de partículas que esfera/Saturno, pero más oscuras
     var logoFocus=eM2*(1-eM1)*(1-eM3);
     var cubeDim=1-0.45*logoFocus;
-    nMat.opacity=(0.7+0.25*Math.sin(T*1.5))*(1-eM3)*eM0*cubeDim;
+    nMat.opacity=(0.7+0.25*Math.sin(T*1.5))*(1-eM3)*eM0v*cubeDim;
     var blurAmt = 0;
     if(Math.abs(blurAmt-(animate._blur||0))>0.25){ animate._blur=blurAmt; cv.style.filter = blurAmt>0.15 ? ('blur('+blurAmt.toFixed(1)+'px)') : ''; }
 
@@ -1504,10 +1534,16 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       var tz=lerp(lerp(lerp(ebz, exGal[i3+2], eM1), exCube[i3+2], eM2), exScat[i3+2], eM3);
       tx+=repE[i3]; ty+=repE[i3+1]; tz+=repE[i3+2];
       exa[i3]+=(tx-exa[i3])*0.13; exa[i3+1]+=(ty-exa[i3+1])*0.13; exa[i3+2]+=(tz-exa[i3+2])*0.13;
+      var enx=exSph[i3],eny=exSph[i3+1],enz=exSph[i3+2], enl=Math.sqrt(enx*enx+eny*eny+enz*enz)||1;
+      var edot=(enx*_viewDir.x+eny*_viewDir.y+enz*_viewDir.z)/enl;
+      var elit=SHADE_AMB+(1-SHADE_AMB)*Math.max(0,edot);
+      var elitMix=1+(elit-1)*sphereShade;
+      expCol[i3]=expColBase[i3]*elitMix; expCol[i3+1]=expColBase[i3+1]*elitMix; expCol[i3+2]=expColBase[i3+2]*elitMix;
     }
     expGeo.attributes.position.needsUpdate=true;
+    expGeo.attributes.color.needsUpdate=true;
     // las partículas extra aparecen al deformarse de la esfera
-    expMat.opacity=eM0*cubeDim; // partículas extra; atenuadas en el cubo para leer textos
+    expMat.opacity=eM0v*cubeDim; // partículas extra; atenuadas en el cubo para leer textos
 
     camera.lookAt(offX*0.25, 0, 0);
     renderer.render(scene, camera);
@@ -1998,11 +2034,11 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
 
   /* ── NODOS (espacio compacto 760x600) ── */
   var NODES={
-    form:   {x:76,y:115,  label:'Formulario', sub:'Web',     icon:'form'},
-    wa_in:  {x:76,y:175, label:'WhatsApp',   sub:'Mensaje', icon:'whatsapp'},
+    form:   {x:56,y:90,  label:'Formulario', sub:'Web',     icon:'form'},
+    wa_in:  {x:66,y:165, label:'WhatsApp',   sub:'Mensaje', icon:'whatsapp'},
     cal_in: {x:108,y:235, label:'Calendario', sub:'Evento',  icon:'calendar'},
-    crm:    {x:76,y:295, label:'CRM',         sub:'Lead',    icon:'crm'},
-    erp:    {x:108,y:355, label:'ERP',         sub:'Stock',   icon:'erp'},
+    crm:    {x:66,y:305, label:'CRM',         sub:'Lead',    icon:'crm'},
+    erp:    {x:56,y:380, label:'ERP',         sub:'Stock',   icon:'erp'},
     core:   {x:380,y:225, core:true, label:'La Máquina IA', sub:'Agente IA', icon:'core'},
     claude: {x:380,y:90,  model:true, label:'Claude', icon:'claude'},
     gemini: {x:312,y:475, model:true, label:'Gemini', icon:'gemini'},
@@ -2164,13 +2200,15 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     function xrs(){xcv.width=innerWidth*DPR; xcv.height=innerHeight*DPR; xg.setTransform(DPR,0,0,DPR,0,0);}
     xrs(); addEventListener('resize',xrs,{passive:true});
 
-    var SPHCOL=[143,208,255]; // 0x8fd0ff: el color de la esfera 3D
     function rgb(hex){return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)];}
+    // misma paleta cyan/naranja/violeta que las partículas de la esfera/Saturno/logo
+    var PAL3=[rgb('#38BDF8'),rgb('#FB923C'),rgb('#A78BFA')];
+    function randPal(){return PAL3[(Math.random()*PAL3.length)|0];}
     var parts=[];
-    function addP(sx,sy,col,r){
+    function addP(sx,sy,col,r,tcol){
       var a=Math.random()*Math.PI*2, d=36+Math.random()*150;
       var th=Math.acos(Math.random()*2-1), ph=Math.random()*Math.PI*2;
-      parts.push({sx:sx,sy:sy,c:rgb(col),r:r,
+      parts.push({sx:sx,sy:sy,c:rgb(col),tc:tcol||randPal(),r:r,
         dx:Math.cos(a)*d, dy:Math.sin(a)*d-22,
         ux:Math.sin(th)*Math.cos(ph), uy:Math.cos(th)*0.96,
         j:Math.random()*0.3});
@@ -2193,7 +2231,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       var L=ed.len||ed.path.getTotalLength();
       for(var s=11;s<L;s+=22){
         var pt=ed.path.getPointAtLength(s);
-        addP(pt.x,pt.y, COL[ed.e.cat], 1.8);
+        addP(pt.x,pt.y, COL[ed.e.cat], 1.8, rgb(COL[ed.e.cat]));
       }
       var pm=ed.path.getPointAtLength(L*Math.random());
       addP(pm.x,pm.y,'#FFFFFF',2.6);
@@ -2206,10 +2244,10 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       var vh=innerHeight, sy=window.scrollY||0;
       if(innerWidth<=768){ if(active){xg.clearRect(0,0,innerWidth,innerHeight); active=false; root.style.opacity='';} return; }
       var P=window.__PERF; if(P&&P.hidden) return;
-      var eb=Math.max(0,Math.min((sy-vh*0.04)/(vh*0.5),1));
+      var eb=Math.max(0,Math.min((sy-vh*0.04)/(vh*0.8),1));
       var sph=window.__sph||null, form=sph?sph.form:0;
       // el diagrama real se desvanece a medida que estalla
-      root.style.opacity = eb>0 ? String(Math.max(0,1-eb*1.8).toFixed(3)) : '';
+      root.style.opacity = eb>0 ? String(Math.max(0,1-eb*1.4).toFixed(3)) : '';
       if(eb<=0 || form>=0.999){
         if(active){xg.clearRect(0,0,innerWidth,innerHeight); active=false;}
         return;
@@ -2218,8 +2256,8 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       if(rect.width<10){ if(active){xg.clearRect(0,0,innerWidth,innerHeight); active=false;} return; }
       active=true;
       var kx=rect.width/STAGE_W, ky=rect.height/STAGE_H;
-      var burst=sm(Math.min(1,eb/0.45));                 // fase 1: estallido hacia afuera
-      var conv=sm(Math.max(0,(eb-0.38)/0.62));           // fase 2: convergen a la esfera
+      var burst=sm(Math.min(1,eb/0.6));                  // fase 1: estallido hacia afuera (más gradual)
+      var conv=sm(eb);                                   // convergen a la esfera DESDE el inicio del scroll, en simultáneo con el estallido
       var alpha=1-Math.max(0,(form-0.55)/0.45);          // handoff: se funden en la esfera 3D
       xg.clearRect(0,0,innerWidth,innerHeight);
       xg.globalCompositeOperation='lighter';
@@ -2232,7 +2270,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
           cx2=bx+((sph.x+q.ux*sph.r)-bx)*conv;
           cy2=by+((sph.y+q.uy*sph.r)-by)*conv;
         }
-        var R=(q.c[0]+(SPHCOL[0]-q.c[0])*conv)|0, G=(q.c[1]+(SPHCOL[1]-q.c[1])*conv)|0, B=(q.c[2]+(SPHCOL[2]-q.c[2])*conv)|0;
+        var R=(q.c[0]+(q.tc[0]-q.c[0])*conv)|0, G=(q.c[1]+(q.tc[1]-q.c[1])*conv)|0, B=(q.c[2]+(q.tc[2]-q.c[2])*conv)|0;
         var rad=q.r*(1-conv*0.3);
         xg.fillStyle='rgba('+R+','+G+','+B+','+(0.85*alpha).toFixed(3)+')';
         xg.beginPath(); xg.arc(cx2,cy2,rad,0,6.2832); xg.fill();
