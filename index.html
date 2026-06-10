@@ -20,7 +20,7 @@
 <style>
 :root{--pr:#1E40AF;--ct:#F97316;--dk:#0F172A;--bg:#000000;--tx:#F1F5F9;--mu:#94A3B8;--su:#64748B;--ac:rgba(30,64,175,.14)}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;background:#000}
+html{scroll-behavior:smooth;background:#000;overflow-x:hidden;overflow-x:clip}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 ::selection{background:rgba(30,64,175,.25)}
 ::-webkit-scrollbar{width:5px}
@@ -129,7 +129,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .tbi:hover{opacity:1;color:var(--tx)}
 
 /* SECTIONS */
-.sec{padding:100px 0;perspective:1400px;perspective-origin:50% 45%}
+.sec{padding:clamp(76px,10vh,100px) 0 100px;perspective:1400px;perspective-origin:50% 45%}
 /* parallax 3D suave del contenido de cada sección (el JS escribe --rx/--ry) */
 .sec>.ct{transform-style:preserve-3d;transform:rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg));transition:transform .5s cubic-bezier(.22,1,.36,1);will-change:transform}
 .sec>.ct.tlt{transition:none}
@@ -205,7 +205,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .id{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
 /* FINAL CTA */
-.fc{background:transparent;position:relative;overflow:hidden;text-align:center}
+.fc{background:transparent;position:relative;overflow:hidden;text-align:center;min-height:calc(100vh - 64px)}
 .fcb{position:absolute;inset:0;background:radial-gradient(ellipse 900px 600px at 50% 120%,rgba(30,64,175,.18) 0%,transparent 60%),radial-gradient(ellipse 600px 400px at 50% -20%,rgba(249,115,22,.07) 0%,transparent 60%);pointer-events:none}
 .fcg{position:absolute;inset:0;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;pointer-events:none}
 .fci{position:relative;z-index:2}
@@ -316,7 +316,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 #proceso .ct>.fu{width:min(56%,860px);max-width:none!important;margin-left:0!important;margin-right:auto!important;text-align:center!important}
 #proceso .ct>.fu .ssub{margin-left:auto!important;margin-right:auto!important}
 #proceso .proc-card{width:min(56%,860px);margin-left:0;margin-right:auto}
-@media(max-width:1024px){#proceso .proc-card{width:100%}#proceso .ct>.fu{text-align:center!important;margin:0 auto!important}}
+@media(max-width:1024px){#proceso .proc-card{width:100%}#proceso .ct>.fu{width:100%;text-align:center!important;margin:0 auto!important}}
 .proc-card{background:rgba(8,16,35,.72);border:1px solid rgba(30,64,175,.14);border-radius:20px;padding:40px 40px 44px;margin-top:48px;box-shadow:0 1px 2px rgba(0,0,0,.3),0 8px 32px rgba(0,0,0,.25);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:opacity .65s cubic-bezier(.4,0,.2,1),box-shadow .35s ease,border-color .25s ease;animation:float-a 9.5s ease-in-out infinite;animation-delay:-1.2s}
 .proc-card:hover{border-color:rgba(30,64,175,.7);box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 40px rgba(30,64,175,.45),0 0 80px rgba(30,64,175,.2),0 0 120px rgba(30,64,175,.1)}
 
@@ -324,7 +324,9 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 @media(max-width:1024px){
   .ct,.ni{padding-left:32px;padding-right:32px}
   #servicios .ct{padding-left:32px}
-  .sg{grid-template-columns:repeat(2,1fr)}
+  .sg{margin-right:0}
+  #servicios .ct>.fu{margin-right:0!important}
+  #proceso .ct{padding-right:32px}
   .pg{grid-template-columns:repeat(2,1fr);gap:40px}
   .pg::before{display:none}
   .stg{grid-template-columns:repeat(2,1fr)}
@@ -337,10 +339,14 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   .hc{grid-template-columns:1fr;padding:60px 0}
   .hv{height:320px}
   /* en mobile el carrusel circular no entra: volvemos a stack vertical */
-  .sg{position:static;width:100%;height:auto;display:flex;flex-direction:column;gap:16px;margin-top:32px}
+  .sg{position:static;width:100%;height:auto;display:flex;flex-direction:column;gap:16px;margin:32px 0 0}
   .sg .sc2{position:relative;top:auto;left:auto;width:100%;transform:none!important}
   .sg .sc2.fu{transform:translateY(24px)!important}
   .sg .sc2.fu.vis{transform:translateY(0)!important}
+  .pg{grid-template-columns:1fr;gap:32px}
+  .sp{padding:0}
+  .proc-card{padding:28px 22px 32px}
+  #proceso .ct{padding-right:20px}
   .fg{grid-template-columns:1fr 1fr;gap:32px}
   .ftb{flex-direction:column;gap:12px;text-align:center}
   .sec{padding:72px 0}
@@ -348,7 +354,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   .mc3,.mc4{display:none}
 }
 @media(max-width:480px){
-  .stg{grid-template-columns:repeat(2,1fr)}
+  .stg{gap:40px 20px}
   .fg{grid-template-columns:1fr}
   .hctas,.cbtns{flex-direction:column;align-items:flex-start}
   .cbtns{align-items:center}
@@ -471,6 +477,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
       <a href="#proceso">Cómo funciona</a>
       <a href="#resultados">Resultados</a>
       <a href="#industrias">Industrias</a>
+      <a href="#clientes">Clientes</a>
     </div>
     <div class="nc">
       <a href="#contacto" class="bc">Agendar llamada <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -482,6 +489,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
     <a href="#proceso">Cómo funciona</a>
     <a href="#resultados">Resultados</a>
     <a href="#industrias">Industrias</a>
+    <a href="#clientes">Clientes</a>
     <a href="#contacto" class="bc">Agendar llamada →</a>
   </div>
 </nav>
@@ -654,7 +662,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 </section>
 
 <!-- RESEÑAS -->
-<section class="sec" id="resenas">
+<section class="sec" id="clientes">
   <div class="ct">
     <div style="text-align:center;max-width:600px;margin:0 auto" class="fu">
       <p class="sl">Clientes</p>
@@ -1259,7 +1267,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   var groupRot=0,tgtGroupRot=0,lastScrollY=window.scrollY;
   var offX=0,tgtOffX=0, offY=0,tgtOffY=0;
   function getSections(){
-    var ids=['inicio','servicios','proceso','resultados','industrias','resenas','contacto'];
+    var ids=['inicio','servicios','proceso','resultados','industrias','clientes','contacto'];
     var sides=[1,-1,-1,1,-1,1,-1], out=[];
     for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el)out.push({top:el.offsetTop,side:sides[i]});}
     return out;

@@ -20,7 +20,7 @@
 <style>
 :root{--pr:#1E40AF;--ct:#F97316;--dk:#0F172A;--bg:#000000;--tx:#F1F5F9;--mu:#94A3B8;--su:#64748B;--ac:rgba(30,64,175,.14)}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;background:#000}
+html{scroll-behavior:smooth;background:#000;overflow-x:hidden;overflow-x:clip}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 ::selection{background:rgba(30,64,175,.25)}
 ::-webkit-scrollbar{width:5px}
@@ -42,8 +42,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .nl a:hover{color:var(--pr)}
 .nl a:hover::after{width:100%}
 .nl a:focus-visible{outline:2px solid rgba(30,64,175,.4);outline-offset:4px;border-radius:2px}
-#mb{display:none}
-.hb{display:none}
+#mb{display:none;flex-direction:column;background:rgba(0,0,0,.96);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);padding:16px 24px 24px;gap:4px}
+#mb.op{display:flex}
+#mb a{font-size:15px;font-weight:500;color:#CBD5E1;text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
+#mb a:hover{color:var(--pr)}
+#mb a:last-child{border:none}
+.hb{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.hb span{display:block;width:22px;height:2px;background:#E2E8F0;border-radius:1px}
 .ct{max-width:1200px;margin:0 auto;padding:0 48px;width:100%}
 
 /* CONTENT */
@@ -77,6 +82,8 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   .ftb{flex-direction:column;gap:12px;text-align:center;padding:24px 0}
   .content{padding-top:80px}
   .ni{padding:0 24px}
+  .nl{display:none}
+  .hb{display:flex}
 }
 @media(max-width:480px){
   .fg{grid-template-columns:1fr}
@@ -97,6 +104,12 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
       <a href="/#servicios">Servicios</a>
       <a href="/#contacto">Contacto</a>
     </div>
+    <button class="hb" id="hbtn" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+  <div id="mb">
+    <a href="/#inicio">Inicio</a>
+    <a href="/#servicios">Servicios</a>
+    <a href="/#contacto">Contacto</a>
   </div>
 </nav>
 
@@ -255,6 +268,9 @@ window.addEventListener('scroll', () => {
     nav.classList.remove('sc');
   }
 });
+const hbtn=document.getElementById('hbtn'),mb=document.getElementById('mb');
+hbtn.addEventListener('click',()=>{const o=mb.classList.toggle('op');hbtn.setAttribute('aria-expanded',o)});
+mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList.remove('op');hbtn.setAttribute('aria-expanded','false')}));
 </script>
 </body>
 </html>

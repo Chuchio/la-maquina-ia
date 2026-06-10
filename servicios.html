@@ -20,7 +20,7 @@
 <style>
 :root{--pr:#1E40AF;--ct:#F97316;--dk:#0F172A;--bg:#000000;--tx:#F1F5F9;--mu:#94A3B8;--su:#64748B}
 *{box-sizing:border-box;margin:0;padding:0}
-html{background:#000}
+html{background:#000;overflow-x:hidden;overflow-x:clip}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#000;color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 ::selection{background:rgba(30,64,175,.25)}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#000}::-webkit-scrollbar-thumb{background:rgba(30,64,175,.3);border-radius:3px}
@@ -44,6 +44,11 @@ body>*:not(.bgfx){position:relative;z-index:1}
 .bc:hover{background:#EA6C0A;transform:translateY(-1px);box-shadow:0 8px 24px rgba(249,115,22,.36)}
 .hb{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
 .hb span{display:block;width:22px;height:2px;background:#E2E8F0;border-radius:1px}
+#mb{display:none;flex-direction:column;background:rgba(0,0,0,.96);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);padding:16px 24px 24px;gap:4px}
+#mb.op{display:flex}
+#mb a{font-size:15px;font-weight:500;color:#CBD5E1;text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
+#mb a:hover{color:var(--pr)}
+#mb a:last-child{border:none;margin-top:12px;text-align:center}
 
 .ct{max-width:1240px;margin:0 auto;padding:0 48px;width:100%}
 
@@ -116,12 +121,11 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 
 @media(max-width:980px){
   .split{grid-template-columns:1fr;gap:24px}
-  .side{position:static;flex-direction:row;overflow-x:auto;gap:8px;padding-bottom:6px;scrollbar-width:none}
-  .side::-webkit-scrollbar{display:none}
+  .side{position:static;flex-direction:row;flex-wrap:wrap;gap:8px;padding-bottom:6px}
   .side a{flex:0 0 auto}.side a .mt .mn{display:none}
   .d-cols{grid-template-columns:1fr;gap:32px}
 }
-@media(max-width:768px){.ct,.ni{padding-left:20px;padding-right:20px}.nl{display:none}.hb{display:flex}.fg{grid-template-columns:1fr 1fr;gap:32px}.pn{flex-direction:column}}
+@media(max-width:768px){.ct,.ni{padding-left:20px;padding-right:20px}.nl{display:none}.ni>.bc{display:none}.hb{display:flex}.fg{grid-template-columns:1fr 1fr;gap:32px}.pn{flex-direction:column}}
 @media(max-width:480px){.fg{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -132,9 +136,17 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 <nav id="nav">
   <div class="ni">
     <a href="/#inicio" class="logo" aria-label="La Máquina IA"><img src="logo-nav.png" alt="" width="40" height="40"></a>
-    <div class="nl"><a href="/#servicios">Servicios</a><a href="/#proceso">Cómo funciona</a><a href="/#resultados">Resultados</a><a href="/#industrias">Industrias</a></div>
+    <div class="nl"><a href="/#servicios">Servicios</a><a href="/#proceso">Cómo funciona</a><a href="/#resultados">Resultados</a><a href="/#industrias">Industrias</a><a href="/#clientes">Clientes</a></div>
     <a href="/#contacto" class="bc">Agendar llamada <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    <button class="hb" aria-label="Menú"><span></span><span></span><span></span></button>
+    <button class="hb" id="hbtn" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+  <div id="mb">
+    <a href="/#servicios">Servicios</a>
+    <a href="/#proceso">Cómo funciona</a>
+    <a href="/#resultados">Resultados</a>
+    <a href="/#industrias">Industrias</a>
+    <a href="/#clientes">Clientes</a>
+    <a href="/#contacto" class="bc">Agendar llamada →</a>
   </div>
 </nav>
 
@@ -303,14 +315,35 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   <div class="ct">
     <div class="fg">
       <div>
-        <a href="/#inicio" class="logo" aria-label="La Máquina IA"><span class="lo-la" style="color:rgba(248,250,252,.88)">La</span><span class="lo-mq" style="color:rgba(248,250,252,.88)">Máquina</span><span class="lo-ia" style="background:rgba(30,64,175,.2);color:rgba(248,250,252,.65)">IA</span></a>
+        <a href="/#inicio" class="logo" aria-label="La Máquina IA">
+          <span class="lo-la" style="color:rgba(248,250,252,.88)">La</span>
+          <span class="lo-mq" style="color:rgba(248,250,252,.88)">Máquina</span>
+          <span class="lo-ia" style="background:rgba(30,64,175,.2);color:rgba(248,250,252,.65)">IA</span>
+        </a>
         <p class="fbd">Automatización de procesos empresariales con inteligencia artificial. Menos fricción, más resultados</p>
       </div>
-      <div><p class="fct">Servicios</p><nav class="fl"><a data-go="agentes" style="cursor:pointer">Agentes IA</a><a data-go="automatizacion" style="cursor:pointer">Automatización</a><a data-go="integracion" style="cursor:pointer">Integración</a><a data-go="asistentes" style="cursor:pointer">Asistentes IA</a><a data-go="datos" style="cursor:pointer">Inteligencia de Datos</a></nav></div>
-      <div><p class="fct">Empresa</p><nav class="fl"><a href="/#proceso">Cómo funciona</a><a href="/#resultados">Resultados</a><a href="/#industrias">Industrias</a></nav></div>
-      <div><p class="fct">Contacto</p><nav class="fl"><a href="mailto:hola@lamaquinaia.com">hola@lamaquinaia.com</a><a href="/#contacto">Agendar llamada</a><a href="https://wa.me/5491178295927" target="_blank" rel="noopener">WhatsApp</a></nav></div>
+      <div>
+        <p class="fct">Servicios</p>
+        <nav class="fl" aria-label="Servicios"><a href="/servicios#agentes">Agentes IA</a><a href="/servicios#automatizacion">Automatización</a><a href="/servicios#integracion">Integraciones</a><a href="/servicios#asistentes">Asistentes IA</a><a href="/servicios#datos">Analytics</a></nav>
+      </div>
+      <div>
+        <p class="fct">Empresa</p>
+        <nav class="fl" aria-label="Empresa"><a href="/#proceso">Cómo funciona</a><a href="/#resultados">Resultados</a><a href="/#industrias">Industrias</a><a href="/#contacto">Casos de éxito</a></nav>
+      </div>
+      <div>
+        <p class="fct">Contacto</p>
+        <nav class="fl" aria-label="Contacto"><a href="mailto:hola@lamaquinaia.com">hola@lamaquinaia.com</a><a href="/#contacto">Agendar llamada</a><a href="https://instagram.com/lamaquinaia" target="_blank" rel="noopener">Instagram</a><a href="https://wa.me/5491178295927?text=Hola%2C%20quiero%20automatizar%20mi%20empresa" target="_blank" rel="noopener">WhatsApp</a></nav>
+      </div>
     </div>
-    <div class="ftb"><p class="fcp">© Copyright 2026 La Máquina IA<span style="margin:0 12px;opacity:.4">|</span><a href="/terminos-y-condiciones" class="fla">Términos</a><span style="margin:0 12px;opacity:.4">|</span><a href="/politica-de-privacidad" class="fla">Privacidad</a></p></div>
+    <div class="ftb" style="justify-content:center;gap:0">
+      <p class="fcp">
+        © Copyright 2026 La Máquina IA
+        <span style="margin:0 12px;opacity:.4">|</span>
+        <a href="/terminos-y-condiciones" class="fla">Términos y condiciones</a>
+        <span style="margin:0 12px;opacity:.4">|</span>
+        <a href="/politica-de-privacidad" class="fla">Políticas de privacidad</a>
+      </p>
+    </div>
   </div>
 </footer>
 
@@ -341,6 +374,11 @@ window.addEventListener('hashchange',()=>{const h=location.hash.replace('#','');
 const params=new URLSearchParams(location.search);
 const start=params.get('s')||location.hash.replace('#','')||'agentes';
 show(SVCS.some(s=>s.id===start)?start:'agentes',true,false);
+
+// Menú móvil (hamburguesa)
+const hbtn=document.getElementById('hbtn'),mb=document.getElementById('mb');
+hbtn.addEventListener('click',()=>{const o=mb.classList.toggle('op');hbtn.setAttribute('aria-expanded',o)});
+mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList.remove('op');hbtn.setAttribute('aria-expanded','false')}));
 </script>
 </body>
 </html>
