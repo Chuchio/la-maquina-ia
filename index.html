@@ -33,7 +33,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 #nav.hide{transform:translateY(-100%)}
 .ni{max-width:1200px;margin:0 auto;padding:0 48px;height:100px;display:flex;align-items:center;justify-content:space-between}
 .logo{text-decoration:none;display:flex;align-items:baseline}
-.logo img{display:block;width:64px;height:64px}
+.logo img{display:block;width:40px;height:40px}
 .lo-la{font-size:20px;font-weight:300;color:#E2E8F0;letter-spacing:-.01em}
 .lo-mq{font-size:20px;font-weight:800;color:#F8FAFC;letter-spacing:-.035em}
 .lo-ia{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#93C5FD;background:rgba(30,64,175,.15);padding:2px 7px;border-radius:100px;margin-left:6px;align-self:center;border:1px solid rgba(30,64,175,.25)}
@@ -89,8 +89,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .chip{display:inline-flex;align-items:center;gap:6px;background:rgba(30,64,175,.1);color:#93C5FD;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:100px;border:1px solid rgba(30,64,175,.25)}
 .cdot{width:6px;height:6px;background:var(--pr);border-radius:50%;animation:bl 2s ease-in-out infinite}
 @keyframes bl{0%,100%{opacity:1}50%{opacity:.3}}
-.hero-brand{font-size:clamp(38px,min(6.5vw,8.6vh),80px);font-weight:800;letter-spacing:-.04em;line-height:1;color:#F8FAFC;margin-bottom:clamp(7px,1.5vh,20px)}
-.hero-brand span{color:var(--pr)}
+.hero-brand{display:flex;align-items:baseline;flex-wrap:wrap;gap:.22em;margin-bottom:clamp(7px,1.5vh,20px)}
+.hb-la{font-size:clamp(38px,min(6.5vw,8.6vh),80px);font-weight:300;letter-spacing:-.02em;line-height:1;color:rgba(248,250,252,.88)}
+.hb-mq{font-size:clamp(38px,min(6.5vw,8.6vh),80px);font-weight:800;letter-spacing:-.04em;line-height:1;color:rgba(248,250,252,.88)}
+.hb-ia{font-size:clamp(24px,min(4.2vw,5.5vh),50px);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#C7CEDB;background:#141B33;padding:0 .5em;border-radius:100px;line-height:1.9;align-self:baseline;position:relative;top:.08em;border:2px solid #2B3A66}
 .hh1{font-size:clamp(27px,min(4vw,6.3vh),52px);font-weight:800;letter-spacing:-.03em;line-height:1.07;color:#F8FAFC;margin-top:clamp(40px,7vh,80px)}
 .hh1 em{font-style:normal;color:var(--pr)}
 .hsub{font-size:clamp(15px,1.05vw,17px);font-weight:500;line-height:1.6;color:var(--mu);max-width:460px;margin-top:clamp(20px,3vh,32px)}
@@ -480,7 +482,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
 <nav id="nav">
   <div class="ni">
     <a href="#inicio" class="logo" aria-label="La Máquina IA">
-      <img src="logo-nav.png" alt="" width="38" height="38" style="margin-left:-32px">
+      <img src="logo-nav.png" alt="" width="40" height="40" style="margin-left:-42px">
     </a>
     <div class="nl">
       <a href="#servicios">Servicios</a>
@@ -513,7 +515,11 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
     <div class="hc" id="hcon">
       <div class="hl" style="position:relative;z-index:2">
         <div style="position:relative;top:10px">
-          <div class="hero-brand">La Máquina <span>IA</span></div>
+          <div class="hero-brand">
+            <span class="hb-la">La</span>
+            <span class="hb-mq">Máquina</span>
+            <span class="hb-ia">IA</span>
+          </div>
           <h1 class="hh1">Tu operación<br>en <em>piloto</em><br>automático</h1>
           <p class="hsub">Automatizamos los procesos repetitivos de tu empresa con IA. Menos fricción, menos errores, más tiempo para lo que realmente importa</p>
         </div>
@@ -809,7 +815,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
       </div>
       <div>
         <p class="fct">Contacto</p>
-        <nav class="fl" aria-label="Contacto"><a href="mailto:hola@lamaquinaia.com">hola@lamaquinaia.com</a><a href="#contacto">Agendar llamada</a><a href="https://instagram.com/lamaquinaia" target="_blank" rel="noopener">Instagram</a><a href="https://wa.me/5491178295927?text=Hola%2C%20quiero%20automatizar%20mi%20empresa" target="_blank" rel="noopener">WhatsApp</a></nav>
+        <nav class="fl" aria-label="Contacto"><a href="mailto:info@lamaquinaia.com">info@lamaquinaia.com</a><a href="#contacto">Agendar llamada</a><a href="https://instagram.com/lamaquinaia" target="_blank" rel="noopener">Instagram</a><a href="https://wa.me/5491178295927?text=Hola%2C%20quiero%20automatizar%20mi%20empresa" target="_blank" rel="noopener">WhatsApp</a></nav>
       </div>
     </div>
     <div class="ftb" style="justify-content:center;gap:0">
@@ -846,7 +852,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
         if(r.ok){ f.reset(); show('¡Gracias! Te respondemos en menos de 24 horas.', true); }
         else { return r.json().then(function(d){ throw new Error((d&&d.errors&&d.errors[0]&&d.errors[0].message)||'error'); }); }
       })
-      .catch(function(){ show('No se pudo enviar. Escribinos a hola@lamaquinaia.com', false); })
+      .catch(function(){ show('No se pudo enviar. Escribinos a info@lamaquinaia.com', false); })
       .finally(function(){ btn.disabled=false; btn.innerHTML=btnHTML; });
   });
 })();
@@ -1134,11 +1140,12 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   function ease(v){return v*v*(3-2*v);}
   function lerp(a,b,t){return a+(b-a)*t;}
 
-  // round glow sprite
+  // triangular glow sprite
   var dotTex=(function(){var s=64,c=document.createElement('canvas');c.width=c.height=s;var g=c.getContext('2d');
     var rg=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);rg.addColorStop(0,'rgba(255,255,255,1)');
     rg.addColorStop(0.35,'rgba(255,255,255,0.9)');rg.addColorStop(0.7,'rgba(255,255,255,0.25)');
-    rg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=rg;g.beginPath();g.arc(s/2,s/2,s/2,0,Math.PI*2);g.fill();
+    rg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=rg;
+    g.beginPath();g.moveTo(s/2,1);g.lineTo(s-1,s-1);g.lineTo(1,s-1);g.closePath();g.fill();
     return new THREE.CanvasTexture(c);})();
 
   // ── Nodos: distribución base en esfera (fibonacci) para la red neuronal ──
@@ -1347,10 +1354,12 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     // m0 ensamblado disperso→esfera: las partículas vuelan hacia adentro al salir del
     // hero (MISMA fórmula que el burst del workflow) y forman la esfera al entrar a Servicios.
     if(secServ){var s0=secServ.offsetTop; tgtM0=Math.max(0,Math.min((sy-(s0-vh))/(vh*1.1),1));}
-    // m1 esfera→Saturno: se forma durante Servicios (mientras la forma está a la
-    // izquierda, lejos de las tarjetas) y queda listo ANTES de entrar a Proceso.
+    // m1 esfera→Saturno: la esfera se mantiene entera durante la mayor parte de
+    // Servicios y recién se desarma hacia Saturno en el tramo final (mismo tramo
+    // en que offX la cruza hacia la posición de Saturno), quedando lista al
+    // entrar a Proceso.
     if(secServ&&secProc){var s1=secServ.offsetTop,sp=secProc.offsetTop;
-      tgtM1=Math.max(0,Math.min((sy-s1+vh*0.2)/((sp-s1)*0.7),1));}
+      tgtM1=Math.max(0,Math.min((sy-s1+vh*0.5-(sp-s1)*0.7)/((sp-s1)*0.3),1));}
     // m2 galaxia→cubo: durante proceso→resultados (rango corto para cubo nítido)
     if(secRes){var s2=secRes.offsetTop; tgtM2=Math.max(0,Math.min((sy-s2+vh*0.3)/(vh*1.2),1));}
     // m3 explosión: anclada a contacto, empieza tras el cubo
@@ -1600,12 +1609,13 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       var px=s.x*W, py=s.y*H;
       ctx.beginPath();
       ctx.fillStyle='rgba('+s.col+','+a.toFixed(3)+')';
-      ctx.arc(px,py,s.r,0,Math.PI*2); ctx.fill();
+      ctx.moveTo(px,py-s.r); ctx.lineTo(px+s.r*0.866,py+s.r*0.5); ctx.lineTo(px-s.r*0.866,py+s.r*0.5); ctx.closePath(); ctx.fill();
       // glow leve en las más grandes
       if(s.r>1.0){
+        var gr=s.r*3;
         ctx.beginPath();
         ctx.fillStyle='rgba('+s.col+','+(a*0.18).toFixed(3)+')';
-        ctx.arc(px,py,s.r*3,0,Math.PI*2); ctx.fill();
+        ctx.moveTo(px,py-gr); ctx.lineTo(px+gr*0.866,py+gr*0.5); ctx.lineTo(px-gr*0.866,py+gr*0.5); ctx.closePath(); ctx.fill();
       }
     }
   }
@@ -1679,12 +1689,13 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       // draw soft glowing dot
       var glow=1+Math.min(1,(Math.abs(p.ox)+Math.abs(p.oy))/20)*0.8;
       var rad=p.sz*glow;
-      var g=ctx.createRadialGradient(px,py,0,px,py,rad*3);
+      var tr=rad*3;
+      var g=ctx.createRadialGradient(px,py,0,px,py,tr);
       g.addColorStop(0,'rgba(190,235,255,'+(0.55*vop)+')');
       g.addColorStop(0.4,'rgba(110,190,255,'+(0.30*vop)+')');
       g.addColorStop(1,'rgba(40,120,255,0)');
       ctx.fillStyle=g;
-      ctx.beginPath(); ctx.arc(px,py,rad*3,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(px,py-tr); ctx.lineTo(px+tr*0.866,py+tr*0.5); ctx.lineTo(px-tr*0.866,py+tr*0.5); ctx.closePath(); ctx.fill();
     }
   }
   requestAnimationFrame(frame);
@@ -1956,8 +1967,9 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
             ctx.globalAlpha=vis*baseA*da;
             var gl=ctx.createRadialGradient(fx,fy,0,fx,fy,R);
             gl.addColorStop(0,'rgba(220,238,255,1)');gl.addColorStop(0.5,'rgba(120,180,255,0.5)');gl.addColorStop(1,'rgba(80,140,255,0)');
-            ctx.fillStyle=gl;ctx.beginPath();ctx.arc(fx,fy,R,0,7);ctx.fill();
-            ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(fx,fy,fr.r*0.7,0,7);ctx.fill();}
+            ctx.fillStyle=gl;ctx.beginPath();ctx.moveTo(fx,fy-R);ctx.lineTo(fx+R*0.866,fy+R*0.5);ctx.lineTo(fx-R*0.866,fy+R*0.5);ctx.closePath();ctx.fill();
+            var fr2=fr.r*0.7;
+            ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(fx,fy-fr2);ctx.lineTo(fx+fr2*0.866,fy+fr2*0.5);ctx.lineTo(fx-fr2*0.866,fy+fr2*0.5);ctx.closePath();ctx.fill();}
         });
         ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
       }
@@ -2272,10 +2284,11 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
         }
         var R=(q.c[0]+(q.tc[0]-q.c[0])*conv)|0, G=(q.c[1]+(q.tc[1]-q.c[1])*conv)|0, B=(q.c[2]+(q.tc[2]-q.c[2])*conv)|0;
         var rad=q.r*(1-conv*0.3);
+        var rad3=rad*3;
         xg.fillStyle='rgba('+R+','+G+','+B+','+(0.85*alpha).toFixed(3)+')';
-        xg.beginPath(); xg.arc(cx2,cy2,rad,0,6.2832); xg.fill();
+        xg.beginPath(); xg.moveTo(cx2,cy2-rad); xg.lineTo(cx2+rad*0.866,cy2+rad*0.5); xg.lineTo(cx2-rad*0.866,cy2+rad*0.5); xg.closePath(); xg.fill();
         xg.fillStyle='rgba('+R+','+G+','+B+','+(0.15*alpha).toFixed(3)+')';
-        xg.beginPath(); xg.arc(cx2,cy2,rad*3,0,6.2832); xg.fill();
+        xg.beginPath(); xg.moveTo(cx2,cy2-rad3); xg.lineTo(cx2+rad3*0.866,cy2+rad3*0.5); xg.lineTo(cx2-rad3*0.866,cy2+rad3*0.5); xg.closePath(); xg.fill();
       }
       xg.globalCompositeOperation='source-over';
     }
