@@ -1182,6 +1182,9 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   }
   var NODES=nodes.length;
 
+  // qué tan disperso arranca cada partícula respecto a su posición final en la esfera
+  var ASM_SCALE=4.5;
+
   // targets de cada forma
   var sphPos=new Float32Array(NODES*3), galPos=new Float32Array(NODES*3),
       cubePos=new Float32Array(NODES*3), scatPos=new Float32Array(NODES*3),
@@ -1215,12 +1218,14 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     // EXPLOSIÓN (final)
     var sa=rnd()*Math.PI*2, sb=Math.acos(rnd()*2-1), sr=4.5+rnd()*5.5;
     scatPos[i3]=Math.sin(sb)*Math.cos(sa)*sr; scatPos[i3+1]=Math.cos(sb)*sr; scatPos[i3+2]=Math.sin(sb)*Math.sin(sa)*sr;
-    // ENSAMBLADO 3D: sin jitter — la esfera 3D queda invisible en su posición final
-    // y sólo se desvanece "in" cuando las partículas del workflow (canvas 2D) terminan
-    // de converger y aterrizar ahí. Así no aparecen partículas sueltas desde otro lado.
-    asmPos[i3]  = sphPos[i3];
-    asmPos[i3+1]= sphPos[i3+1];
-    asmPos[i3+2]= sphPos[i3+2];
+    // ENSAMBLADO 3D: cada partícula arranca dispersa, lejos de su posición final
+    // (misma dirección que en la esfera, pero mucho más lejos del centro) y
+    // converge hacia sphPos a medida que eM0 va de 0→1 — es el MISMO conjunto
+    // de partículas el que viaja y forma la esfera, sin fragmentos 2D aparte.
+    var asmK=ASM_SCALE*(0.7+brnd()*0.6);
+    asmPos[i3]  = sphPos[i3]*asmK;
+    asmPos[i3+1]= sphPos[i3+1]*asmK;
+    asmPos[i3+2]= sphPos[i3+2]*asmK;
   }
 
   var group=new THREE.Group(); scene.add(group);
@@ -1293,8 +1298,10 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     var i3=i*3;
     var a=Math.random()*Math.PI*2, c=Math.acos(Math.random()*2-1), Rs=1.35;
     exSph[i3]=Math.sin(c)*Math.cos(a)*Rs; exSph[i3+1]=Math.cos(c)*Rs; exSph[i3+2]=Math.sin(c)*Math.sin(a)*Rs;
-    // sin jitter: igual que arriba, quedan invisibles en su lugar hasta el handoff
-    exAsm[i3]=exSph[i3]; exAsm[i3+1]=exSph[i3+1]; exAsm[i3+2]=exSph[i3+2];
+    // igual que asmPos: arranca disperso (misma dirección, más lejos del centro)
+    // y converge hacia exSph junto con el resto del conjunto
+    var exAsmK=ASM_SCALE*(0.7+Math.random()*0.6);
+    exAsm[i3]=exSph[i3]*exAsmK; exAsm[i3+1]=exSph[i3+1]*exAsmK; exAsm[i3+2]=exSph[i3+2]*exAsmK;
     // SATURNO (extra): refuerza el anillo plano (más finos al borde)
     if(i % 100 < 30){
       var sa2=Math.random()*Math.PI*2, sc2=Math.acos(Math.random()*2-1), R2=0.78;
@@ -1475,10 +1482,11 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     groupRot+=(tgtGroupRot-groupRot)*0.07; offX+=(tgtOffX-offX)*0.06; offY+=(tgtOffY-offY)*0.06;
     cRotX+=(tRotX-cRotX)*0.05; cRotY+=(tRotY-cRotY)*0.05;
     var eM0=ease(morph0), eM1=ease(morph1), eM2=ease(morph2), eM3=ease(morph3);
-    // handoff: la esfera 3D empieza a aparecer/crecer desde el mismo instante en
-    // que el workflow estalla (en simultáneo con los fragmentos 2D convergiendo),
-    // así se ve como si la esfera se "construyera" con esos fragmentos.
-    var eM0v=eM0;
+    // handoff: la esfera 3D se mantiene casi invisible mientras los fragmentos 2D
+    // del workflow recién empiezan a converger, y se va revelando (cúbico, no
+    // lineal) a medida que esos fragmentos van llegando a su forma — da la
+    // sensación de que la esfera se "completa" con las partículas que llegan.
+    var eM0v=eM0*eM0*eM0;
 
     var ringView=eM1*(1-eM2); // 1 cuando es Saturno puro
     group.position.x=offX; group.position.y=offY;
@@ -1549,7 +1557,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     // logo: mismo tamaño y cantidad de partículas que esfera/Saturno, pero más oscuras
     var logoFocus=eM2*(1-eM1)*(1-eM3);
     var cubeDim=1-0.45*logoFocus;
-    nMat.opacity=(0.7+0.25*Math.sin(T*1.5))*(1-eM3)*eM0v*cubeDim;
+    nMat.opacity=(0.7+0.25*Math.sin(T*1.5))*(1-eM3)*(0.4+0.6*eM0)*cubeDim;
     var blurAmt = 0;
     if(Math.abs(blurAmt-(animate._blur||0))>0.25){ animate._blur=blurAmt; cv.style.filter = blurAmt>0.15 ? ('blur('+blurAmt.toFixed(1)+'px)') : ''; }
 
@@ -1572,7 +1580,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     expGeo.attributes.position.needsUpdate=true;
     expGeo.attributes.color.needsUpdate=true;
     // las partículas extra aparecen al deformarse de la esfera
-    expMat.opacity=eM0v*cubeDim; // partículas extra; atenuadas en el cubo para leer textos
+    expMat.opacity=(0.4+0.6*eM0)*cubeDim; // partículas extra; atenuadas en el cubo para leer textos
 
     camera.lookAt(offX*0.25, 0, 0);
     renderer.render(scene, camera);
@@ -2223,97 +2231,18 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
   }
   requestAnimationFrame(frame);
 
-  /* ── EXPLOSIÓN AL SCROLLEAR: el diagrama estalla en partículas 2D que vuelan
-     hasta la esfera 3D (window.__sph, publicada por el morph) y la "forman".
-     Reversible: si scrolleás hacia arriba, las partículas se rearman en el diagrama. ── */
+  /* ── FADE AL SCROLLEAR: el diagrama del hero se desvanece a medida que se
+     entra a Servicios, donde la MISMA esfera de partículas 3D (#morph-cv) ya
+     viene volando desde su estado disperso para formarse — un solo conjunto
+     de partículas, sin un sistema 2D aparte que no coincida con la esfera. ── */
   (function(){
-    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var xcv=document.createElement('canvas');
-    xcv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0';
-    document.body.appendChild(xcv);
-    var xg=xcv.getContext('2d'), DPR=Math.min(window.devicePixelRatio||1,2);
-    function xrs(){xcv.width=innerWidth*DPR; xcv.height=innerHeight*DPR; xg.setTransform(DPR,0,0,DPR,0,0);}
-    xrs(); addEventListener('resize',xrs,{passive:true});
-
-    function rgb(hex){return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)];}
-    // misma paleta cyan/naranja/violeta que las partículas de la esfera/Saturno/logo
-    var PAL3=[rgb('#38BDF8'),rgb('#FB923C'),rgb('#A78BFA')];
-    function randPal(){return PAL3[(Math.random()*PAL3.length)|0];}
-    var parts=[];
-    function addP(sx,sy,col,r,tcol){
-      var a=Math.random()*Math.PI*2, d=36+Math.random()*150;
-      var th=Math.acos(Math.random()*2-1), ph=Math.random()*Math.PI*2;
-      parts.push({sx:sx,sy:sy,c:rgb(col),tc:tcol||randPal(),r:r,
-        dx:Math.cos(a)*d, dy:Math.sin(a)*d-22,
-        ux:Math.sin(th)*Math.cos(ph), uy:Math.cos(th)*0.96,
-        j:Math.random()*0.3});
-    }
-    // contorno de cada nodo (tarjetas) en coords del stage 760x600
-    for(var id in NODES){
-      var n=NODES[id], w=halfW(n)*2, h=halfH(n)*2, P=2*(w+h);
-      var cnt=Math.max(10,Math.round(P/15));
-      for(var k=0;k<cnt;k++){
-        var p=k/cnt*P, px,py;
-        if(p<w){px=n.x-w/2+p; py=n.y-h/2;}
-        else if(p<w+h){px=n.x+w/2; py=n.y-h/2+(p-w);}
-        else if(p<2*w+h){px=n.x+w/2-(p-w-h); py=n.y+h/2;}
-        else {px=n.x-w/2; py=n.y+h/2-(p-2*w-h);}
-        addP(px,py, n.core?'#5B8DEF':'#C7D2E8', n.core?2.3:1.6);
-      }
-    }
-    // puntos a lo largo de cada arista + un paquete brillante por arista
-    edgeData.forEach(function(ed){
-      var L=ed.len||ed.path.getTotalLength();
-      for(var s=11;s<L;s+=22){
-        var pt=ed.path.getPointAtLength(s);
-        addP(pt.x,pt.y, COL[ed.e.cat], 1.8, rgb(COL[ed.e.cat]));
-      }
-      var pm=ed.path.getPointAtLength(L*Math.random());
-      addP(pm.x,pm.y,'#FFFFFF',2.6);
-    });
-
-    function sm(v){return v*v*(3-2*v);}
-    var active=false;
     function xloop(){
       requestAnimationFrame(xloop);
       var vh=innerHeight, sy=window.scrollY||0;
-      if(innerWidth<=768){ if(active){xg.clearRect(0,0,innerWidth,innerHeight); active=false; root.style.opacity='';} return; }
+      if(innerWidth<=768){ root.style.opacity=''; return; }
       var P=window.__PERF; if(P&&P.hidden) return;
       var eb=Math.max(0,Math.min((sy-vh*0.04)/(vh*0.8),1));
-      var sph=window.__sph||null, form=sph?sph.form:0;
-      // el diagrama real se desvanece a medida que estalla
       root.style.opacity = eb>0 ? String(Math.max(0,1-eb*1.4).toFixed(3)) : '';
-      if(eb<=0 || form>=0.999){
-        if(active){xg.clearRect(0,0,innerWidth,innerHeight); active=false;}
-        return;
-      }
-      var rect=links.getBoundingClientRect();
-      if(rect.width<10){ if(active){xg.clearRect(0,0,innerWidth,innerHeight); active=false;} return; }
-      active=true;
-      var kx=rect.width/STAGE_W, ky=rect.height/STAGE_H;
-      var burst=sm(Math.min(1,eb/0.6));                  // fase 1: estallido hacia afuera (más gradual)
-      var conv=sm(eb);                                   // convergen a la esfera DESDE el inicio del scroll, en simultáneo con el estallido
-      var alpha=1-Math.max(0,(form-0.55)/0.45);          // handoff: se funden en la esfera 3D
-      xg.clearRect(0,0,innerWidth,innerHeight);
-      xg.globalCompositeOperation='lighter';
-      for(var i=0;i<parts.length;i++){
-        var q=parts[i];
-        var ox=rect.left+q.sx*kx, oy=rect.top+q.sy*ky;
-        var bx=ox+q.dx*burst*(1+q.j), by=oy+q.dy*burst*(1+q.j);
-        var cx2=bx, cy2=by;
-        if(sph&&conv>0){
-          cx2=bx+((sph.x+q.ux*sph.r)-bx)*conv;
-          cy2=by+((sph.y+q.uy*sph.r)-by)*conv;
-        }
-        var R=(q.c[0]+(q.tc[0]-q.c[0])*conv)|0, G=(q.c[1]+(q.tc[1]-q.c[1])*conv)|0, B=(q.c[2]+(q.tc[2]-q.c[2])*conv)|0;
-        var rad=q.r*(1-conv*0.3);
-        var rad3=rad*3;
-        xg.fillStyle='rgba('+R+','+G+','+B+','+(0.85*alpha).toFixed(3)+')';
-        xg.beginPath(); xg.moveTo(cx2,cy2-rad); xg.lineTo(cx2+rad*0.866,cy2+rad*0.5); xg.lineTo(cx2-rad*0.866,cy2+rad*0.5); xg.closePath(); xg.fill();
-        xg.fillStyle='rgba('+R+','+G+','+B+','+(0.15*alpha).toFixed(3)+')';
-        xg.beginPath(); xg.moveTo(cx2,cy2-rad3); xg.lineTo(cx2+rad3*0.866,cy2+rad3*0.5); xg.lineTo(cx2-rad3*0.866,cy2+rad3*0.5); xg.closePath(); xg.fill();
-      }
-      xg.globalCompositeOperation='source-over';
     }
     requestAnimationFrame(xloop);
   })();
