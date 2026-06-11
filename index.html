@@ -238,6 +238,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .cform-msg{font-size:14px;font-weight:600;line-height:1.5;margin:2px 0 0;text-align:center}
 .cform-msg.ok{color:#34D399}
 .cform-msg.err{color:#F97316}
+.cform input.fld-err,.cform textarea.fld-err{border-color:#F87171;background:rgba(248,113,113,.08)}
+.cform input.fld-err:focus-visible,.cform textarea.fld-err:focus-visible{box-shadow:0 0 0 3px rgba(248,113,113,.28)}
 .calt{font-size:13px;color:rgba(248,250,252,.6);text-align:center;margin:16px auto 0}
 .calt a{color:rgba(248,250,252,.85);text-decoration:underline;text-underline-offset:2px}
 .calt a:hover{color:#fff}
@@ -801,10 +803,11 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
       <form id="cform" action="https://formspree.io/f/XXXXXXX" method="POST" class="cform">
         <!-- honeypot anti-spam: oculto a usuarios; si un bot lo completa, Formspree descarta el envío -->
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-        <input name="nombre" type="text" placeholder="Tu nombre" autocomplete="name" required>
-        <input name="email" type="email" placeholder="Tu email" autocomplete="email" required>
-        <input name="empresa" type="text" placeholder="Empresa (opcional)" autocomplete="organization">
-        <textarea name="mensaje" rows="3" placeholder="Contanos qué querés automatizar. Si todavía no lo tenés claro, lo charlamos juntos" required></textarea>
+        <input name="nombre" type="text" placeholder="Tu nombre" autocomplete="name" minlength="2" maxlength="80" pattern="[A-Za-zÀ-ÖØ-öø-ÿ\s'\-]+" required>
+        <input name="telefono" type="tel" placeholder="Teléfono" autocomplete="tel" minlength="6" maxlength="20" pattern="[0-9+()\s-]+">
+        <input name="email" type="email" placeholder="Tu email" autocomplete="email" maxlength="120" required>
+        <input name="empresa" type="text" placeholder="Empresa (opcional)" autocomplete="organization" maxlength="100">
+        <textarea name="mensaje" rows="3" placeholder="Contanos qué querés automatizar. Si todavía no lo tenés claro, lo charlamos juntos" minlength="10" maxlength="1000" required></textarea>
         <button type="submit" class="bc bc-lg">Enviar mensaje</button>
         <p class="cform-msg" role="status" aria-live="polite" hidden></p>
       </form>
@@ -863,8 +866,24 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   var f=document.getElementById('cform'); if(!f) return;
   var msg=f.querySelector('.cform-msg'), btn=f.querySelector('button[type=submit]'), btnHTML=btn.innerHTML;
   function show(text, ok){ msg.textContent=text; msg.classList.remove('ok','err'); msg.classList.add(ok?'ok':'err'); msg.hidden=false; }
+
+  // ── Validación de campos ──────────────────────────────────────
+  var validityMsgs={
+    nombre:'Ingresá tu nombre (solo letras y espacios, entre 2 y 80 caracteres)',
+    telefono:'Ingresá un teléfono válido (solo números, espacios, +, - y paréntesis, entre 6 y 20 caracteres)',
+    email:'Ingresá un email válido',
+    mensaje:'Contanos en al menos 10 caracteres qué querés automatizar (máximo 1000)'
+  };
+  Object.keys(validityMsgs).forEach(function(name){
+    var el=f.elements[name]; if(!el) return;
+    el.addEventListener('invalid', function(){ el.setCustomValidity(validityMsgs[name]); el.classList.add('fld-err'); });
+    el.addEventListener('input', function(){ el.setCustomValidity(''); el.classList.remove('fld-err'); });
+    el.addEventListener('blur', function(){ el.classList.toggle('fld-err', !el.checkValidity()); });
+  });
+
   f.addEventListener('submit', function(e){
     e.preventDefault();
+    if(!f.checkValidity()){ f.reportValidity(); return; }
     if(f.action.indexOf('XXXXXXX')>-1){ show('El formulario todavía no está configurado (falta el endpoint de Formspree).', false); return; }
     btn.disabled=true; btn.textContent='Enviando…'; msg.hidden=true;
     fetch(f.action, { method:'POST', body:new FormData(f), headers:{ 'Accept':'application/json' } })
@@ -1398,11 +1417,14 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     var t=Math.max(0,Math.min((mid-secs[cur].top)/secH,1));
     tgtOffY=0;
     if(cur>=3 && tgtM3<0.02){
-      // FASE CUBO: a la IZQUIERDA (de fondo), para que los textos de Resultados
-      // se lean por encima — igual que Saturno hace a la derecha. Barre desde donde
-      // venía Saturno (derecha) hacia la izquierda a medida que el cubo se forma.
-      var cubeForm=ease(Math.max(0,Math.min((tgtM2-0.55)/0.45,1)));
-      tgtOffX=(0.7 + (-0.72-0.7)*cubeForm)*AMP;
+      // FASE CUBO: barrido hacia la IZQUIERDA LINEAL, arrancando justo en el cambio
+      // de sección Proceso→Resultados (no en tgtM2=0, que deja un tramo "congelado"
+      // de ~180px y se siente como un lag al cambiar de página). Cruza al cubo
+      // (izquierda) recién pasada la mitad del recorrido, cuando el anillo ya está
+      // bastante disuelto.
+      var cubeStart=secRes.offsetTop-vh*0.5;
+      var cubeT=Math.max(0,Math.min((sy-cubeStart)/(vh*1.4),1));
+      tgtOffX=(0.95 + (-0.72-0.95)*cubeT)*AMP;
     } else if(cur>=3){
       // explosión: sigue desde la izquierda hacia más afuera
       var exo=ease(tgtM3);
