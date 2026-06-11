@@ -332,7 +332,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
       </div>
       <div>
         <p class="fct">Servicios</p>
-        <nav class="fl" aria-label="Servicios"><a href="/servicios#agentes">Agentes IA</a><a href="/servicios#automatizacion">Automatización</a><a href="/servicios#integracion">Integraciones</a><a href="/servicios#asistentes">Asistentes IA</a><a href="/servicios#datos">Analytics</a></nav>
+        <nav class="fl" aria-label="Servicios"><a href="/servicios?s=agentes">Agentes IA</a><a href="/servicios?s=automatizacion">Automatización</a><a href="/servicios?s=integracion">Integraciones</a><a href="/servicios?s=asistentes">Asistentes IA</a><a href="/servicios?s=datos">Analytics</a></nav>
       </div>
       <div>
         <p class="fct">Empresa</p>
@@ -392,16 +392,23 @@ function show(id,push,scroll){
   panels.forEach(p=>p.classList.toggle('on',p.id===id));
   sideLinks.forEach(a=>a.classList.toggle('on',a.dataset.go===id));
   const pan=document.getElementById(id); pan.style.animation='none'; void pan.offsetWidth; pan.style.animation='';
-  if(push){history.replaceState(null,'','#'+id);}
+  if(push){history.replaceState(null,'',location.pathname+'?s='+id);}
   if(scroll){document.querySelector('.split').scrollIntoView({behavior:'smooth',block:'start'});}
 }
 document.querySelectorAll('[data-go]').forEach(el=>{
   el.addEventListener('click',e=>{e.preventDefault(); const g=el.dataset.go; if(g) show(g,true,true);});
 });
-window.addEventListener('hashchange',()=>{const h=location.hash.replace('#','');if(h)show(h,false,true);});
+// El scroll de /servicios SIEMPRE arranca arriba de todo, sin importar
+// qué servicio venga preseleccionado (vía ?s= o un #hash heredado).
+if('scrollRestoration' in history){history.scrollRestoration='manual';}
 const params=new URLSearchParams(location.search);
-const start=params.get('s')||location.hash.replace('#','')||'agentes';
-show(SVCS.some(s=>s.id===start)?start:'agentes',true,false);
+const wanted=params.get('s')||location.hash.replace('#','')||'agentes';
+const start=SVCS.some(s=>s.id===wanted)?wanted:'agentes';
+// Reescribimos la URL a ?s=… (sin hash) para que el navegador no salte al panel.
+history.replaceState(null,'',location.pathname+'?s='+start);
+show(start,false,false);                 // preselecciona sin desplazar
+window.scrollTo(0,0);                     // por si quedó un salto de fragmento pendiente
+window.addEventListener('load',()=>window.scrollTo(0,0),{once:true});
 
 // Menú móvil (hamburguesa)
 const hbtn=document.getElementById('hbtn'),mb=document.getElementById('mb');
