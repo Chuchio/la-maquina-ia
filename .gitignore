@@ -5,4 +5,6 @@ temporary screenshots/
 !logo-nav.png
 !assets/**/*.png
 !brand_assets/**/*.png
+!favicon-*.png
+!apple-touch-icon.png
 .vercel
