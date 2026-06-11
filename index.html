@@ -48,6 +48,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 #mb a{font-size:15px;font-weight:500;color:#CBD5E1;text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
 #mb a:hover{color:var(--pr)}
 #mb a:last-child{border:none;margin-top:12px;text-align:center;align-self:center}
+#mb a.bc{justify-content:center;color:#fff;font-size:15px;font-weight:700;padding:18px 36px;border-radius:10px;border-bottom:none}
+#mb a.bc:hover{color:#fff}
 .hb{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
 .hb span{display:block;width:22px;height:2px;background:#E2E8F0;border-radius:1px}
 
@@ -92,7 +94,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:var
 .hero-brand{display:flex;align-items:baseline;flex-wrap:wrap;gap:.22em;margin-bottom:clamp(7px,1.5vh,20px)}
 .hb-la{font-size:clamp(38px,min(6.5vw,8.6vh),80px);font-weight:300;letter-spacing:-.02em;line-height:1;color:rgba(248,250,252,.88)}
 .hb-mq{font-size:clamp(38px,min(6.5vw,8.6vh),80px);font-weight:800;letter-spacing:-.04em;line-height:1;color:rgba(248,250,252,.88)}
-.hb-ia{font-size:clamp(24px,min(4.2vw,5.5vh),50px);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#C7CEDB;background:#141B33;padding:0 .5em;border-radius:100px;line-height:1.9;align-self:baseline;position:relative;top:.08em;border:2px solid #2B3A66}
+.hb-ia{font-size:clamp(29px,min(5vw,6.6vh),61px);font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#C7CEDB;background:#141B33;padding:.16em .42em;border-radius:100px;line-height:1;align-self:baseline;position:relative;top:.02em;border:2px solid #2B3A66}
 .hh1{font-size:clamp(27px,min(4vw,6.3vh),52px);font-weight:800;letter-spacing:-.03em;line-height:1.07;color:#F8FAFC;margin-top:clamp(40px,7vh,80px)}
 .hh1 em{font-style:normal;color:var(--pr)}
 .hsub{font-size:clamp(15px,1.05vw,17px);font-weight:500;line-height:1.6;color:var(--mu);max-width:460px;margin-top:clamp(20px,3vh,32px)}
@@ -334,7 +336,11 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   .ct,.ni{padding-left:20px;padding-right:20px}
   #servicios .ct{padding-left:20px}
   #inicio .ct{padding-left:20px}
-  #inicio .hl{margin-left:0}
+  #inicio .hl{margin-left:0;align-items:center;text-align:center}
+  .hero-brand{justify-content:center}
+  .hsub{margin-left:auto;margin-right:auto}
+  .hctas{flex-direction:column;align-items:center}
+  .hctas .bc,.hctas .bg{width:100%;max-width:300px;justify-content:center}
   .logo img{margin-left:0!important}
   .nl,.nc{display:none}
   .hb{display:flex}
@@ -357,14 +363,18 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   .fl{gap:8px}
   .fl a{font-size:12px}
   .ftb{flex-direction:column;gap:12px;text-align:center}
+  .fcp{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0}
+  .fcp .fla{white-space:nowrap}
+  .fcp .fc-sep{margin:0 8px!important}
+  .fc-sep1{display:none}
+  .fc-copy{order:3;flex-basis:100%;text-align:center;margin-top:8px}
   .sec{padding:72px 0}
   .tbs{gap:28px}
   .mc3,.mc4{display:none}
 }
 @media(max-width:480px){
   .stg{gap:40px 20px}
-  .hctas,.cbtns{flex-direction:column;align-items:flex-start}
-  .cbtns{align-items:center}
+  .cbtns{flex-direction:column;align-items:center}
 }
 </style>
 <style>
@@ -820,10 +830,10 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
     </div>
     <div class="ftb" style="justify-content:center;gap:0">
       <p class="fcp">
-        © Copyright 2026 La Máquina IA
-        <span style="margin:0 12px;opacity:.4">|</span>
+        <span class="fc-copy">© Copyright 2026 La Máquina IA</span>
+        <span class="fc-sep fc-sep1" style="margin:0 12px;opacity:.4">|</span>
         <a href="/terminos-y-condiciones" class="fla">Términos y condiciones</a>
-        <span style="margin:0 12px;opacity:.4">|</span>
+        <span class="fc-sep" style="margin:0 12px;opacity:.4">|</span>
         <a href="/politica-de-privacidad" class="fla">Políticas de privacidad</a>
       </p>
     </div>
