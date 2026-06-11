@@ -3,6 +3,7 @@ temporary screenshots/
 *.png
 !logo.png
 !logo-nav.png
+!logo-core.png
 !assets/**/*.png
 !brand_assets/**/*.png
 !favicon-*.png
