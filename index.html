@@ -353,7 +353,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   .hsub{margin-left:auto;margin-right:auto}
   .hctas{flex-direction:column;align-items:center}
   .hctas .bc,.hctas .bg{width:100%;max-width:300px;justify-content:center}
-  .logo img{margin-left:0!important}
+  #nav .logo img{margin-left:0!important}
   .nl,.nc{display:none}
   .hb{display:flex}
   .hc{grid-template-columns:1fr;padding:60px 0}
@@ -371,6 +371,9 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   .itg{flex-direction:column;align-items:center}
   .fg{grid-template-columns:repeat(3,1fr);gap:28px 14px}
   .fg>div:first-child{grid-column:1/-1}
+  /* isotipo en la misma línea que la marca, empujado a la derecha y centrado vertical con ella */
+  footer .logo{align-items:center}
+  footer .logo img{margin-left:auto!important;margin-right:15%!important}
   .fct{font-size:11px;margin-bottom:10px}
   .fl{gap:8px}
   .fl a{font-size:12px}
@@ -449,15 +452,18 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
   background:conic-gradient(from 0deg,rgba(30,64,175,0),rgba(59,130,246,.7),rgba(249,115,22,.7),rgba(59,130,246,.7),rgba(30,64,175,0));
   opacity:.42;filter:blur(5px);animation:hwfSpin 7s linear infinite}
 @keyframes hwfSpin{to{transform:rotate(360deg)}}
-#hwf .node.core{width:120px;height:120px}
-#hwf .node.core .ico{width:116px;height:116px;flex-basis:116px;border-radius:0;background:none;border:none;
-  position:relative;overflow:visible;margin-top:6px;
-  filter:drop-shadow(0 0 5px rgba(91,141,239,.45))}
+#hwf .node.core{width:152px;height:176px;padding-bottom:10px}
+#hwf .node.core .ico{width:128px;height:128px;flex-basis:128px;border-radius:0;background:none;border:none;
+  position:relative;overflow:visible;margin-top:2px;
+  filter:drop-shadow(0 0 6px rgba(91,141,239,.5))}
 #hwf .node.core .ico svg{width:44px;height:44px}
-#hwf .node.core .ico img{display:block;width:100%;height:100%;object-fit:contain}
-#hwf .node.core .lb{font-size:14.5px;font-weight:800;color:#fff;letter-spacing:-.01em}
-#hwf .node.core .tx{transform:translateY(-30px)}
-#hwf .node.core .sb{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#93C5FD;margin-top:3px}
+#hwf .node.core .ico img{display:block;width:100%;height:100%;object-fit:contain;transform:scale(1.26)}
+#hwf .node.core .lb{display:flex;align-items:baseline;justify-content:center;gap:.18em;white-space:nowrap}
+#hwf .node.core .lb-la{font-size:13px;font-weight:300;letter-spacing:-.02em;line-height:1;color:rgba(248,250,252,.88)}
+#hwf .node.core .lb-mq{font-size:13px;font-weight:800;letter-spacing:-.04em;line-height:1;color:rgba(248,250,252,.88)}
+#hwf .node.core .lb-ia{font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#C7CEDB;background:#141B33;padding:.13em .40em;border-radius:100px;line-height:1;border:1px solid #2B3A66;position:relative;top:-.1em}
+#hwf .node.core .tx{transform:translateY(-2px)}
+#hwf .node.core .sb{font-size:8.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#93C5FD;margin-top:6px}
 #hwf .node.core.beat{animation:hwfBeat .7s cubic-bezier(.22,1,.36,1)}
 @keyframes hwfBeat{
   0%{box-shadow:0 24px 60px -18px rgba(0,0,0,.9),0 0 0 1px rgba(59,130,246,.12),0 0 60px -10px rgba(30,64,175,.55),inset 0 1px 0 rgba(255,255,255,.06)}
@@ -826,6 +832,7 @@ footer{background:rgba(0,0,0,.75);border-top:1px solid rgba(255,255,255,.06);bac
           <span class="lo-la" style="color:rgba(248,250,252,.88)">La</span>
           <span class="lo-mq" style="color:rgba(248,250,252,.88)">Máquina</span>
           <span class="lo-ia" style="background:rgba(30,64,175,.2);color:rgba(248,250,252,.65)">IA</span>
+          <img src="logo-nav.png" alt="" width="30" height="30" style="margin-left:30px;align-self:center">
         </a>
       </div>
       <div>
@@ -1528,6 +1535,12 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     _qInv.copy(group.quaternion).invert();
     _viewDir.applyQuaternion(_qInv);
     var sphereShade=(1-eM1)*(1-eM2)*(1-eM3)*eM0v; // sólo se nota en la fase esfera
+    // logo: mismo tamaño y cantidad de partículas que esfera/Saturno, pero más oscuras
+    var logoFocus=eM2*(1-eM1)*(1-eM3);
+    // logoLife: 1 cuando el logo ya está formado y quieto (último frame antes de explotar).
+    // Independiente de eM1 (que ya vale 1 ahí), así las partículas del logo "viven" igual
+    // que las de Saturno: deriva + titileo continuos en vez de quedar estáticas.
+    var logoLife=eM2*(1-eM3);
 
     var ca=nGeo.attributes.position.array;
     applyRepulsion(ca, repN, NODES, dt, eM3);
@@ -1538,6 +1551,13 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       var tx=lerp(lerp(lerp(bx, galPos[i3],   eM1), cubePos[i3],   eM2), scatPos[i3],   eM3);
       var ty=lerp(lerp(lerp(by, galPos[i3+1], eM1), cubePos[i3+1], eM2), scatPos[i3+1], eM3);
       var tz=lerp(lerp(lerp(bz, galPos[i3+2], eM1), cubePos[i3+2], eM2), scatPos[i3+2], eM3);
+      if(logoLife>0.001){
+        // fase logo: deriva continua por partícula (las otras fases ya "viven" por la rotación del grupo)
+        var ph=i*2.399;
+        tx+=Math.sin(T*0.9+ph)*0.06*logoLife;
+        ty+=Math.cos(T*1.1+ph*1.7)*0.06*logoLife;
+        tz+=Math.sin(T*0.7+ph)*0.04*logoLife;
+      }
       tx+=repN[i3]; ty+=repN[i3+1]; tz+=repN[i3+2];
       ca[i3]+=(tx-ca[i3])*0.16; ca[i3+1]+=(ty-ca[i3+1])*0.16; ca[i3+2]+=(tz-ca[i3+2])*0.16;
       // sombreado: la normal de la esfera es su propia posición normalizada
@@ -1545,6 +1565,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       var dot=(nx*_viewDir.x+ny*_viewDir.y+nz*_viewDir.z)/nl;
       var lit=SHADE_AMB+(1-SHADE_AMB)*Math.max(0,dot);
       var litMix=1+(lit-1)*sphereShade;
+      if(logoLife>0.001){ litMix*=1-0.22*logoLife*(0.5+0.5*Math.sin(T*1.8+i*2.399)); } // twinkle sutil en fase logo
       nCol[i3]=nColBase[i3]*litMix; nCol[i3+1]=nColBase[i3+1]*litMix; nCol[i3+2]=nColBase[i3+2]*litMix;
     }
     nGeo.attributes.position.needsUpdate=true;
@@ -1576,8 +1597,6 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       eMat.opacity=0; // sin líneas neuronales: la esfera es sólo partículas
       pGeo.attributes.position.needsUpdate=true; pMat.opacity=netVis*0.7;
     }
-    // logo: mismo tamaño y cantidad de partículas que esfera/Saturno, pero más oscuras
-    var logoFocus=eM2*(1-eM1)*(1-eM3);
     var cubeDim=1-0.45*logoFocus;
     nMat.opacity=(0.7+0.25*Math.sin(T*1.5))*(1-eM3)*(0.4+0.6*eM0)*cubeDim;
     var blurAmt = 0;
@@ -1591,12 +1610,19 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
       var tx=lerp(lerp(lerp(ebx, exGal[i3],   eM1), exCube[i3],   eM2), exScat[i3],   eM3);
       var ty=lerp(lerp(lerp(eby, exGal[i3+1], eM1), exCube[i3+1], eM2), exScat[i3+1], eM3);
       var tz=lerp(lerp(lerp(ebz, exGal[i3+2], eM1), exCube[i3+2], eM2), exScat[i3+2], eM3);
+      if(logoLife>0.001){
+        var eph=i*2.399+1.3; // fase distinta a las neuronas para que no se muevan en bloque
+        tx+=Math.sin(T*0.9+eph)*0.06*logoLife;
+        ty+=Math.cos(T*1.1+eph*1.7)*0.06*logoLife;
+        tz+=Math.sin(T*0.7+eph)*0.04*logoLife;
+      }
       tx+=repE[i3]; ty+=repE[i3+1]; tz+=repE[i3+2];
       exa[i3]+=(tx-exa[i3])*0.13; exa[i3+1]+=(ty-exa[i3+1])*0.13; exa[i3+2]+=(tz-exa[i3+2])*0.13;
       var enx=exSph[i3],eny=exSph[i3+1],enz=exSph[i3+2], enl=Math.sqrt(enx*enx+eny*eny+enz*enz)||1;
       var edot=(enx*_viewDir.x+eny*_viewDir.y+enz*_viewDir.z)/enl;
       var elit=SHADE_AMB+(1-SHADE_AMB)*Math.max(0,edot);
       var elitMix=1+(elit-1)*sphereShade;
+      if(logoLife>0.001){ elitMix*=1-0.22*logoLife*(0.5+0.5*Math.sin(T*1.8+i*2.399+1.3)); }
       expCol[i3]=expColBase[i3]*elitMix; expCol[i3+1]=expColBase[i3+1]*elitMix; expCol[i3+2]=expColBase[i3+2]*elitMix;
     }
     expGeo.attributes.position.needsUpdate=true;
@@ -2181,7 +2207,7 @@ mb.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mb.classList
     el.className='node'+(n.core?' core':'')+(n.model?' model':'');
     el.style.left=n.x+'px'; el.style.top=n.y+'px';
     if(n.core){
-      el.innerHTML='<div class="ico">'+ICONS[n.icon]+'</div><div class="tx" style="text-align:center"><div class="lb">'+n.label+'</div><div class="sb">'+n.sub+'</div></div>';
+      el.innerHTML='<div class="ico">'+ICONS[n.icon]+'</div><div class="tx" style="text-align:center"><div class="lb"><span class="lb-la">La</span><span class="lb-mq">Máquina</span><span class="lb-ia">IA</span></div><div class="sb">'+n.sub+'</div></div>';
     }else{
       el.innerHTML='<div class="ico">'+ICONS[n.icon]+'</div><div class="tx"><div class="lb">'+n.label+'</div>'+(n.sub?'<div class="sb">'+n.sub+'</div>':'')+'</div>';
     }
